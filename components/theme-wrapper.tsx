@@ -14,11 +14,10 @@ export function ThemeWrapper({
 }: ThemeWrapperProps) {
   const [config] = useConfig()
   
-  console.log(config)
   return (
     <div
       className={cn(
-        // `theme-${defaultTheme || config.theme}`,
+        `theme-${defaultTheme || config.theme}`,
         `base`,
         "w-full",
         className

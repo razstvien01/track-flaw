@@ -1,10 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
-// import { ThemeWrapper } from "@/components/theme-wrapper";
-
-// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,9 +16,8 @@ export default function RootLayout({
     <html lang="en">
       <body className="red-background">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        {children}
-
-        </ThemeProvider>
+          {children}
+      </ThemeProvider>
       </body>
     </html>
   );

@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { themes } from "@/registry/themes";
-import { useConfig } from "../hooks/use-config";
+import { useConfig } from "../app/hooks/use-config";
 
 import { CheckIcon } from "@radix-ui/react-icons";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
@@ -97,19 +97,8 @@ export function ThemeCustomizer() {
               <Skeleton className="h-6 w-6 rounded-full" />
             </div>
           )}
-          {/* (
-            <div className="mr-1 flex items-center space-x-3">
-              <Skeleton className="h-6 w-6 rounded-full" />
-              <Skeleton className="h-6 w-6 rounded-full" />
-              <Skeleton className="h-6 w-6 rounded-full" />
-              <Skeleton className="h-6 w-6 rounded-full" />
-              <Skeleton className="h-6 w-6 rounded-full" />
-            </div>
-          ) */}
         </div>
-        <Button className="animate-in zoom-in duration-500">
-          HELLO WORLD
-        </Button>
+        
       </div>
     </div>
   );
