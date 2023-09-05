@@ -2,7 +2,7 @@
 import { Tabs, TabsList } from "@/components/ui/tabs"
 import { ModeToggle } from "./components/mode_toggle";
 import { UserNav } from "./components/user-nav";
-import { TabsTrigger } from "@radix-ui/react-tabs";
+import { TabsContent, TabsTrigger } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
 
 
@@ -19,7 +19,7 @@ export default function Home() {
                 className="md:w-[100px] lg:w-[300px]"
               />
             </div> */}
-            <Tabs defaultValue="Home" className="w-full">
+            {/* <Tabs defaultValue="Home" className="w-full">
               <TabsList>
                 <TabsTrigger value="home">
                   <Button>Home</Button>
@@ -28,6 +28,25 @@ export default function Home() {
                   <Button>Project</Button>
                 </TabsTrigger>
               </TabsList>
+            </Tabs> */}
+            <Tabs className="w-1/3 items-center align-middle">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value='home'>
+                  HOME
+                </TabsTrigger>
+                <TabsTrigger value='project'>
+                  PROJECT
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value='home'>
+                {/* <div> */}
+                  {/* <Button>HOME</Button> */}
+                {/* </div> */}
+                {/* <Button></Button> */}
+              </TabsContent>
+              <TabsContent value='project'>
+                
+              </TabsContent>
             </Tabs>
             <ModeToggle />
             <UserNav />
