@@ -46,6 +46,7 @@ export const getUsers = async () => {
 };
 
 export const deleteUser = async (id: string) => {
+  //* Comment
   await deleteDoc(doc(db, "users", id));
 };
 
