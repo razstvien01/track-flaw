@@ -4,20 +4,39 @@ import {
   checkIfExistsUser,
 } from "@/app/controllers/users.controller";
 import { NextRequest, NextResponse } from "next/server";
-import { type } from "os";
 
 export const GET = async (request: NextRequest) => {
-  const users = await getUsers()
+  try {
+    const users = await getUsers();
 
-  // return new Response(JSON.stringify({ message: 'success', users: users}))
-  return new Response(JSON.stringify({ message: "success" }));
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "Fetch users successfully",
+        users,
+      })
+    );
+  } catch (error) {
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          "Failure in fetching the users",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 };
 
 export const POST = async (request: NextRequest) => {
-  const body = await request.json();
+  const userData = await request.json();
 
   try {
-    if (await checkIfExistsUser(body)) {
+    const { email_address } = userData;
+    
+    if (await checkIfExistsUser(email_address)) {
       return NextResponse.json(
         {
           success: false,
@@ -25,14 +44,19 @@ export const POST = async (request: NextRequest) => {
             "This user is already exists. Please try another email address",
         },
         {
-          status: 401,
+          status: 500,
         }
       );
     }
 
-    await addUser(body);
+    await addUser(userData);
 
-    return new Response(JSON.stringify({ success: true, message: "Account user created successfully" }));
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "Account user created successfully",
+      })
+    );
   } catch (error) {
     return NextResponse.json(
       {
@@ -40,13 +64,14 @@ export const POST = async (request: NextRequest) => {
         message: "User Registration failed",
       },
       {
-        status: 401,
+        status: 500,
       }
     );
   }
 };
 
 export const DELETE = async (request: NextRequest) => {
+  
   return new Response(JSON.stringify({ message: "success", method: "DELETE" }));
 };
 
