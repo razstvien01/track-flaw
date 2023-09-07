@@ -6,8 +6,8 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 import { type } from "os";
 
-export const GET = async (request: NextRequest, response: NextResponse) => {
-  // const users = await getUsers()
+export const GET = async (request: NextRequest) => {
+  const users = await getUsers()
 
   // return new Response(JSON.stringify({ message: 'success', users: users}))
   return new Response(JSON.stringify({ message: "success" }));
@@ -29,10 +29,10 @@ export const POST = async (request: NextRequest) => {
         }
       );
     }
-    
+
     await addUser(body);
 
-    return new Response(JSON.stringify({ success: true, method: "POST" }));
+    return new Response(JSON.stringify({ success: true, message: "Account user created successfully" }));
   } catch (error) {
     return NextResponse.json(
       {
