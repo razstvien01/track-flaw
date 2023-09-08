@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "./components/header";
+import { Label } from "@/components/ui/label";
 
 export const metadata: Metadata = {
   title: "Track Flaw",
@@ -19,7 +20,12 @@ export default function RootLayout({
       <body className="red-background">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header/>
-          {children}
+          <div className="relative min-h-screen">
+            {children}
+            <Label className="absolute bottom-0 left-0 mb-2 ml-2">
+              Created by Buggy Cat.
+            </Label>
+          </div>
         </ThemeProvider>
       </body>
     </html>

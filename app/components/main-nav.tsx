@@ -24,6 +24,12 @@ export function MainNav({
         Projects
       </Link>
       <Link
+        href="/views/teams"
+        className="text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        Teams
+      </Link>
+      <Link
         href="/views/bugs"
         className="text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
       >
