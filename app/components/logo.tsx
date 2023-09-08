@@ -1,23 +1,20 @@
 "use client"
 
-import { AspectRatio } from "@radix-ui/react-aspect-ratio";
+import Link from "next/link";
 import Image from "next/image";
 
 export function Logo() {
   return (
     <div>
-      {/* <AspectRatio ratio={16 / 9}> */}
-        <Image
-          src="/cat-svgrepo-com.svg"
-          alt="Image"
-          width={50} // Add the width property
-          height={50} // Add the height property
-          className="rounded-md object-cover"
-          onClick={() => {
-            console.log("Icon clicked");
-          }}
-        />
-      {/* </AspectRatio> */}
+      <Link href="/">
+          <Image
+            src="/cat-svgrepo-com.svg"
+            alt="Image"
+            width={50}
+            height={50}
+            className="rounded-md object-cover"
+          />
+      </Link>
     </div>
   );
 }

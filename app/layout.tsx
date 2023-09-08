@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
+import Header from "./components/header";
 
 export const metadata: Metadata = {
   title: "Track Flaw",
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="red-background">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Header/>
           {children}
         </ThemeProvider>
       </body>

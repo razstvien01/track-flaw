@@ -1,6 +1,6 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 export function MainNav({
   className,
@@ -12,30 +12,23 @@ export function MainNav({
       {...props}
     >
       <Link
-        href="/examples/dashboard"
+        href="/views/dashboard"
         className="text-lg font-medium transition-colors hover:text-primary"
       >
         Dashboard
       </Link>
       <Link
-        href="/examples/dashboard"
+        href="/views/projects"
+        className="text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
+      >
+        Projects
+      </Link>
+      <Link
+        href="/views/bugs"
         className="text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         Bugs
       </Link>
-      <Link
-        href="/examples/dashboard"
-        className="text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
-        // onAnimationEnd={}
-      >
-        Projects
-      </Link>
-      {/* <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
-      >
-        Settings
-      </Link> */}
     </nav>
-  )
+  );
 }
