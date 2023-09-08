@@ -1,6 +1,6 @@
 import { db } from "../firebase";
 import { collection, getDocs, query } from "firebase/firestore";
-import { addDoc, where, doc, deleteDoc } from "firebase/firestore";
+import { addDoc, where, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 interface UserDetails {
   id: string;
@@ -46,20 +46,13 @@ export const getUsers = async () => {
 };
 
 export const deleteUser = async (id: string) => {
-  //* Comment
   await deleteDoc(doc(db, "users", id));
 };
 
 export const updateUser = async(userData: UserDetails) => {
-  // // Determine the document ID you want to update, e.g., based on user ID
-  // const documentId = userData.userId; // Replace with the appropriate field
-
-  // // Reference the document to update
-  // const userDocRef = doc(db, 'users', documentId); // 'users' is the collection name
-
-  // // Update the document
-  // await setDoc(userDocRef, userData, { merge: true });
-  
   const { id } = userData
+  
+  const userDocRef = doc(db, 'users', id)
+  await setDoc(userDocRef, userData, { merge: true })
   
 }
