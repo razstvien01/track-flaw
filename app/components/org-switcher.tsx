@@ -154,7 +154,7 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
                     }}
                   >
                     <PlusCircledIcon className="mr-2 h-5 w-5" />
-                    Create Team
+                    Create Organization
                   </CommandItem>
                 </DialogTrigger>
               </CommandGroup>
@@ -164,7 +164,7 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
       </Popover>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create team</DialogTitle>
+          <DialogTitle>Create organization</DialogTitle>
           <DialogDescription>
             Add a new team to manage products and customers.
           </DialogDescription>
