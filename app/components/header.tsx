@@ -1,6 +1,6 @@
 import React from "react";
 
-import TeamSwitcher from "./team-switcher";
+import OrgSwitcher from "./org-switcher";
 import ModeToggle from "./mode-toggle";
 import { UserNav } from "./user-nav";
 
@@ -17,7 +17,7 @@ const Header = () => {
         <MainNav className="mx-6" />
         <div className="ml-auto flex items-center space-x-4">
           <Search />
-          <TeamSwitcher />
+          <OrgSwitcher />
           <ModeToggle />
           <UserNav />
         </div>

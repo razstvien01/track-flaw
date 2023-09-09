@@ -1,19 +1,15 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   CaretSortIcon,
   CheckIcon,
   PlusCircledIcon,
-} from "@radix-ui/react-icons"
+} from "@radix-ui/react-icons";
 
-import { cn } from "@/lib/utils"
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -22,7 +18,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Dialog,
   DialogContent,
@@ -31,26 +27,26 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 const groups = [
   {
     label: "Personal Account",
-    teams: [
+    organizations: [
       {
         label: "Alicia Koch",
         value: "personal",
@@ -58,8 +54,8 @@ const groups = [
     ],
   },
   {
-    label: "Teams",
-    teams: [
+    label: "Organizations",
+    organizations: [
       {
         label: "Acme Inc.",
         value: "acme-inc",
@@ -70,23 +66,25 @@ const groups = [
       },
     ],
   },
-]
+];
 
-type Team = (typeof groups)[number]["teams"][number]
+type Org = (typeof groups)[number]["organizations"][number];
 
-type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
+type PopoverTriggerProps = React.ComponentPropsWithoutRef<
+  typeof PopoverTrigger
+>;
 
-interface TeamSwitcherProps extends PopoverTriggerProps {}
+interface OrgSwitcherProps extends PopoverTriggerProps {}
 
-export default function TeamSwitcher({ className }: TeamSwitcherProps) {
-  const [open, setOpen] = React.useState(false)
-  const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false)
-  const [selectedTeam, setSelectedTeam] = React.useState<Team>(
-    groups[0].teams[0]
-  )
+export default function OrgSwitcher({ className }: OrgSwitcherProps) {
+  const [open, setOpen] = React.useState(false);
+  const [showNewOrgDialog, setShowNewOrgDialog] = React.useState(false);
+  const [selectedOrg, setSelectedOrg] = React.useState<Org>(
+    groups[0].organizations[0]
+  );
 
   return (
-    <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
+    <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -98,12 +96,12 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
-                alt={selectedTeam.label}
+                src={`https://avatar.vercel.sh/${selectedOrg.value}.png`}
+                alt={selectedOrg.label}
               />
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>
-            {selectedTeam.label}
+            {selectedOrg.label}
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -114,28 +112,28 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
               <CommandEmpty>No team found.</CommandEmpty>
               {groups.map((group) => (
                 <CommandGroup key={group.label} heading={group.label}>
-                  {group.teams.map((team) => (
+                  {group.organizations.map((org) => (
                     <CommandItem
-                      key={team.value}
+                      key={org.value}
                       onSelect={() => {
-                        setSelectedTeam(team)
-                        setOpen(false)
+                        setSelectedOrg(org);
+                        setOpen(false);
                       }}
                       className="text-sm"
                     >
                       <Avatar className="mr-2 h-5 w-5">
                         <AvatarImage
-                          src={`https://avatar.vercel.sh/${team.value}.png`}
-                          alt={team.label}
+                          src={`https://avatar.vercel.sh/${org.value}.png`}
+                          alt={org.label}
                           className="grayscale"
                         />
                         <AvatarFallback>SC</AvatarFallback>
                       </Avatar>
-                      {team.label}
+                      {org.label}
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",
-                          selectedTeam.value === team.value
+                          org.value === org.value
                             ? "opacity-100"
                             : "opacity-0"
                         )}
@@ -151,8 +149,8 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
                 <DialogTrigger asChild>
                   <CommandItem
                     onSelect={() => {
-                      setOpen(false)
-                      setShowNewTeamDialog(true)
+                      setOpen(false);
+                      setShowNewOrgDialog(true);
                     }}
                   >
                     <PlusCircledIcon className="mr-2 h-5 w-5" />
@@ -202,12 +200,12 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => setShowNewTeamDialog(false)}>
+          <Button variant="outline" onClick={() => setShowNewOrgDialog(false)}>
             Cancel
           </Button>
           <Button type="submit">Continue</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
