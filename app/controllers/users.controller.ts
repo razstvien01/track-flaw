@@ -3,13 +3,13 @@ import { collection, getDoc, getDocs, query } from "firebase/firestore";
 import { addDoc, where, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 interface UserDetails {
-  id: string;
+  user_id: string;
   first_name: string;
   last_name: string;
   email_address: string;
   contact_number: string;
   role_id: string;
-  org_id: string
+  org_ids: string[]
 }
 
 export const checkIfExistsUser = async (email_address: string) => {
@@ -25,13 +25,21 @@ export const checkIfExistsUser = async (email_address: string) => {
 };
 
 export const addUser = async (userData: UserDetails) => {
-  const { role_id, org_id } = userData 
+  const { role_id, org_ids, ...restUserData } = userData;
+
+  //* Create references for the role and organizations based on their IDs
+  const roleRef = doc(db, 'roles', role_id);
+  const orgRefs = org_ids.map((org_id) => doc(db, 'organizations', org_id));
+
+  //* Add the role and organizations references to the user data
+  const userWithRefs = {
+    ...restUserData,
+    role_ref: roleRef,
+    org_refs: orgRefs,
+  };
   
-  const roleRef = doc(db, "roles", role_id);
-  const orgRef = doc(db, "organizations", org_id)
-  
-  const userWithRole = { ...userData, role_ref: roleRef, org_ref: orgRef };
-  await addDoc(collection(db, "users"), userWithRole);
+  //* Add the user document with role and organizations references
+  await addDoc(collection(db, 'users'), userWithRefs);
 };
 
 export const getUsers = async () => {
@@ -51,13 +59,13 @@ export const getUsers = async () => {
   }
 };
 
-export const deleteUser = async (id: string) => {
-  await deleteDoc(doc(db, "users", id));
+export const deleteUser = async (user_id: string) => {
+  await deleteDoc(doc(db, "users", user_id));
 };
 
 export const updateUser = async (userData: UserDetails) => {
-  const { id } = userData;
+  const { user_id } = userData;
 
-  const userDocRef = doc(db, "users", id);
+  const userDocRef = doc(db, "users", user_id);
   await setDoc(userDocRef, userData, { merge: true });
 };

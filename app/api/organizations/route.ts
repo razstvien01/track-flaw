@@ -1,20 +1,21 @@
-// import {
-//   getUsers,
-//   addUser,
-//   checkIfExistsUser,
-//   deleteUser,
-//   updateUser,
-// } from "@/app/controllers/organizations.controller";
+import {
+  addOrg,
+  checkIfExistsOrg,
+  deleteOrg,
+  getOrgs,
+  updateOrg
+} from "@/app/controllers/organizations.controller";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
   try {
-    // const users = await getUsers();
+    const orgs = await getOrgs();
 
     return new Response(
       JSON.stringify({
         success: true,
         message: "Fetch Users Successfully",
+        orgs,
       })
     );
   } catch (error) {
@@ -36,20 +37,20 @@ export const POST = async (request: NextRequest) => {
     
     const { email_address } = userData;
 
-    // if (await checkIfExistsUser(email_address)) {
-      // return NextResponse.json(
-      //   {
-      //     success: false,
-      //     message:
-      //       "This User is Already Exists. Please Try Another Email Address",
-      //   },
-      //   {
-      //     status: 500,
-      //   }
-      // );
-    // }
+    if (await checkIfExistsOrg(email_address)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "This User is Already Exists. Please Try Another Email Address",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
 
-    // await addUser(userData);
+    await addOrg(userData);
 
     return new Response(
       JSON.stringify({
@@ -72,10 +73,10 @@ export const POST = async (request: NextRequest) => {
 
 export const DELETE = async (request: NextRequest) => {
   try {
-    // const user = await request.json();
-    // const { id } = user;
+    const user = await request.json();
+    const { id } = user;
 
-    // await deleteUser(id);
+    await deleteOrg(id);
 
     return new Response(
       JSON.stringify({
@@ -98,9 +99,9 @@ export const DELETE = async (request: NextRequest) => {
 
 export const PUT = async (request: NextRequest) => {
   try {
-    // const user = await request.json();
+    const user = await request.json();
     
-    // await updateUser(user)
+    await updateOrg(user)
     
     return new Response(
       JSON.stringify({
