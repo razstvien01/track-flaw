@@ -133,7 +133,7 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",
-                          org.value === org.value
+                          selectedOrg.value === org.value
                             ? "opacity-100"
                             : "opacity-0"
                         )}

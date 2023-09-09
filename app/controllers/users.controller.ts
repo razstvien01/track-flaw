@@ -1,5 +1,5 @@
 import { db } from "../firebase";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDoc, getDocs, query } from "firebase/firestore";
 import { addDoc, where, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 interface UserDetails {
@@ -8,7 +8,8 @@ interface UserDetails {
   last_name: string;
   email_address: string;
   contact_number: string;
-  position: string;
+  role_id: string;
+  org_id: string
 }
 
 export const checkIfExistsUser = async (email_address: string) => {
@@ -24,8 +25,13 @@ export const checkIfExistsUser = async (email_address: string) => {
 };
 
 export const addUser = async (userData: UserDetails) => {
-  //* User does not exist, add them to the database
-  await addDoc(collection(db, "users"), userData);
+  const { role_id, org_id } = userData 
+  
+  const roleRef = doc(db, "roles", role_id);
+  const orgRef = doc(db, "organizations", org_id)
+  
+  const userWithRole = { ...userData, role_ref: roleRef, org_ref: orgRef };
+  await addDoc(collection(db, "users"), userWithRole);
 };
 
 export const getUsers = async () => {
@@ -49,10 +55,9 @@ export const deleteUser = async (id: string) => {
   await deleteDoc(doc(db, "users", id));
 };
 
-export const updateUser = async(userData: UserDetails) => {
-  const { id } = userData
-  
-  const userDocRef = doc(db, 'users', id)
-  await setDoc(userDocRef, userData, { merge: true })
-  
-}
+export const updateUser = async (userData: UserDetails) => {
+  const { id } = userData;
+
+  const userDocRef = doc(db, "users", id);
+  await setDoc(userDocRef, userData, { merge: true });
+};
