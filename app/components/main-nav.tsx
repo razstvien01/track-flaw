@@ -1,24 +1,49 @@
-"use client"
+"use client";
 
 import Link from "next/link";
-import { useState } from "react"; // Import useState to manage the clicked component state
+import { useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-const enum MAIN_COMPONENTS {
-  DASHBOARD = 'DASHBOARD',
-  PROJECTS = 'PROJECTS',
-  TEAMS = 'TEAMS',
-  BUGS = 'BUGS'
+const MAIN_COMPONENTS: Record<string, string> = {
+  DASHBOARD: "DASHBOARD",
+  PROJECTS: "PROJECTS",
+  TEAMS: "TEAMS",
+  BUGS: "BUGS",
+};
+
+interface NavigationItemProps {
+  href: string;
+  text: string;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+function NavigationItem({
+  href,
+  text,
+  isActive,
+  onClick,
+}: NavigationItemProps) {
+  return (
+    <Link
+      href={href}
+      className={`text-lg font-medium transition-colors hover:text-primary ${
+        isActive ? "" : "text-muted-foreground"
+      }`}
+      onClick={onClick}
+    >
+      {text.toLowerCase().charAt(0).toUpperCase() + '' + text.toLowerCase().slice(1)}
+    </Link>
+  );
 }
 
 export function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
-  const [clickedComponent, setClickedComponent] = useState("");
+  const [clickedComponent, setClickedComponent] = useState<string>("");
 
-  // Function to handle the component click
   const handleComponentClick = (componentName: string) => {
     setClickedComponent(componentName);
   };
@@ -28,34 +53,15 @@ export function MainNav({
       className={cn("flex items-center space-x-4 lg:space-x-6", className)}
       {...props}
     >
-      <Link
-        href="/views/dashboard"
-        className={`text-lg font-medium transition-colors hover:text-primary ${(clickedComponent === MAIN_COMPONENTS.DASHBOARD ? '' : 'text-muted-foreground')}`}
-        onClick={() => handleComponentClick(MAIN_COMPONENTS.DASHBOARD)}
-      >
-        Dashboard
-      </Link>
-      <Link
-        href="/views/projects"
-        className={`text-lg font-medium transition-colors hover:text-primary ${(clickedComponent === MAIN_COMPONENTS.PROJECTS ? '' : 'text-muted-foreground')}`}
-        onClick={() => handleComponentClick(MAIN_COMPONENTS.PROJECTS)}
-      >
-        Projects
-      </Link>
-      <Link
-        href="/views/teams"
-        className={`text-lg font-medium transition-colors hover:text-primary ${(clickedComponent === MAIN_COMPONENTS.TEAMS ? '' : 'text-muted-foreground')}`}
-        onClick={() => handleComponentClick(MAIN_COMPONENTS.TEAMS)}
-      >
-        Teams
-      </Link>
-      <Link
-        href="/views/bugs"
-        className={`text-lg font-medium transition-colors hover:text-primary ${(clickedComponent === MAIN_COMPONENTS.BUGS ? '' : 'text-muted-foreground')}`}
-        onClick={() => handleComponentClick(MAIN_COMPONENTS.BUGS)}
-      >
-        Bugs
-      </Link>
+      {Object.values(MAIN_COMPONENTS).map((component) => (
+        <NavigationItem
+          key={component}
+          href={`/views/${component.toLowerCase()}`}
+          text={component}
+          isActive={clickedComponent === component}
+          onClick={() => handleComponentClick(component)}
+        />
+      ))}
     </nav>
   );
 }
