@@ -16,18 +16,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="red-background">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Header/>
+    <>
+      <html lang="en" suppressHydrationWarning>
+        <body>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Header/>
           <div className="relative min-h-screen">
             {children}
             <Label className="absolute bottom-0 left-0 mb-2 ml-2">
               Created by Buggy Cat.
             </Label>
           </div>
-        </ThemeProvider>
-      </body>
-    </html>
+          </ThemeProvider>
+        </body>
+      </html>
+    </>
   );
 }
