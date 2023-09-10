@@ -14,7 +14,7 @@ export const GET = async (request: NextRequest) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: "Fetch Users Successfully",
+        message: "Fetch Organizations Successfully",
         orgs,
       })
     );
@@ -22,7 +22,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json(
       {
         success: false,
-        message: "Failure in fetching the users",
+        message: "Failure in Fetching the Organizations",
       },
       {
         status: 500,
@@ -33,16 +33,16 @@ export const GET = async (request: NextRequest) => {
 
 export const POST = async (request: NextRequest) => {
   try {
-    const userData = await request.json();
+    const orgData = await request.json();
     
-    const { email_address } = userData;
+    const { org_email } = orgData;
 
-    if (await checkIfExistsOrg(email_address)) {
+    if (await checkIfExistsOrg(org_email)) {
       return NextResponse.json(
         {
           success: false,
           message:
-            "This User is Already Exists. Please Try Another Email Address",
+            "This Organization is Already Exists. Please Try Another Email Address",
         },
         {
           status: 500,
@@ -50,19 +50,19 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    await addOrg(userData);
+    await addOrg(orgData);
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: "Account User Created Successfully",
+        message: "Organization Created Successfully",
       })
     );
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: "User Registration Failed",
+        message: "Organization Registration Failed",
       },
       {
         status: 500,
@@ -73,22 +73,22 @@ export const POST = async (request: NextRequest) => {
 
 export const DELETE = async (request: NextRequest) => {
   try {
-    const user = await request.json();
-    const { id } = user;
-
-    await deleteOrg(id);
+    const orgData = await request.json();
+    const { org_id } = orgData;
+    
+    await deleteOrg(org_id);
 
     return new Response(
       JSON.stringify({
         success: true,
-        message: "Account User Deleted Successfully",
+        message: "Organization Deleted Successfully",
       })
     );
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: "Deleting the User Account Failed",
+        message: "Deleting the Organization Failed",
       },
       {
         status: 500,
@@ -99,21 +99,21 @@ export const DELETE = async (request: NextRequest) => {
 
 export const PUT = async (request: NextRequest) => {
   try {
-    const user = await request.json();
+    const orgData = await request.json();
     
-    await updateOrg(user)
+    await updateOrg(orgData)
     
     return new Response(
       JSON.stringify({
         success: true,
-        message: "Account User Updated Successfully",
+        message: "Organization Details Updated Successfully",
       })
     );
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: "Updating the User Account Failed",
+        message: "Updating the Organization Failed",
       },
       {
         status: 500,

@@ -74,9 +74,9 @@ export const POST = async (request: NextRequest) => {
 export const DELETE = async (request: NextRequest) => {
   try {
     const user = await request.json();
-    const { id } = user;
+    const { user_id } = user;
 
-    await deleteUser(id);
+    await deleteUser(user_id);
 
     return new Response(
       JSON.stringify({
@@ -106,14 +106,14 @@ export const PUT = async (request: NextRequest) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: "Account User Updated Successfully",
+        message: "Account User Details Updated Successfully",
       })
     );
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: "Updating the User Account Failed",
+        message: "Updating the User Account Details Failed",
       },
       {
         status: 500,

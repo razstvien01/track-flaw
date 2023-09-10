@@ -9,7 +9,7 @@ interface UserDetails {
   email_address: string;
   contact_number: string;
   role_id: string;
-  org_ids: string[]
+  org_ids: string[];
 }
 
 export const checkIfExistsUser = async (email_address: string) => {
@@ -28,8 +28,8 @@ export const addUser = async (userData: UserDetails) => {
   const { role_id, org_ids, ...restUserData } = userData;
 
   //* Create references for the role and organizations based on their IDs
-  const roleRef = doc(db, 'roles', role_id);
-  const orgRefs = org_ids.map((org_id) => doc(db, 'organizations', org_id));
+  const roleRef = doc(db, "roles", role_id);
+  const orgRefs = org_ids.map((org_id) => doc(db, "organizations", org_id));
 
   //* Add the role and organizations references to the user data
   const userWithRefs = {
@@ -37,26 +37,21 @@ export const addUser = async (userData: UserDetails) => {
     role_ref: roleRef,
     org_refs: orgRefs,
   };
-  
+
   //* Add the user document with role and organizations references
-  await addDoc(collection(db, 'users'), userWithRefs);
+  await addDoc(collection(db, "users"), userWithRefs);
 };
 
 export const getUsers = async () => {
-  try {
-    const q = query(collection(db, "users"));
-    const querySnapshot = await getDocs(q);
+  const q = query(collection(db, "users"));
+  const querySnapshot = await getDocs(q);
 
-    const userArr = querySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
-    }));
+  const userArr = querySnapshot.docs.map((doc) => ({
+    ...doc.data(),
+    id: doc.id,
+  }));
 
-    return userArr;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  return userArr;
 };
 
 export const deleteUser = async (user_id: string) => {
