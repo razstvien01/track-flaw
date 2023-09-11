@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import {
   CaretSortIcon,
   CheckIcon,
@@ -42,6 +42,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import OrgSwitcherDialog from "./org-switcher.dialog";
 
 const groups = [
   {
@@ -77,9 +78,9 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
 interface OrgSwitcherProps extends PopoverTriggerProps {}
 
 export default function OrgSwitcher({ className }: OrgSwitcherProps) {
-  const [open, setOpen] = React.useState(false);
-  const [showNewOrgDialog, setShowNewOrgDialog] = React.useState(false);
-  const [selectedOrg, setSelectedOrg] = React.useState<Org>(
+  const [open, setOpen] = useState(false);
+  const [showNewOrgDialog, setShowNewOrgDialog] = useState(false);
+  const [selectedOrg, setSelectedOrg] = useState<Org>(
     groups[0].organizations[0]
   );
 
@@ -162,18 +163,19 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
           </Command>
         </PopoverContent>
       </Popover>
-      <DialogContent>
+      <OrgSwitcherDialog setShowNewOrgDialog={setShowNewOrgDialog}/>
+      {/* <DialogContent>
         <DialogHeader>
           <DialogTitle>Create organization</DialogTitle>
           <DialogDescription>
-            Add a new team to manage products and customers.
+            Add a new organization to our list of partners to expand our network and collaborate on exciting projects.
           </DialogDescription>
         </DialogHeader>
         <div>
           <div className="space-y-4 py-2 pb-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Team name</Label>
-              <Input id="name" placeholder="Acme Inc." />
+              <Label htmlFor="name">Organization name</Label>
+              <Input id="name" placeholder="Enter organization name" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="plan">Subscription plan</Label>
@@ -205,7 +207,7 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
           </Button>
           <Button type="submit">Continue</Button>
         </DialogFooter>
-      </DialogContent>
+      </DialogContent> */}
     </Dialog>
   );
 }
