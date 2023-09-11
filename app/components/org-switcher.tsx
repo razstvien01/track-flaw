@@ -66,22 +66,14 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
   const [open, setOpen] = useState(false);
   const [showNewOrgDialog, setShowNewOrgDialog] = useState(false);
   const [selectedOrg, setSelectedOrg] = useState<any>(
-    // groups[0].organizations[0]
     {
-      org_name: ''
+      org_name: 'Select organization'
     }
   );
   const [orgs, setOrgs] = useState<any[]>([]);
-
+    
   useGetOrgs(setOrgs);
-
-  useEffect(() => {
-    console.log(typeof orgs);
-    // console.log(orgs.map);
-    console.log(orgs.map((org) => org));
-    return () => {};
-  }, [orgs]);
-
+  
   return (
     <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -148,66 +140,6 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
                   </CommandGroup>
                 );
               })}
-              {/* {orgs.map((org: any) => (
-                <CommandGroup key={org.label} heading={'Organizations'}>
-                  <CommandItem
-                    key={org.id}
-                    onSelect={() => {
-                      setSelectedOrg(org.organization);
-                      setOpen(false);
-                    }}
-                    className="text-sm"
-                  >
-                    <Avatar className="mr-2 h-5 w-5">
-                      <AvatarImage
-                        src={`https://avatar.vercel.sh/${org.organization.org_name}.png`}
-                        alt={org.organization.org_name}
-                        className="grayscale"
-                      />
-                      <AvatarFallback>SC</AvatarFallback>
-                    </Avatar>
-                    {org.org_name}
-                    <CheckIcon
-                      className={cn(
-                        "ml-auto h-4 w-4",
-                        selectedOrg.org_name === org.organization.value
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                    />
-                  </CommandItem>
-                </CommandGroup>
-              ))} */}
-              {/* {group.organizations.map((org) => (
-                    <CommandItem
-                      key={org.value}
-                      onSelect={() => {
-                        setSelectedOrg(org);
-                        setOpen(false);
-                      }}
-                      className="text-sm"
-                    >
-                      <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage
-                          src={`https://avatar.vercel.sh/${org.value}.png`}
-                          alt={org.label}
-                          className="grayscale"
-                        />
-                        <AvatarFallback>SC</AvatarFallback>
-                      </Avatar>
-                      {org.label}
-                      <CheckIcon
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          selectedOrg.value === org.value
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
-                    </CommandItem>
-                  ))} */}
-              {/* </CommandGroup>
-              ))} */}
             </CommandList>
             <CommandSeparator />
             <CommandList>
@@ -229,50 +161,6 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
         </PopoverContent>
       </Popover>
       <OrgSwitcherDialog setShowNewOrgDialog={setShowNewOrgDialog} />
-      {/* <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create organization</DialogTitle>
-          <DialogDescription>
-            Add a new organization to our list of partners to expand our network and collaborate on exciting projects.
-          </DialogDescription>
-        </DialogHeader>
-        <div>
-          <div className="space-y-4 py-2 pb-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Organization name</Label>
-              <Input id="name" placeholder="Enter organization name" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="plan">Subscription plan</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">
-                    <span className="font-medium">Free</span> -{" "}
-                    <span className="text-muted-foreground">
-                      Trial for two weeks
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="pro">
-                    <span className="font-medium">Pro</span> -{" "}
-                    <span className="text-muted-foreground">
-                      $9/month per user
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setShowNewOrgDialog(false)}>
-            Cancel
-          </Button>
-          <Button type="submit">Continue</Button>
-        </DialogFooter>
-      </DialogContent> */}
     </Dialog>
   );
 }
