@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CaretSortIcon,
   CheckIcon,
@@ -19,30 +19,15 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import OrgSwitcherDialog from "./org-switcher.dialog";
+import { useGetOrgs } from "../services/org.service";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const groups = [
   {
@@ -80,9 +65,22 @@ interface OrgSwitcherProps extends PopoverTriggerProps {}
 export default function OrgSwitcher({ className }: OrgSwitcherProps) {
   const [open, setOpen] = useState(false);
   const [showNewOrgDialog, setShowNewOrgDialog] = useState(false);
-  const [selectedOrg, setSelectedOrg] = useState<Org>(
-    groups[0].organizations[0]
+  const [selectedOrg, setSelectedOrg] = useState<any>(
+    // groups[0].organizations[0]
+    {
+      org_name: ''
+    }
   );
+  const [orgs, setOrgs] = useState<any[]>([]);
+
+  useGetOrgs(setOrgs);
+
+  useEffect(() => {
+    console.log(typeof orgs);
+    // console.log(orgs.map);
+    console.log(orgs.map((org) => org));
+    return () => {};
+  }, [orgs]);
 
   return (
     <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>
@@ -97,12 +95,12 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedOrg.value}.png`}
-                alt={selectedOrg.label}
+                src={`https://avatar.vercel.sh/${selectedOrg.org_name}.png`}
+                alt={selectedOrg.org_name}
               />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarFallback></AvatarFallback>
             </Avatar>
-            {selectedOrg.label}
+            {selectedOrg.org_name}
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -111,9 +109,76 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
             <CommandList>
               <CommandInput placeholder="Search team..." />
               <CommandEmpty>No team found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
-                  {group.organizations.map((org) => (
+              {orgs.map((organization) => {
+                const { label, orgs } = organization;
+                return (
+                  <CommandGroup key={label} heading={label}>
+                    {orgs.map((org: any) => {
+                      const { org_name } = org;
+                      return (
+                        <CommandItem
+                          key={org_name}
+                          onSelect={() => {
+                            setSelectedOrg(org);
+                            setOpen(false);
+                          }}
+                        >
+                          <Avatar className="mr-2 h-5 w-5">
+                            <AvatarImage
+                              src={`https://avatar.vercel.sh/${org_name}.png`}
+                              alt={org_name}
+                              className="grayscale"
+                            />
+                            <AvatarFallback></AvatarFallback>
+                            <Skeleton></Skeleton>
+                          </Avatar>
+                          {org_name}
+                          <CheckIcon
+                            className={cn(
+                              "ml-auto h-4 w-4",
+                              selectedOrg.org_name === org_name
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                            
+                        </CommandItem>
+                      );
+                    })}
+                  </CommandGroup>
+                );
+              })}
+              {/* {orgs.map((org: any) => (
+                <CommandGroup key={org.label} heading={'Organizations'}>
+                  <CommandItem
+                    key={org.id}
+                    onSelect={() => {
+                      setSelectedOrg(org.organization);
+                      setOpen(false);
+                    }}
+                    className="text-sm"
+                  >
+                    <Avatar className="mr-2 h-5 w-5">
+                      <AvatarImage
+                        src={`https://avatar.vercel.sh/${org.organization.org_name}.png`}
+                        alt={org.organization.org_name}
+                        className="grayscale"
+                      />
+                      <AvatarFallback>SC</AvatarFallback>
+                    </Avatar>
+                    {org.org_name}
+                    <CheckIcon
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        selectedOrg.org_name === org.organization.value
+                          ? "opacity-100"
+                          : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                </CommandGroup>
+              ))} */}
+              {/* {group.organizations.map((org) => (
                     <CommandItem
                       key={org.value}
                       onSelect={() => {
@@ -140,9 +205,9 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
                         )}
                       />
                     </CommandItem>
-                  ))}
-                </CommandGroup>
-              ))}
+                  ))} */}
+              {/* </CommandGroup>
+              ))} */}
             </CommandList>
             <CommandSeparator />
             <CommandList>
@@ -163,7 +228,7 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
           </Command>
         </PopoverContent>
       </Popover>
-      <OrgSwitcherDialog setShowNewOrgDialog={setShowNewOrgDialog}/>
+      <OrgSwitcherDialog setShowNewOrgDialog={setShowNewOrgDialog} />
       {/* <DialogContent>
         <DialogHeader>
           <DialogTitle>Create organization</DialogTitle>

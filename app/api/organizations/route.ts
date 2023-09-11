@@ -3,7 +3,7 @@ import {
   checkIfExistsOrg,
   deleteOrg,
   getOrgs,
-  updateOrg
+  updateOrg,
 } from "@/app/controllers/organizations.controller";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,7 +15,16 @@ export const GET = async (request: NextRequest) => {
       JSON.stringify({
         success: true,
         message: "Fetch Organizations Successfully",
-        orgs,
+        organization: [
+          {
+            label: "Personal",
+            orgs: [],
+          },
+          {
+            label: "Organizations",
+            orgs,
+          },
+        ],
       })
     );
   } catch (error) {
@@ -34,7 +43,7 @@ export const GET = async (request: NextRequest) => {
 export const POST = async (request: NextRequest) => {
   try {
     const orgData = await request.json();
-    
+
     const { org_email } = orgData;
 
     if (await checkIfExistsOrg(org_email)) {
@@ -75,7 +84,7 @@ export const DELETE = async (request: NextRequest) => {
   try {
     const orgData = await request.json();
     const { org_id } = orgData;
-    
+
     await deleteOrg(org_id);
 
     return new Response(
@@ -100,9 +109,9 @@ export const DELETE = async (request: NextRequest) => {
 export const PUT = async (request: NextRequest) => {
   try {
     const orgData = await request.json();
-    
-    await updateOrg(orgData)
-    
+
+    await updateOrg(orgData);
+
     return new Response(
       JSON.stringify({
         success: true,

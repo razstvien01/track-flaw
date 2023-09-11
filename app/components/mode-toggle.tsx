@@ -13,7 +13,7 @@ const ModeToggle = () => {
       variant="outline"
       size="icon"
       onClick={() => {
-        // Toggle between dark and light themes
+        //* Toggle between dark and light themes
         setTheme(theme === "light" ? "dark" : "light");
       }}
     >
