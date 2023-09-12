@@ -28,6 +28,7 @@ import {
   useState,
 } from "react";
 import AlertSuccess from "./success_alert";
+import AlertDestructive from "./alert_destructive";
 
 interface OrgSwitcherDialogProps {
   setShowNewOrgDialog: Dispatch<SetStateAction<boolean>>;
@@ -52,17 +53,24 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
 }) => {
   const [orgData, setOrgData] = useState<OrgDataDetails>(initOrgDataDetails);
   const [isSave, setIsSave] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState({
+    success: false,
+    error: false,
+  });
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(false);
+      setIsVisible({
+        error: false,
+        success: false,
+      });
       setShowNewOrgDialog(false);
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [isVisible, setShowNewOrgDialog]);
-
+  }, [isVisible.success, setShowNewOrgDialog]);
+  
   //* Function to handle form submission
   const handleSubmit = () => {
     setIsSave(true);
@@ -73,14 +81,21 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
       })
       .then((response) => {
         //* Handle a successful response
-
+        setMessage(response.data.message);
+        setIsVisible({
+          error: false,
+          success: true,
+        });
         setIsSave(false);
-        setIsVisible(true);
       })
       .catch((error) => {
         //* Handle any errors that occurred during the request
-        console.error("POST request failed:", error);
 
+        setMessage(error.response.data.message);
+        setIsVisible((prev) => ({
+          ...prev,
+          error: true,
+        }));
         setIsSave(false);
       });
   };
@@ -159,9 +174,8 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
           </div>
         </div>
       </div>
-      {isVisible ? (
-        <AlertSuccess description="Organization created successfully" />
-      ) : null}
+      {isVisible.success ? <AlertSuccess description={message} /> : null}
+      {isVisible.error ? <AlertDestructive description={message} /> : null}
       <DialogFooter>
         <Button variant="outline" onClick={() => setShowNewOrgDialog(false)}>
           Cancel
@@ -169,7 +183,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
         <Button
           type="submit"
           onClick={handleSubmit}
-          disabled={isSave || isVisible}
+          disabled={isSave || isVisible.success}
         >
           {isSave ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : null}
           {isSave ? "Continue" : "Save"}

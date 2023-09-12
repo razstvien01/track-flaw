@@ -11,7 +11,7 @@ const AlertSuccess: React.FC<AlertSuccessProps> = ({ description }) => {
     <Alert className="text-green-600 border border-green-600">
       <Check className="w-4 h-4 text-green-600" />
       <AlertTitle>Success</AlertTitle>
-      <AlertDescription>{`${description} was successful.`}</AlertDescription>
+      <AlertDescription>{description}</AlertDescription>
     </Alert>
   );
 };
