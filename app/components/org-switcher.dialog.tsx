@@ -27,6 +27,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import AlertSuccess from "./success_alert";
 
 interface OrgSwitcherDialogProps {
   setShowNewOrgDialog: Dispatch<SetStateAction<boolean>>;
@@ -51,15 +52,20 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
 }) => {
   const [orgData, setOrgData] = useState<OrgDataDetails>(initOrgDataDetails);
   const [isSave, setIsSave] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+      setShowNewOrgDialog(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [isVisible, setShowNewOrgDialog]);
 
   //* Function to handle form submission
   const handleSubmit = () => {
-    // console.log(orgData);
-    console.log("to submit", orgData);
-    // Send a POST request using axios
-
     setIsSave(true);
-
     axios
       .post("/api/organizations", {
         ...orgData,
@@ -67,15 +73,14 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
       })
       .then((response) => {
         //* Handle a successful response
-        console.log("POST request successful");
-        console.log("Response data:", response.data);
-        setShowNewOrgDialog(false);
+
         setIsSave(false);
+        setIsVisible(true);
       })
       .catch((error) => {
         //* Handle any errors that occurred during the request
         console.error("POST request failed:", error);
-        setShowNewOrgDialog(false);
+
         setIsSave(false);
       });
   };
@@ -154,13 +159,20 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
           </div>
         </div>
       </div>
+      {isVisible ? (
+        <AlertSuccess description="Organization created successfully" />
+      ) : null}
       <DialogFooter>
         <Button variant="outline" onClick={() => setShowNewOrgDialog(false)}>
           Cancel
         </Button>
-        <Button type="submit" onClick={handleSubmit} disabled={isSave}>
+        <Button
+          type="submit"
+          onClick={handleSubmit}
+          disabled={isSave || isVisible}
+        >
           {isSave ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : null}
-          {isSave ? "Continue" : "Saving"}
+          {isSave ? "Continue" : "Save"}
         </Button>
       </DialogFooter>
     </DialogContent>
