@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Loader } from "lucide-react";
 import axios from "axios";
 
 import {
@@ -49,22 +50,33 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   setShowNewOrgDialog,
 }) => {
   const [orgData, setOrgData] = useState<OrgDataDetails>(initOrgDataDetails);
+  const [isSave, setIsSave] = useState<boolean>(false);
 
   //* Function to handle form submission
   const handleSubmit = () => {
     // console.log(orgData);
-    console.log('to submit', orgData)
+    console.log("to submit", orgData);
     // Send a POST request using axios
+
+    setIsSave(true);
+
     axios
-      .post('/api/organizations', { ...orgData, creator_id: 'wwjd8MgJYd0NPpSq9bSy' })
+      .post("/api/organizations", {
+        ...orgData,
+        creator_id: "wwjd8MgJYd0NPpSq9bSy",
+      })
       .then((response) => {
         //* Handle a successful response
         console.log("POST request successful");
         console.log("Response data:", response.data);
+        setShowNewOrgDialog(false);
+        setIsSave(false);
       })
       .catch((error) => {
         //* Handle any errors that occurred during the request
         console.error("POST request failed:", error);
+        setShowNewOrgDialog(false);
+        setIsSave(false);
       });
   };
 
@@ -146,8 +158,9 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
         <Button variant="outline" onClick={() => setShowNewOrgDialog(false)}>
           Cancel
         </Button>
-        <Button type="submit" onClick={handleSubmit}>
-          Continue
+        <Button type="submit" onClick={handleSubmit} disabled={isSave}>
+          {isSave ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : null}
+          {isSave ? "Continue" : "Saving"}
         </Button>
       </DialogFooter>
     </DialogContent>
