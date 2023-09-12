@@ -17,49 +17,128 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import axios from "axios";
 
-import { Dispatch, SetStateAction } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
 interface OrgSwitcherDialogProps {
-  setShowNewOrgDialog: Dispatch<SetStateAction<boolean>>
+  setShowNewOrgDialog: Dispatch<SetStateAction<boolean>>;
 }
 
-const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({ setShowNewOrgDialog }) => {
+interface OrgDataDetails {
+  org_name: string;
+  org_email: string;
+  personal: boolean;
+  org_url: string;
+}
+
+const initOrgDataDetails: OrgDataDetails = {
+  org_name: "",
+  personal: false,
+  org_email: "",
+  org_url: "",
+};
+
+const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
+  setShowNewOrgDialog,
+}) => {
+  const [orgData, setOrgData] = useState<OrgDataDetails>(initOrgDataDetails);
+
+  //* Function to handle form submission
+  const handleSubmit = () => {
+    // console.log(orgData);
+    console.log('to submit', orgData)
+    // Send a POST request using axios
+    axios
+      .post('/api/organizations', { ...orgData, creator_id: 'wwjd8MgJYd0NPpSq9bSy' })
+      .then((response) => {
+        //* Handle a successful response
+        console.log("POST request successful");
+        console.log("Response data:", response.data);
+      })
+      .catch((error) => {
+        //* Handle any errors that occurred during the request
+        console.error("POST request failed:", error);
+      });
+  };
+
+  const handleOnchangeData = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setOrgData((prev: OrgDataDetails) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSelectOnchangeData = (value: string) => {
+    setOrgData((prev: OrgDataDetails) => ({
+      ...prev,
+      personal: JSON.parse(value),
+    }));
+  };
+
   return (
     <DialogContent>
       <DialogHeader>
         <DialogTitle>Create organization</DialogTitle>
         <DialogDescription>
-          Add a new organization to our list of partners to expand our network and collaborate on exciting projects.
+          Add a new organization to our list of partners to expand our network
+          and collaborate on exciting projects.
         </DialogDescription>
       </DialogHeader>
       <div>
         <div className="space-y-4 py-2 pb-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Organization name</Label>
-            <Input id="name" placeholder="Enter organization name" />
+            <Label htmlFor="org_name">Organization name</Label>
+            <Input
+              id="org_name"
+              placeholder="Enter organization name"
+              onChange={(e) => handleOnchangeData(e)}
+            />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="plan">Subscription plan</Label>
-            <Select>
+            <Label htmlFor="org_email">Organization email address</Label>
+            <Input
+              id="org_email"
+              placeholder="Enter organization email address"
+              onChange={(e) => handleOnchangeData(e)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="personal">Is the organization personal?</Label>
+            <Select
+              onValueChange={(e) => handleSelectOnchangeData(e)}
+              value={`${orgData.personal}`}
+            >
               <SelectTrigger>
-                <SelectValue placeholder="Select a plan" />
+                <SelectValue placeholder="Select true or false" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="free">
-                  <span className="font-medium">Free</span> -{" "}
+                <SelectItem value="true">
+                  <span className="font-medium">True</span> -{" "}
                   <span className="text-muted-foreground">
-                    Trial for two weeks
+                    For personal use, you can only have one.
                   </span>
                 </SelectItem>
-                <SelectItem value="pro">
-                  <span className="font-medium">Pro</span> -{" "}
+                <SelectItem value="false">
+                  <span className="font-medium">False</span> -{" "}
                   <span className="text-muted-foreground">
-                    $9/month per user
+                    For organizational use.
                   </span>
                 </SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="name">Organization url</Label>
+            <Input
+              id="org_url"
+              placeholder="Enter organization url"
+              onChange={(e) => handleOnchangeData(e)}
+            />
           </div>
         </div>
       </div>
@@ -67,7 +146,9 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({ setShowNewOrgDial
         <Button variant="outline" onClick={() => setShowNewOrgDialog(false)}>
           Cancel
         </Button>
-        <Button type="submit">Continue</Button>
+        <Button type="submit" onClick={handleSubmit}>
+          Continue
+        </Button>
       </DialogFooter>
     </DialogContent>
   );

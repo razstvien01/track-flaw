@@ -29,33 +29,6 @@ import OrgSwitcherDialog from "./org-switcher.dialog";
 import { useGetOrgs } from "../services/org.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const groups = [
-  {
-    label: "Personal Account",
-    organizations: [
-      {
-        label: "Alicia Koch",
-        value: "personal",
-      },
-    ],
-  },
-  {
-    label: "Organizations",
-    organizations: [
-      {
-        label: "Acme Inc.",
-        value: "acme-inc",
-      },
-      {
-        label: "Monsters Inc.",
-        value: "monsters",
-      },
-    ],
-  },
-];
-
-type Org = (typeof groups)[number]["organizations"][number];
-
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
 >;
