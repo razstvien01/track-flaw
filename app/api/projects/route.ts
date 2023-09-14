@@ -108,9 +108,9 @@ export const DELETE = async (request: NextRequest) => {
 
 export const PUT = async (request: NextRequest) => {
   try {
-    const orgData = await request.json();
+    const projectData = await request.json();
 
-    await updateProject(orgData);
+    await updateProject(projectData);
 
     return new Response(
       JSON.stringify({

@@ -3,6 +3,7 @@ import { collection, getDoc, getDocs, query } from "firebase/firestore";
 import { addDoc, where, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 interface ProjectDetails {
+  project_id: string;
   project_name: string;
   org_id: string;
   team_id: string;
@@ -52,6 +53,7 @@ export const getProjects = async () => {
       org_url: data.org_url,
       id: doc.id,
       org: {
+        id,
         org_name,
         org_url,
         personal
@@ -71,9 +73,9 @@ export const deleteProject = async (project_id: string) => {
   await deleteDoc(doc(db, "projects", project_id));
 };
 
-export const updateProject = async (orgData: ProjectDetails) => {
-  const { org_id } = orgData;
+export const updateProject = async (projectData: ProjectDetails) => {
+  const { project_id } = projectData;
 
-  const userDocRef = doc(db, "organizations", org_id);
-  await setDoc(userDocRef, orgData, { merge: true });
+  const userDocRef = doc(db, "projects", project_id);
+  await setDoc(userDocRef, projectData, { merge: true });
 };
