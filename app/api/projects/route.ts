@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
   try {
-    const orgs = await getProjects();
+    const projects = await getProjects();
 
     return new Response(
       JSON.stringify({
@@ -22,7 +22,7 @@ export const GET = async (request: NextRequest) => {
           },
           {
             label: "Projects",
-            orgs,
+            projects,
           },
         ],
       })

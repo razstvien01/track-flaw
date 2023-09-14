@@ -31,22 +31,19 @@ export const addProject = async (orgData: ProjectDetails) => {
 };
 
 export const getProjects = async () => {
-  const q = query(collection(db, 'organizations'))
+  const q = query(collection(db, 'projects'))
   const querySnapshot = await getDocs(q)
   
-  const orgArr = querySnapshot.docs.map(async (doc) => {
+  const projectArr = querySnapshot.docs.map(async (doc) => {
     const data = doc.data();
-
     
-    // Extract the DocumentReference
-    const creatorRef = data.creator_ref;
-    const { id } = creatorRef
+    const organizationRef = data.org_ref;
+    const { id } = organizationRef
 
-    // Fetch the document referred to by creatorRef
-    const creatorDoc = await getDoc(creatorRef);
-
-    // Extract first_name and last_name from the creatorDoc data
-    const { first_name, last_name } = creatorDoc.data() as any;
+    //* Fetch the document referred to by org_ref
+    const orgDoc = await getDoc(organizationRef);
+    
+    const { org_name, personal, org_url } = orgDoc.data() as any;
 
     // Create a new object with the extracted data
     const extractedData = {
@@ -54,20 +51,20 @@ export const getProjects = async () => {
       org_email: data.org_email,
       org_url: data.org_url,
       id: doc.id,
-      creator: {
-        user_id: id,
-        first_name,
-        last_name,
-      },
+      org: {
+        org_name,
+        org_url,
+        personal
+      }
     };
 
     return extractedData;
   });
 
-  // Wait for all asynchronous operations to complete
-  const orgData = await Promise.all(orgArr);
+  //* Wait for all asynchronous operations to complete
+  const projectData = await Promise.all(projectArr);
   
-  return orgData;
+  return projectData;
 };
 
 export const deleteProject = async (project_id: string) => {
