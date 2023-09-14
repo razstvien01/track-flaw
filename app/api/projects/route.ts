@@ -42,19 +42,16 @@ export const GET = async (request: NextRequest) => {
 
 export const POST = async (request: NextRequest) => {
   try {
-    const orgData = await request.json();
+    const projectData = await request.json();
 
-    const { org_email } = orgData;
+    const { project_name } = projectData;
     
-    console.log(org_email)
-
-    if (await checkIfExistsProj(org_email)) {
-      console.log('muagiii')
+    if (await checkIfExistsProj(project_name)) {
       return NextResponse.json(
         {
           success: false,
           message:
-            "This Project is Already Exists. Please Try Another Email Address",
+            "This Project is Already Exists. Please Try Another Project Nmae",
         },
         {
           status: 500,
@@ -62,7 +59,7 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    await addProject(orgData);
+    await addProject(projectData);
 
     return new Response(
       JSON.stringify({

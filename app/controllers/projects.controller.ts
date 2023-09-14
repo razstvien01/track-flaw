@@ -3,17 +3,16 @@ import { collection, getDoc, getDocs, query } from "firebase/firestore";
 import { addDoc, where, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 interface ProjectDetails {
+  project_name: string;
   org_id: string;
-  org_name: string;
-  org_email: string;
-  creator_id: string;
+  team_id: string;
 }
 
-export const checkIfExistsProj = async (org_email: string) => {
+export const checkIfExistsProj = async (project_name: string) => {
   //* Check if the organization already exists
   const userQuery = query(
-    collection(db, "organizations"),
-    where("org_email", "==", org_email)
+    collection(db, "projects"),
+    where("project_name", "==", project_name)
   );
 
   const querySnapshot = await getDocs(userQuery);
@@ -22,13 +21,13 @@ export const checkIfExistsProj = async (org_email: string) => {
 };
 
 export const addProject = async (orgData: ProjectDetails) => {
-  const { creator_id, ...restOrgData } = orgData;
+  const { org_id, ...restOrgData } = orgData;
 
-  const creatorRef = doc(db, "users", creator_id);
+  const orgRef = doc(db, "organizations", org_id);
 
-  const orgWithRefs = { ...restOrgData, creator_ref: creatorRef };
+  const orgWithRefs = { ...restOrgData, org_ref: orgRef };
 
-  await addDoc(collection(db, "organizations"), orgWithRefs);
+  await addDoc(collection(db, "projects"), orgWithRefs);
 };
 
 export const getProjects = async () => {
