@@ -70,8 +70,8 @@ export const getProjects = async () => {
   return orgData;
 };
 
-export const deleteProject = async (org_id: string) => {
-  await deleteDoc(doc(db, "organizations", org_id));
+export const deleteProject = async (project_id: string) => {
+  await deleteDoc(doc(db, "projects", project_id));
 };
 
 export const updateProject = async (orgData: ProjectDetails) => {

@@ -82,10 +82,10 @@ export const POST = async (request: NextRequest) => {
 
 export const DELETE = async (request: NextRequest) => {
   try {
-    const orgData = await request.json();
-    const { org_id } = orgData;
+    const projectData = await request.json();
+    const { project_id } = projectData;
 
-    await deleteProject(org_id);
+    await deleteProject(project_id);
 
     return new Response(
       JSON.stringify({
