@@ -3,9 +3,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "./components/header";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import { AuthContextProvider } from "./context/auth_context";
 
 export const metadata: Metadata = {
   title: "Track Flaw",
@@ -24,21 +23,11 @@ export default function RootLayout({
     <>
       <html lang="en" suppressHydrationWarning>
         <body>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-            {isLogin ? (
-              <>
-                <Header />
-                <div className="relative min-h-screen">
-                  {children}
-                  <Label className="absolute bottom-0 left-0 mb-2 ml-2">
-                    Created by Buggy Cat.
-                  </Label>
-                </div>
-              </>
-            ) : (
-              <>{children}</>
-            )}
-          </ThemeProvider>
+          <AuthContextProvider>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+              {children}
+            </ThemeProvider>
+          </AuthContextProvider>
         </body>
       </html>
     </>

@@ -16,7 +16,15 @@ export const metadata: Metadata = {
   description: "Authentication forms built using the components.",
 };
 
-const AuthenticationPage: React.FC<any> = () => {
+interface AuthenticationPageProps {
+  googleSignIn: () => void;
+  logOut: () => void;
+}
+
+const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
+  googleSignIn,
+  logOut,
+}) => {
   const [isSignUp, setIsSignUp] = useState(false); // Initialize state
 
   //* Function to toggle between Login and Sign Up
@@ -50,7 +58,7 @@ const AuthenticationPage: React.FC<any> = () => {
                 Enter your email below to create your account
               </p>
             </div>
-            <UserAuthSignupForm />
+            <UserAuthSignupForm googleSignIn={googleSignIn} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link
@@ -70,18 +78,25 @@ const AuthenticationPage: React.FC<any> = () => {
             </p>
           </div>
         </div>
-        <div className="relative h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex bg-cover bg-center" style={{ backgroundImage: 'url("/peakpx.jpg")' }}>
+        <div
+          className="relative h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex bg-cover bg-center"
+          style={{ backgroundImage: 'url("/peakpx.jpg")' }}
+        >
           <div className="absolute inset-0" />
           <div className="relative">
             <div className="absolute top-1 right-4 flex items-center text-lg font-medium md:right-8 md:bottom-8">
-              <Logo/>
+              <Logo />
               &nbsp;&nbsp;Buggy Cat, Inc
             </div>
           </div>
           <div className="relative z-20 mt-auto">
             <blockquote className="space-y-2">
-              <p className="text-lg">
-                &ldquo;{"The Track Flaw's powerful features have saved me countless hours of work and allowed me to deliver flawless software to my clients faster than ever before."}&rdquo;
+              <p className="text-lg w-1/2">
+                &ldquo;
+                {
+                  "The Track Flaw's powerful features have saved me countless hours of work and allowed me to deliver flawless software to my clients faster than ever before."
+                }
+                &rdquo;
               </p>
               <footer className="text-sm">Mr. Robot</footer>
             </blockquote>

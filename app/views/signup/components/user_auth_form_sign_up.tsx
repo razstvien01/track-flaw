@@ -8,9 +8,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Icons } from "./icons"
 
-interface UserAuthSignupFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthSignupFormProps {
+  googleSignIn: () => void
+}
 
-export function UserAuthSignupForm({ className, ...props }: UserAuthSignupFormProps) {
+export function UserAuthSignupForm({ googleSignIn }: UserAuthSignupFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   async function onSubmit(event: React.SyntheticEvent) {
@@ -21,9 +23,18 @@ export function UserAuthSignupForm({ className, ...props }: UserAuthSignupFormPr
       setIsLoading(false)
     }, 3000)
   }
+  
+  const handleSignin = async () => {
+    try {
+      console.log('SIGN IN')
+      await googleSignIn()
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className={cn("grid gap-6")}>
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -58,7 +69,7 @@ export function UserAuthSignupForm({ className, ...props }: UserAuthSignupFormPr
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
+      <Button variant="outline" type="button" disabled={isLoading} onClick={handleSignin}>
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
