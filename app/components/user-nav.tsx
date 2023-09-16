@@ -10,15 +10,16 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 interface UserNavProps {
   logOut: () => void;
 }
 
 const UserNav: React.FC<UserNavProps> = ({ logOut }) => {
+  
   const handleSignOut = async () => {
     try {
       await logOut();
+      window.location.href = 'http://localhost:3000';
     } catch (error) {
       console.log(error);
     }

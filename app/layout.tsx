@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { useState } from "react";
 import { AuthContextProvider } from "./context/auth_context";
 import Header from "./components/header";
+import { useRouter } from 'next/router';
 
 export const metadata: Metadata = {
   title: "Track Flaw",
@@ -18,8 +19,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isLogin, setIsLogin] = useState(false);
-
+  // const router = useRouter(); 
   return (
     <>
       <html lang="en" suppressHydrationWarning>

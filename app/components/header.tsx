@@ -8,8 +8,13 @@ import { MainNav } from "./main-nav";
 import { Search } from "./search";
 import { UserAuth } from "../context/auth_context";
 import AuthenticationPage from "../views/signup/page";
+import { NextRouter } from "next/router";
 
-const Header = () => {
+// interface HeaderProps {
+//   router: NextRouter
+// }
+
+const Header: React.FC<any> = () => {
   const { user, logOut, googleSignIn } = UserAuth();
   
   return (user) ? (
