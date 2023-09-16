@@ -14,6 +14,8 @@ import {
 import { useEffect, useState } from "react";
 import ProfileSheet from "./profile_detail.sheet";
 import { useGetUser, useGetUsers } from "../services/users.service";
+import { UserDataProps } from "../types/types";
+import { UserDataInit } from "../types/init";
 
 interface UserNavProps {
   user: any;
@@ -21,21 +23,13 @@ interface UserNavProps {
 }
 
 const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
-  const { displayName, email, photoURL, uid } = user;
   const [isSheetVisible, setIsSheetVisible] = useState(false);
-  const [userData, setUserData] = useState([])
+  const [userData, setUserData] = useState<UserDataProps>(UserDataInit)
   
-  useGetUser(uid, setUserData)
+  useGetUser(user.uid, setUserData)
   
-  useEffect(() => {
-    
-    console.log(userData)
-    return () => {
-      
-    }
-  }, [userData])
+  const { full_name, email_address, photo_url } = userData
   
-
   const handleSignOut = async () => {
     try {
       logOut();
@@ -46,21 +40,16 @@ const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
   };
 
   const handleOpenSheet = () => {
-    console.log(isSheetVisible);
     setIsSheetVisible(!isSheetVisible);
   };
-
-  const handleCloseSheet = () => {
-    setIsSheetVisible(false);
-  };
-
+  
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={photoURL} alt="@shadcn" />
+              <AvatarImage src={photo_url} alt="@shadcn" />
               <AvatarFallback>ZZ</AvatarFallback>
             </Avatar>
           </Button>
@@ -68,9 +57,9 @@ const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">{displayName}</p>
+              <p className="text-sm font-medium leading-none">{full_name}</p>
               <p className="text-xs leading-none text-muted-foreground">
-                {email}
+                {email_address}
               </p>
             </div>
           </DropdownMenuLabel>

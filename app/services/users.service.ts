@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import { UserDataProps } from "../types/types";
 
 export const useGetUsers = (setUsers: Dispatch<SetStateAction<never[]>>) => {
   useEffect(() => {
@@ -16,7 +17,7 @@ export const useGetUsers = (setUsers: Dispatch<SetStateAction<never[]>>) => {
 
 export const useGetUser = (
   user_id: string,
-  setUser: Dispatch<SetStateAction<never[]>>
+  setUser: Dispatch<SetStateAction<UserDataProps>>
 ) => {
   useEffect(() => {
     const params = {
@@ -29,7 +30,6 @@ export const useGetUser = (
         params,
       })
       .then((response) => {
-        console.log(response.data)
         setUser(response.data.user);
       })
       .catch((error) => {
