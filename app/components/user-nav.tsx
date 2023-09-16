@@ -11,15 +11,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 interface UserNavProps {
+  user: any;
   logOut: () => void;
 }
 
-const UserNav: React.FC<UserNavProps> = ({ logOut }) => {
-  
+const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
+  const { displayName, email, photoURL } = user;
+
   const handleSignOut = async () => {
     try {
-      await logOut();
-      window.location.href = 'http://localhost:3000';
+      logOut();
+      window.location.href = "http://localhost:3000";
     } catch (error) {
       console.log(error);
     }
@@ -30,7 +32,7 @@ const UserNav: React.FC<UserNavProps> = ({ logOut }) => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            {/* <AvatarImage src="/avatars/01.png" alt="@shadcn" /> */}
+            <AvatarImage src={photoURL} alt="@shadcn" />
             <AvatarFallback>ZZ</AvatarFallback>
           </Avatar>
         </Button>
@@ -38,9 +40,9 @@ const UserNav: React.FC<UserNavProps> = ({ logOut }) => {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">razstvien</p>
+            <p className="text-sm font-medium leading-none">{displayName}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              nicolenevanz.aricayos@gmail.com
+              {email}
             </p>
           </div>
         </DropdownMenuLabel>

@@ -24,7 +24,7 @@ const Header = () => {
           <Search />
           <OrgSwitcher />
           <ModeToggle />
-          <UserNav logOut={logOut}/>
+          <UserNav user={user} logOut={logOut}/>
         </div>
       </div>
     </div>
