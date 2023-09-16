@@ -23,9 +23,8 @@ export const GET = async (request: NextRequest, response: NextResponse) => {
       case USER_QUERY.GET_USER:
         
         const user_id = url.searchParams.get("user_id")
-        console.log('asdasddsasddas')
         const user = (user_id) ? await getUser(user_id): null;
-        console.log('asdadsa')
+        
         return new Response(
           JSON.stringify({
             success: true,
@@ -64,6 +63,7 @@ export const POST = async (request: NextRequest) => {
     const userData = await request.json();
 
     const { email_address, user_id } = userData;
+    
     if (user_id && (await checkIfExistsUserId(user_id))) {
       return new Response(
         JSON.stringify({

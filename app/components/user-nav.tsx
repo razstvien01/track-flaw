@@ -11,8 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileSheet from "./profile_detail.sheet";
+import { useGetUser, useGetUsers } from "../services/users.service";
 
 interface UserNavProps {
   user: any;
@@ -20,9 +21,20 @@ interface UserNavProps {
 }
 
 const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
-  const { displayName, email, photoURL } = user;
+  const { displayName, email, photoURL, uid } = user;
   const [isSheetVisible, setIsSheetVisible] = useState(false);
-  // const [user, setUser]
+  const [userData, setUserData] = useState([])
+  
+  useGetUser(uid, setUserData)
+  
+  useEffect(() => {
+    
+    console.log(userData)
+    return () => {
+      
+    }
+  }, [userData])
+  
 
   const handleSignOut = async () => {
     try {

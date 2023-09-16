@@ -76,7 +76,7 @@ export const getUsers = async () => {
 export const getUser = async (user_id: string) => {
   const userRef = doc(db, "users", user_id);
   const userDoc = await getDoc(userRef);
-
+  
   if (userDoc.exists()) {
     return userDoc.data();
   } else {

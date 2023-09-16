@@ -1,10 +1,7 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useEffect } from "react";
 
-export const useGetUsers = (
-  users: any,
-  setUsers: Dispatch<SetStateAction<never[]>>
-) => {
+export const useGetUsers = (setUsers: Dispatch<SetStateAction<never[]>>) => {
   useEffect(() => {
     axios
       .get("api/users")
@@ -15,6 +12,30 @@ export const useGetUsers = (
         console.error("Error retrieving users:", error);
       });
   }, [setUsers]);
+};
+
+export const useGetUser = (
+  user_id: string,
+  setUser: Dispatch<SetStateAction<never[]>>
+) => {
+  useEffect(() => {
+    const params = {
+      query: "GET_USER",
+      user_id,
+    };
+    
+    axios
+      .get("api/users", {
+        params,
+      })
+      .then((response) => {
+        console.log(response.data)
+        setUser(response.data.user);
+      })
+      .catch((error) => {
+        console.error("Error retrieving users:", error);
+      });
+  }, [setUser, user_id]);
 };
 
 export const addUser = async (user: any) => {
