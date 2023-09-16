@@ -18,10 +18,12 @@ export const metadata: Metadata = {
 
 interface AuthenticationPageProps {
   googleSignIn: () => void;
+  googleSignUp: () => void
 }
 
 const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
   googleSignIn,
+  googleSignUp
 }) => {
   const [isSignUp, setIsSignUp] = useState(false); // Initialize state
 
@@ -56,7 +58,7 @@ const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
                 Enter your email below to create your account
               </p>
             </div>
-            <UserAuthSignupForm googleSignIn={googleSignIn} />
+            <UserAuthSignupForm googleSignIn={googleSignIn} googleSignUp={googleSignUp}/>
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link

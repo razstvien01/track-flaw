@@ -4,6 +4,7 @@ import {
   checkIfExistsUser,
   deleteUser,
   updateUser,
+  checkIfExistsUserId,
 } from "@/app/controllers/users.controller";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -35,9 +36,16 @@ export const POST = async (request: NextRequest) => {
   try {
     const userData = await request.json();
     
-    const { email_address } = userData;
-
-    if (await checkIfExistsUser(email_address)) {
+    console.log('HEHEHE')
+    const { email_address, user_id } = userData;
+    if(user_id && await checkIfExistsUserId(user_id)){
+      return new Response(
+        JSON.stringify({
+          success: true,
+        })
+      );
+    }
+    else if (!user_id && await checkIfExistsUser(email_address)) {
       return NextResponse.json(
         {
           success: false,
@@ -49,9 +57,9 @@ export const POST = async (request: NextRequest) => {
         }
       );
     }
-
+    console.log('Attemp to create account')
     await addUser(userData);
-
+    
     return new Response(
       JSON.stringify({
         success: true,

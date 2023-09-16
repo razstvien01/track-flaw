@@ -10,9 +10,10 @@ import { Icons } from "./icons"
 
 interface UserAuthSignupFormProps {
   googleSignIn: () => void
+  googleSignUp: () => void
 }
 
-export function UserAuthSignupForm({ googleSignIn }: UserAuthSignupFormProps) {
+export function UserAuthSignupForm({ googleSignIn, googleSignUp }: UserAuthSignupFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   async function onSubmit(event: React.SyntheticEvent) {
@@ -24,10 +25,9 @@ export function UserAuthSignupForm({ googleSignIn }: UserAuthSignupFormProps) {
     }, 3000)
   }
   
-  const handleSignin = async () => {
+  const handleSignup = async () => {
     try {
-      console.log('SIGN IN')
-      await googleSignIn()
+      await googleSignUp()
     } catch (error) {
       console.log(error)
     }
@@ -69,7 +69,7 @@ export function UserAuthSignupForm({ googleSignIn }: UserAuthSignupFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading} onClick={handleSignin}>
+      <Button variant="outline" type="button" disabled={isLoading} onClick={handleSignup}>
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
