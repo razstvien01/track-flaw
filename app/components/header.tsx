@@ -1,5 +1,3 @@
-import React from "react";
-
 import OrgSwitcher from "./org-switcher";
 import ModeToggle from "./mode-toggle";
 import { UserNav } from "./user-nav";

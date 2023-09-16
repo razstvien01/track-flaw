@@ -1,8 +1,11 @@
+"use client";
+
 import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import Header from "./components/header";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 export const metadata: Metadata = {
   title: "Track Flaw",
@@ -15,18 +18,26 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [isLogin, setIsLogin] = useState(false);
+
   return (
     <>
       <html lang="en" suppressHydrationWarning>
         <body>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-            <Header/>
-          <div className="relative min-h-screen">
-            {children}
-            <Label className="absolute bottom-0 left-0 mb-2 ml-2">
-              Created by Buggy Cat.
-            </Label>
-          </div>
+            {isLogin ? (
+              <>
+                <Header />
+                <div className="relative min-h-screen">
+                  {children}
+                  <Label className="absolute bottom-0 left-0 mb-2 ml-2">
+                    Created by Buggy Cat.
+                  </Label>
+                </div>
+              </>
+            ) : (
+              <>{children}</>
+            )}
           </ThemeProvider>
         </body>
       </html>
