@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { useState, useEffect } from "react";
 import { AuthContextProvider } from "./context/auth_context";
 import Header from "./components/header";
+import { Toaster } from "@/components/ui/toaster";
 
 const LoadingComponent = () => (
   <div className="flex justify-center items-center h-screen">
@@ -31,7 +32,7 @@ export default function RootLayout({
     // Simulate a 3-second loading period
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 2000);
 
     return () => clearTimeout(loadingTimeout);
   }, []);
@@ -46,6 +47,7 @@ export default function RootLayout({
               {children}
             </ThemeProvider>
           </AuthContextProvider>
+          <Toaster/>
         </body>
       </html>
     </>

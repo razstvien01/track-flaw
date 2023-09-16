@@ -1,8 +1,25 @@
+'use client'
+
+import { useToast } from '@/components/ui/use-toast'
 import React from 'react'
+import { Button } from '@/components/ui/button'
 
 const Bugs = () => {
+  const { toast } = useToast()
+  
+  
   return (
-    <div>Bugs</div>
+    <Button
+      variant="outline"
+      onClick={() => {
+        console.log('toiasstt')
+        toast({
+          description: "Your message has been sent.",
+        })
+      }}
+    >
+      Show Toast
+    </Button>
   )
 }
 

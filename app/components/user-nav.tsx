@@ -25,10 +25,12 @@ interface UserNavProps {
 const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
   const [isSheetVisible, setIsSheetVisible] = useState(false);
   const [userData, setUserData] = useState<UserDataProps>(UserDataInit)
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  useGetUser(user.uid, setUserData, isUpdate)
   
-  useGetUser(user.uid, setUserData)
-  
+  console.log(user)
   const { full_name, email_address, photo_url } = userData
+  
   
   const handleSignOut = async () => {
     try {
@@ -89,7 +91,7 @@ const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
         </DropdownMenuContent>
       </DropdownMenu>
       
-      <ProfileSheet isSheetVisible={isSheetVisible} handleOpenSheet={handleOpenSheet} user={userData}/>
+      <ProfileSheet isSheetVisible={isSheetVisible} setIsSheetVisible={setIsSheetVisible} handleOpenSheet={handleOpenSheet} user={userData} isUpdate={isUpdate} setIsUpdate={setIsUpdate}/>
     </>
   );
 };
