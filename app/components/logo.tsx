@@ -10,8 +10,8 @@ export function Logo() {
           <Image
             src="/cat-svgrepo-com.svg"
             alt="Image"
-            width={45}
-            height={45}
+            width={30}
+            height={30}
             className="rounded-md object-cover"
           />
       </Link>

@@ -75,7 +75,7 @@ const AuthenticationPage: React.FC<any> = () => {
           <div className="relative">
             <div className="absolute top-1 right-4 flex items-center text-lg font-medium md:right-8 md:bottom-8">
               <Logo/>
-              &nbsp;Buggy Cat
+              &nbsp;&nbsp;Buggy Cat, Inc
             </div>
           </div>
           <div className="relative z-20 mt-auto">
