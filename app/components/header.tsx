@@ -10,22 +10,12 @@ import { MainNav } from "./main-nav";
 import { Search } from "./search";
 import { UserAuth } from "../context/auth_context";
 import AuthenticationPage from "../views/authentication/page";
-import { useEffect, useState } from "react";
-import { resolve } from "path";
+
 
 const Header = () => {
   const { user, logOut, googleSignIn, googleSignUp } = UserAuth();
-  const [ loading, setLoading ] = useState(true)
   
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 50))
-      setLoading(false)
-    }
-    checkAuthentication()
-  }, [user])
-  
-  return (loading ? null : user) ? (
+  return (user) ? (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
         <Logo />

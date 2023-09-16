@@ -18,12 +18,12 @@ export const metadata: Metadata = {
 
 interface AuthenticationPageProps {
   googleSignIn: () => void;
-  googleSignUp: () => void
+  googleSignUp: () => void;
 }
 
 const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
   googleSignIn,
-  googleSignUp
+  googleSignUp,
 }) => {
   const [isSignUp, setIsSignUp] = useState(false);
 
@@ -51,6 +51,9 @@ const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
+              <h1 className="text-6xl font-bold tracking-tight mb-8">
+                Track Flaw
+              </h1>
               <h1 className="text-2xl font-semibold tracking-tight">
                 {isSignUp ? "Create an account" : "Sign in an account"}
               </h1>
@@ -58,7 +61,11 @@ const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
                 Enter your email below to create your account
               </p>
             </div>
-            <UserAuthSignupForm isSignUp={isSignUp} googleSignIn={googleSignIn} googleSignUp={googleSignUp}/>
+            <UserAuthSignupForm
+              isSignUp={isSignUp}
+              googleSignIn={googleSignIn}
+              googleSignUp={googleSignUp}
+            />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link
