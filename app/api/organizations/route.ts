@@ -46,10 +46,7 @@ export const POST = async (request: NextRequest) => {
 
     const { org_email } = orgData;
     
-    console.log(org_email)
-
     if (await checkIfExistsOrg(org_email)) {
-      console.log('muagiii')
       return NextResponse.json(
         {
           success: false,

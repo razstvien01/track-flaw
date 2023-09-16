@@ -25,7 +25,7 @@ const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
   googleSignIn,
   googleSignUp
 }) => {
-  const [isSignUp, setIsSignUp] = useState(false); // Initialize state
+  const [isSignUp, setIsSignUp] = useState(false);
 
   //* Function to toggle between Login and Sign Up
   const toggleLabel = () => {
@@ -36,7 +36,7 @@ const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
     <>
       <div className="container relative min-h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="flex items-center space-x-4 absolute left-4 top-4 md:left-8 md:top-8">
-          <ModeToggle /> {/* Place the ModeToggle component here */}
+          <ModeToggle />
           <Button
             className={cn(
               buttonVariants({ variant: "ghost" }),
@@ -52,13 +52,13 @@ const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Create an account
+                {isSignUp ? "Create an account" : "Sign in an account"}
               </h1>
               <p className="text-sm text-muted-foreground">
                 Enter your email below to create your account
               </p>
             </div>
-            <UserAuthSignupForm googleSignIn={googleSignIn} googleSignUp={googleSignUp}/>
+            <UserAuthSignupForm isSignUp={isSignUp} googleSignIn={googleSignIn} googleSignUp={googleSignUp}/>
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link

@@ -9,11 +9,12 @@ import { Label } from "@/components/ui/label"
 import { Icons } from "./icons"
 
 interface UserAuthSignupFormProps {
+  isSignUp: boolean
   googleSignIn: () => void
   googleSignUp: () => void
 }
 
-export function UserAuthSignupForm({ googleSignIn, googleSignUp }: UserAuthSignupFormProps) {
+export function UserAuthSignupForm({ isSignUp, googleSignIn, googleSignUp }: UserAuthSignupFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   async function onSubmit(event: React.SyntheticEvent) {
@@ -55,7 +56,7 @@ export function UserAuthSignupForm({ googleSignIn, googleSignUp }: UserAuthSignu
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In with Email
+            {isSignUp ? 'Sign Up with Email' : 'Sign In with Email'}
           </Button>
         </div>
       </form>

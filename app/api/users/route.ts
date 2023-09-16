@@ -36,7 +36,6 @@ export const POST = async (request: NextRequest) => {
   try {
     const userData = await request.json();
     
-    console.log('HEHEHE')
     const { email_address, user_id } = userData;
     if(user_id && await checkIfExistsUserId(user_id)){
       return new Response(
@@ -57,7 +56,6 @@ export const POST = async (request: NextRequest) => {
         }
       );
     }
-    console.log('Attemp to create account')
     await addUser(userData);
     
     return new Response(

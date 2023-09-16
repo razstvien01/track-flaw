@@ -9,7 +9,7 @@ import { Logo } from "./logo";
 import { MainNav } from "./main-nav";
 import { Search } from "./search";
 import { UserAuth } from "../context/auth_context";
-import AuthenticationPage from "../views/signup/page";
+import AuthenticationPage from "../views/authentication/page";
 import { useEffect, useState } from "react";
 import { resolve } from "path";
 

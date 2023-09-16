@@ -21,7 +21,6 @@ export const checkIfExistsUser = async (email_address: string) => {
   );
 
   const querySnapshot = await getDocs(userQuery);
-  console.log(!querySnapshot.empty ? true : false);
   return !querySnapshot.empty ? true : false;
 };
 

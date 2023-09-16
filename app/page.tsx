@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import AuthenticationPage from "./views/signup/page";
 import { UserAuth } from "./context/auth_context";
-import Header from "./components/header";
-import { Label } from "@/components/ui/label";
 
 export default function Home({ Component, pageProps }: any) {
   const { user, logOut, googleSignIn } = UserAuth();

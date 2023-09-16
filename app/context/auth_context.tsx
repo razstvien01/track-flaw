@@ -28,7 +28,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   const [user, setUser] = useState(null);
 
   const googleSignIn = () => {
-    // console.log('DO SIGN UP')
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider);
   };
@@ -36,14 +35,11 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   const googleSignUp = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      console.log(provider)
-      console.log(auth)
+
       const result = await signInWithPopup(auth, provider);
 
       //* Access user data from the authentication result
       const user = result.user;
-      console.log("User signed in:", user);
-
       //* You can access user properties like displayName, email, uid, etc.
       const display_name = user.displayName;
       const email_address = user.email;
