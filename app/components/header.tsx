@@ -1,14 +1,18 @@
 import OrgSwitcher from "./org-switcher";
 import ModeToggle from "./mode-toggle";
-import { UserNav } from "./user-nav";
+import UserNav from "./user-nav";
 
 //* Components
 import { Logo } from "./logo";
 import { MainNav } from "./main-nav";
 import { Search } from "./search";
+import { UserAuth } from "../context/auth_context";
+import AuthenticationPage from "../views/signup/page";
 
 const Header = () => {
-  return (
+  const { user, logOut, googleSignIn } = UserAuth();
+  
+  return (user) ? (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
         <Logo />
@@ -17,11 +21,11 @@ const Header = () => {
           <Search />
           <OrgSwitcher />
           <ModeToggle />
-          <UserNav />
+          <UserNav logOut={logOut}/>
         </div>
       </div>
     </div>
-  );
+  ) : <AuthenticationPage googleSignIn={googleSignIn} />;
 };
 
 export default Header;

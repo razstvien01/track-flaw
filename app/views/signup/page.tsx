@@ -18,12 +18,10 @@ export const metadata: Metadata = {
 
 interface AuthenticationPageProps {
   googleSignIn: () => void;
-  logOut: () => void;
 }
 
 const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
   googleSignIn,
-  logOut,
 }) => {
   const [isSignUp, setIsSignUp] = useState(false); // Initialize state
 

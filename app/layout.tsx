@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { useState } from "react";
 import { AuthContextProvider } from "./context/auth_context";
+import Header from "./components/header";
 
 export const metadata: Metadata = {
   title: "Track Flaw",
@@ -25,6 +26,7 @@ export default function RootLayout({
         <body>
           <AuthContextProvider>
             <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+              <Header/>
               {children}
             </ThemeProvider>
           </AuthContextProvider>

@@ -44,7 +44,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     return () => unsubscribe();
   }, [user]);
 
-  console.log(user);
   return <AuthContext.Provider value={{user, googleSignIn, logOut}}>{children}</AuthContext.Provider>;
 };
 
