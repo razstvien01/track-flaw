@@ -15,6 +15,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase";
 import axios from "axios";
+import { addUser } from "../services/users.service";
 
 const AuthContext = createContext<any>(null);
 
@@ -40,16 +41,8 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 
       //* Access user data from the authentication result
       const user = result.user;
-      //* You can access user properties like displayName, email, uid, etc.
-      const display_name = user.displayName;
-      const email_address = user.email;
-      const uid = user.uid;
-
-      await axios.post("http://localhost:3000/api/users", {
-        user_id: uid,
-        display_name,
-        email_address,
-      })
+      
+      addUser(user)
       
     } catch (error) {
       console.log("Google Sign-In Error:", error);

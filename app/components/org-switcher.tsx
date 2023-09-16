@@ -32,7 +32,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
 >;
-
+ 
 interface OrgSwitcherProps extends PopoverTriggerProps {}
 
 export default function OrgSwitcher({ className }: OrgSwitcherProps) {

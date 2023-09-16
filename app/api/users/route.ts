@@ -5,25 +5,52 @@ import {
   deleteUser,
   updateUser,
   checkIfExistsUserId,
+  getUser,
 } from "@/app/controllers/users.controller";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (request: NextRequest) => {
-  try {
-    const users = await getUsers();
+enum USER_QUERY {
+  GET_USER = "GET_USER",
+  GET_USERS = "GET_USERS",
+}
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Fetch Users Successfully",
-        users,
-      })
-    );
+export const GET = async (request: NextRequest, response: NextResponse) => {
+  const url = new URL(request.url);
+  const query = url.searchParams.get("query");
+  
+  try {
+    switch (query) {
+      case USER_QUERY.GET_USER:
+        
+        const user_id = url.searchParams.get("user_id")
+        console.log('asdasddsasddas')
+        const user = (user_id) ? await getUser(user_id): null;
+        console.log('asdadsa')
+        return new Response(
+          JSON.stringify({
+            success: true,
+            message: "Fetch User/s Successfully",
+            user
+          })
+        );
+
+      case USER_QUERY.GET_USERS:
+        const users = await getUsers();
+        return new Response(
+          JSON.stringify({
+            success: true,
+            message: "Fetch User/s Successfully",
+            users,
+          })
+        );
+        break;
+    }
+    const users = await getUsers();
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: "Failure in fetching the users",
+        message: "Failure in fetching the user/s",
       },
       {
         status: 500,
@@ -35,16 +62,15 @@ export const GET = async (request: NextRequest) => {
 export const POST = async (request: NextRequest) => {
   try {
     const userData = await request.json();
-    
+
     const { email_address, user_id } = userData;
-    if(user_id && await checkIfExistsUserId(user_id)){
+    if (user_id && (await checkIfExistsUserId(user_id))) {
       return new Response(
         JSON.stringify({
           success: true,
         })
       );
-    }
-    else if (!user_id && await checkIfExistsUser(email_address)) {
+    } else if (!user_id && (await checkIfExistsUser(email_address))) {
       return NextResponse.json(
         {
           success: false,
@@ -57,7 +83,7 @@ export const POST = async (request: NextRequest) => {
       );
     }
     await addUser(userData);
-    
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -106,9 +132,9 @@ export const DELETE = async (request: NextRequest) => {
 export const PUT = async (request: NextRequest) => {
   try {
     const user = await request.json();
-    
-    await updateUser(user)
-    
+
+    await updateUser(user);
+
     return new Response(
       JSON.stringify({
         success: true,

@@ -7,10 +7,11 @@ interface UserDetails {
   first_name: string;
   last_name: string;
   email_address: string;
-  contact_number: string;
+  phone_number: string;
   role_id: string;
   org_ids: string[];
-  display_name: string;
+  full_name: string;
+  photo_url: string;
 }
 
 export const checkIfExistsUser = async (email_address: string) => {
@@ -70,6 +71,17 @@ export const getUsers = async () => {
   }));
 
   return userArr;
+};
+
+export const getUser = async (user_id: string) => {
+  const userRef = doc(db, "users", user_id);
+  const userDoc = await getDoc(userRef);
+
+  if (userDoc.exists()) {
+    return userDoc.data();
+  } else {
+    return null;
+  }
 };
 
 export const deleteUser = async (user_id: string) => {

@@ -2,7 +2,6 @@
 
 import OrgSwitcher from "./org-switcher";
 import ModeToggle from "./mode-toggle";
-import UserNav from "./user-nav";
 
 //* Components
 import { Logo } from "./logo";
@@ -10,6 +9,7 @@ import { MainNav } from "./main-nav";
 import { Search } from "./search";
 import { UserAuth } from "../context/auth_context";
 import AuthenticationPage from "../views/authentication/page";
+import UserNav from "./user-nav";
 
 
 const Header = () => {

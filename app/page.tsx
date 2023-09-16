@@ -6,7 +6,8 @@ import { UserAuth } from "./context/auth_context";
 export default function Home({ Component, pageProps }: any) {
   const { user, logOut, googleSignIn } = UserAuth();
   const [isLogin, setIsLogin] = useState(false);
-
+  
+  console.log(user)
   return (
     <main className="flex flex-col items-left justify-between">
       {/* {user ? (
