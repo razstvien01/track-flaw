@@ -40,6 +40,7 @@ const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
   };
 
   const handleOpenSheet = () => {
+    console.log('asdasd')
     setIsSheetVisible(!isSheetVisible);
   };
   
@@ -88,7 +89,7 @@ const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
         </DropdownMenuContent>
       </DropdownMenu>
       
-      <ProfileSheet isSheetVisible={isSheetVisible} handleOpenSheet={handleOpenSheet} user={user}/>
+      <ProfileSheet isSheetVisible={isSheetVisible} handleOpenSheet={handleOpenSheet} user={userData}/>
     </>
   );
 };
