@@ -12,7 +12,6 @@ const Bugs = () => {
     <Button
       variant="outline"
       onClick={() => {
-        console.log('toiasstt')
         toast({
           description: "Your message has been sent.",
         })

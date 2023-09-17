@@ -28,7 +28,6 @@ const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   useGetUser(user.uid, setUserData, isUpdate)
   
-  console.log(user)
   const { full_name, email_address, photo_url } = userData
   
   
@@ -42,7 +41,6 @@ const UserNav: React.FC<UserNavProps> = ({ user, logOut }) => {
   };
 
   const handleOpenSheet = () => {
-    console.log('asdasd')
     setIsSheetVisible(!isSheetVisible);
   };
   
