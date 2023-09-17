@@ -32,7 +32,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
 >;
- 
+
 interface OrgSwitcherProps extends PopoverTriggerProps {}
 
 export default function OrgSwitcher({ className }: OrgSwitcherProps) {
@@ -72,8 +72,8 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
         <PopoverContent className="w-[200px] p-0">
           <Command>
             <CommandList>
-              <CommandInput placeholder="Search team..." />
-              <CommandEmpty>No team found.</CommandEmpty>
+              <CommandInput placeholder="Search organization..." />
+              <CommandEmpty>No organization found.</CommandEmpty>
               {orgs.map((organization) => {
                 const { label, orgs } = organization;
                 return (
