@@ -29,36 +29,27 @@ import {
 } from "react";
 import AlertSuccess from "./success_alert";
 import AlertDestructive from "./alert_destructive";
+import { UserAuth } from "../context/auth_context";
+import { OrgDataProps } from "../types/types";
+import { OrgDataInit } from "../types/init";
+import { ROLES } from "../types/constants";
 
 interface OrgSwitcherDialogProps {
   setShowNewOrgDialog: Dispatch<SetStateAction<boolean>>;
 }
 
-interface OrgDataDetails {
-  org_name: string;
-  org_email: string;
-  personal: boolean;
-  org_url: string;
-}
-
-const initOrgDataDetails: OrgDataDetails = {
-  org_name: "",
-  personal: false,
-  org_email: "",
-  org_url: "",
-};
-
 const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   setShowNewOrgDialog,
 }) => {
-  const [orgData, setOrgData] = useState<OrgDataDetails>(initOrgDataDetails);
+  const { uid } = UserAuth();
+  const [orgData, setOrgData] = useState<OrgDataProps>(OrgDataInit);
   const [isSave, setIsSave] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState({
     success: false,
     error: false,
   });
   const [message, setMessage] = useState("");
-
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible({
@@ -70,14 +61,14 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
 
     return () => clearTimeout(timer);
   }, [isVisible.success, setShowNewOrgDialog]);
-  
+
   //* Function to handle form submission
   const handleSubmit = () => {
     setIsSave(true);
     axios
       .post("/api/organizations", {
         ...orgData,
-        creator_id: "wwjd8MgJYd0NPpSq9bSy",
+        creator_id: uid,
       })
       .then((response) => {
         //* Handle a successful response
@@ -102,13 +93,13 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
 
   const handleOnchangeData = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    setOrgData((prev: OrgDataDetails) => ({ ...prev, [id]: value }));
+    setOrgData((prev: OrgDataProps) => ({ ...prev, [id]: value }));
   };
 
   const handleSelectOnchangeData = (value: string) => {
-    setOrgData((prev: OrgDataDetails) => ({
+    setOrgData((prev: OrgDataProps) => ({
       ...prev,
-      personal: JSON.parse(value),
+      role: JSON.parse(value),
     }));
   };
 
@@ -139,7 +130,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
               onChange={(e) => handleOnchangeData(e)}
             />
           </div>
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="personal">Is the organization personal?</Label>
             <Select
               onValueChange={(e) => handleSelectOnchangeData(e)}
@@ -163,7 +154,35 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
                 </SelectItem>
               </SelectContent>
             </Select>
+          </div> */}
+          <div className="space-y-2">
+            <Label htmlFor="personal">Select Role</Label>
+            <Select
+              onValueChange={(e) => handleSelectOnchangeData(e)}
+              value={`${orgData.role}`}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select true or false" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(ROLES).map((role) => (
+                  <SelectItem key={role} value={role}>
+                    <span className="font-medium">{role}</span> -{" "}
+                    <span className="text-muted-foreground">
+                      {role === ROLES.ADMIN
+                        ? "managing projects and users"
+                        : role === ROLES.MANAGER
+                        ? "oversee specific projects"
+                        : role === ROLES.TESTER
+                        ? "identifying and reporting bugs"
+                      : "fixing reported bugs and implementing new features"}
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
+
           <div className="space-y-2">
             <Label htmlFor="name">Organization url</Label>
             <Input

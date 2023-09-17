@@ -16,5 +16,5 @@ export const OrgDataInit: OrgDataProps = {
   org_name: '',
   org_url: '',
   personal: false,
-  role: ''
+  role: 'Admin'
 }
