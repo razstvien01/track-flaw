@@ -6,7 +6,7 @@ interface OrganizationDetails {
   org_name: string;
   org_email: string;
   creator_id: string;
-  role: boolean
+  role: string
 }
 
 export const checkIfExistsOrg = async (org_email: string) => {
@@ -26,12 +26,16 @@ export const addOrg = async (orgData: OrganizationDetails) => {
   
   const creatorRef = doc(db, "users", creator_id);
   
-  const orgWithRefs = { ...restOrgData, creator_ref: creatorRef };
-  
-  // Add the organization document to the 'organizations' collection
-  const orgDocRef = await addDoc(collection(db, "organizations"), orgWithRefs);
+  //* Add the organization document to the 'organizations' collection
+  const orgDocRef = doc(collection(db, "organizations"));
 
-  // Update the user document to include the organization reference and role
+  //* Create an organization document data object
+  const orgDocData = { ...restOrgData, creator_ref: creatorRef };
+
+  //* Set the data for the organization document
+  await setDoc(orgDocRef, orgDocData);
+
+  //* Update the user document to include the organization reference and role
   const userDocRef = doc(db, "users", creator_id);
   const userDoc = await getDoc(userDocRef);
 
@@ -39,13 +43,13 @@ export const addOrg = async (orgData: OrganizationDetails) => {
     const userData = userDoc.data();
     const joinedOrgs = userData.joined_orgs || [];
     
-    // Add the new organization reference and role to the joined_orgs array
+    //* Add the new organization reference and role to the joined_orgs array
     joinedOrgs.push({
       org_ref: orgDocRef,
-      role: role
+      role: role.toUpperCase()
     });
 
-    // Update the user document with the modified joined_orgs array
+    //*w Update the user document with the modified joined_orgs array
     await updateDoc(userDocRef, {
       joined_orgs: joinedOrgs
     });

@@ -61,26 +61,6 @@ export const addUser = async (userData: UserDetails) => {
   }
 };
 
-// export const getUsers = async () => {
-//   const q = query(collection(db, "users"));
-//   const querySnapshot = await getDocs(q);
-
-//   // const userArr = querySnapshot.docs.map((doc) => ({
-//   //   ...doc.data(),
-//   //   id: doc.id,
-//   // }));
-
-//   const userArr = querySnapshot.docs.map((doc) => {
-//     const data = doc.data();
-
-//     const org_refs = data
-
-//     const orgDocs = await org_refs.map(())
-//   })
-
-//   return userArr;
-// };
-
 export const getUsers = async () => {
   const q = collection(db, "users");
   const querySnapshot = await getDocs(q);
@@ -92,7 +72,7 @@ export const getUsers = async () => {
     const org_refs = data.org_refs || [];
 
     const orgDocs = [];
-    
+
     for (const orgRef of org_refs) {
       const orgDoc = await getDoc(orgRef);
       const { org_email, org_name, image_url, personal, org_url } =
@@ -132,20 +112,19 @@ export const getUser = async (user_id: string) => {
 
     const orgDocs = await Promise.all(
       joined_orgs.map(async (joined_org: any) => {
-        const { role, org_refs } = joined_org;
-
-        const orgDoc = await getDoc(org_refs);
+        const { role, org_ref } = joined_org;
+        const orgDoc = await getDoc(org_ref);
 
         if (orgDoc.exists()) {
-          const { org_email, org_name, image_url, personal, org_url } =
+          const { org_email, org_name, image_url, personal } =
             orgDoc.data() as any;
+
           return {
             org_id: orgDoc.id,
             org_email,
             org_name,
             image_url,
             personal,
-            org_url,
             role,
           };
         }

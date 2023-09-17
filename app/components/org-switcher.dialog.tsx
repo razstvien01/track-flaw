@@ -100,7 +100,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   const handleSelectOnchangeData = (value: string) => {
     setOrgData((prev: OrgDataProps) => ({
       ...prev,
-      role: value.toUpperCase(),
+      role: value,
     }));
   };
 
@@ -181,7 +181,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
           disabled={isSave || isVisible.success}
         >
           {isSave ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : null}
-          {isSave ? "Continue" : "Save"}
+          {isSave ? "Saving" : "Save"}
         </Button>
       </DialogFooter>
     </DialogContent>

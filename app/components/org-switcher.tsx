@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   CaretSortIcon,
   CheckIcon,
@@ -35,11 +35,13 @@ type PopoverTriggerProps = React.ComponentPropsWithoutRef<
 
 interface OrgSwitcherProps extends PopoverTriggerProps {
   org_refs: OrgDataProps[];
+  showNewOrgDialog: boolean
+  setShowNewOrgDialog: Dispatch<SetStateAction<boolean>>
 }
 
-export default function OrgSwitcher({ className, org_refs }: OrgSwitcherProps) {
+export default function OrgSwitcher({ className, org_refs, showNewOrgDialog, setShowNewOrgDialog }: OrgSwitcherProps) {
   const [open, setOpen] = useState(false);
-  const [showNewOrgDialog, setShowNewOrgDialog] = useState(false);
+  
   const [selectedOrg, setSelectedOrg] = useState<any>({
     org_name: "Select organization",
   });

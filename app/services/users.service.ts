@@ -18,7 +18,8 @@ export const useGetUsers = (setUsers: Dispatch<SetStateAction<never[]>>) => {
 export const useGetUser = (
   user_id: string,
   setUser: Dispatch<SetStateAction<UserDataProps>>,
-  isUpdate?: boolean
+  isUpdate?: boolean,
+  showNewOrgDialog?: boolean
 ) => {
   useEffect(() => {
     const params = {
@@ -36,7 +37,7 @@ export const useGetUser = (
       .catch((error) => {
         console.error("Error retrieving users:", error);
       });
-  }, [setUser, user_id, isUpdate]);
+  }, [setUser, user_id, isUpdate, showNewOrgDialog]);
 };
 
 export const addUser = async (user: any) => {
