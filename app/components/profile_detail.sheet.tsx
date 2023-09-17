@@ -77,10 +77,10 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
 
   const handleUpdate = () => {
     setIsUpdate(true);
-    
+    const { org_refs, ...newUser} = newUserData 
     axios
       .put("/api/users", {
-        ...newUserData,
+        ...newUser,
         user_id: user_id,
       })
       .then((response) => {
