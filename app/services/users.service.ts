@@ -5,7 +5,7 @@ import { UserDataProps } from "../types/types";
 export const useGetUsers = (setUsers: Dispatch<SetStateAction<never[]>>) => {
   useEffect(() => {
     axios
-      .get("api/users")
+      .get("/api/users")
       .then((response) => {
         setUsers(response.data.users);
       })
@@ -27,7 +27,7 @@ export const useGetUser = (
     };
     
     axios
-      .get("api/users", {
+      .get("/api/users", {
         params,
       })
       .then((response) => {

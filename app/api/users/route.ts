@@ -15,16 +15,17 @@ enum USER_QUERY {
 }
 
 export const GET = async (request: NextRequest, response: NextResponse) => {
+  console.log('CALLED')
   const url = new URL(request.url);
   const query = url.searchParams.get("query");
-  
+  console.log('JHELE')
   try {
     switch (query) {
       case USER_QUERY.GET_USER:
-        
+        console.log('AGIII PLEASE')
         const user_id = url.searchParams.get("user_id")
         const user = (user_id) ? await getUser(user_id): null;
-        
+        console.log(user_id)
         return new Response(
           JSON.stringify({
             success: true,
