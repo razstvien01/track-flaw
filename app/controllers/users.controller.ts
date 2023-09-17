@@ -69,12 +69,12 @@ export const addUser = async (userData: UserDetails) => {
 //   //   ...doc.data(),
 //   //   id: doc.id,
 //   // }));
-  
+
 //   const userArr = querySnapshot.docs.map((doc) => {
 //     const data = doc.data();
-    
+
 //     const org_refs = data
-    
+
 //     const orgDocs = await org_refs.map(())
 //   })
 
@@ -89,16 +89,16 @@ export const getUsers = async () => {
 
   for (const doc of querySnapshot.docs) {
     const data = doc.data();
-    const org_refs = data.org_refs || []; // Ensure org_refs is an array
+    const org_refs = data.org_refs || [];
 
     const orgDocs = [];
-
-    // Iterate through org_refs and fetch the corresponding documents
+    
     for (const orgRef of org_refs) {
       const orgDoc = await getDoc(orgRef);
-      const { org_email, org_name, image_url, personal, org_url } = orgDoc.data() as any
-      
-      console.log(orgRef)
+      const { org_email, org_name, image_url, personal, org_url } =
+        orgDoc.data() as any;
+
+      console.log(orgRef);
       if (orgDoc.exists()) {
         orgDocs.push({
           org_id: orgDoc.id,
@@ -107,15 +107,15 @@ export const getUsers = async () => {
           org_name,
           image_url,
           personal,
-          org_url
+          org_url,
         });
       }
     }
-    
+
     userArr.push({
       user_id: doc.id,
       ...data,
-      org_refs: orgDocs
+      org_refs: orgDocs,
     });
   }
 
@@ -123,37 +123,43 @@ export const getUsers = async () => {
 };
 
 export const getUser = async (user_id: string) => {
-  const userRef = doc(db, 'users', user_id);
+  const userRef = doc(db, "users", user_id);
   const userDoc = await getDoc(userRef);
 
   if (userDoc.exists()) {
     const userData = userDoc.data();
-    const org_refs = userData.org_refs || [];
+    const { joined_orgs, ...newUserData } = userData || [];
 
-    const orgDocs = await Promise.all(org_refs.map(async (orgRef: any) => {
-      const orgDoc = await getDoc(orgRef);
-      if (orgDoc.exists()) {
-        const { org_email, org_name, image_url, personal, org_url } = orgDoc.data() as any;
-        
-        return {
-          org_id: orgDoc.id,
-          org_email,
-          org_name,
-          image_url,
-          personal,
-          org_url
-        };
-      }
-      return null;
-    }));
+    const orgDocs = await Promise.all(
+      joined_orgs.map(async (joined_org: any) => {
+        const { role, org_refs } = joined_org;
+
+        const orgDoc = await getDoc(org_refs);
+
+        if (orgDoc.exists()) {
+          const { org_email, org_name, image_url, personal, org_url } =
+            orgDoc.data() as any;
+          return {
+            org_id: orgDoc.id,
+            org_email,
+            org_name,
+            image_url,
+            personal,
+            org_url,
+            role,
+          };
+        }
+        return null;
+      })
+    );
 
     return {
       user_id,
-      ...userData,
-      org_refs: orgDocs.filter(Boolean) // Remove any null values
+      ...newUserData,
+      org_refs: orgDocs.filter(Boolean), //* Remove any null values
     };
   } else {
-    return null; // Handle case where userDoc doesn't exist
+    return null; //* Handle case where userDoc doesn't exist
   }
 };
 

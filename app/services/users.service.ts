@@ -18,7 +18,7 @@ export const useGetUsers = (setUsers: Dispatch<SetStateAction<never[]>>) => {
 export const useGetUser = (
   user_id: string,
   setUser: Dispatch<SetStateAction<UserDataProps>>,
-  isUpdate: boolean
+  isUpdate?: boolean
 ) => {
   useEffect(() => {
     const params = {

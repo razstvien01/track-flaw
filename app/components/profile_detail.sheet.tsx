@@ -21,7 +21,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader } from "lucide-react";
 import axios from "axios";
 import { UserDataInit } from "../types/init";
-import { ToastWithTitle } from "./toast";
 import { toast } from "@/components/ui/use-toast";
 
 interface ProfileSheetProps {

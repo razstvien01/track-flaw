@@ -28,25 +28,36 @@ import {
 import OrgSwitcherDialog from "./org-switcher.dialog";
 import { useGetOrgs } from "../services/org.service";
 import { Skeleton } from "@/components/ui/skeleton";
+import { OrgDataProps, UserDataProps } from "../types/types";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
 >;
 
-interface OrgSwitcherProps extends PopoverTriggerProps {}
+interface OrgSwitcherProps extends PopoverTriggerProps {
+  org_refs: OrgDataProps[];
+}
 
-export default function OrgSwitcher({ className }: OrgSwitcherProps) {
+export default function OrgSwitcher({ className, org_refs }: OrgSwitcherProps) {
   const [open, setOpen] = useState(false);
   const [showNewOrgDialog, setShowNewOrgDialog] = useState(false);
-  const [selectedOrg, setSelectedOrg] = useState<any>(
-    {
-      org_name: 'Select organization'
-    }
-  );
-  const [orgs, setOrgs] = useState<any[]>([]);
-    
-  useGetOrgs(setOrgs);
-  
+  const [selectedOrg, setSelectedOrg] = useState<any>({
+    org_name: "Select organization",
+  });
+
+  // const [userData, setUserData] = useState<UserDataProps>(UserDataInit)
+
+  // useEffect(() => {
+  //   console.log(userData)
+
+  //   return () => {
+
+  //   }
+  // }, [userData])
+
+  // useGetUser(user_id, setUserData)
+  // useGetOrgs(setOrgs);
+
   return (
     <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -74,43 +85,35 @@ export default function OrgSwitcher({ className }: OrgSwitcherProps) {
             <CommandList>
               <CommandInput placeholder="Search organization..." />
               <CommandEmpty>No organization found.</CommandEmpty>
-              {orgs.map((organization) => {
-                const { label, orgs } = organization;
+              {org_refs.map((org: any) => {
+                const { org_name } = org;
                 return (
-                  <CommandGroup key={label} heading={label}>
-                    {orgs.map((org: any) => {
-                      const { org_name } = org;
-                      return (
-                        <CommandItem
-                          key={org_name}
-                          onSelect={() => {
-                            setSelectedOrg(org);
-                            setOpen(false);
-                          }}
-                        >
-                          <Avatar className="mr-2 h-5 w-5">
-                            <AvatarImage
-                              src={`https://avatar.vercel.sh/${org_name}.png`}
-                              alt={org_name}
-                              className="grayscale"
-                            />
-                            <AvatarFallback></AvatarFallback>
-                            <Skeleton></Skeleton>
-                          </Avatar>
-                          {org_name}
-                          <CheckIcon
-                            className={cn(
-                              "ml-auto h-4 w-4",
-                              selectedOrg.org_name === org_name
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                            
-                        </CommandItem>
-                      );
-                    })}
-                  </CommandGroup>
+                  <CommandItem
+                    key={org_name}
+                    onSelect={() => {
+                      setSelectedOrg(org);
+                      setOpen(false);
+                    }}
+                  >
+                    <Avatar className="mr-2 h-5 w-5">
+                      <AvatarImage
+                        src={`https://avatar.vercel.sh/${org_name}.png`}
+                        alt={org_name}
+                        className="grayscale"
+                      />
+                      <AvatarFallback></AvatarFallback>
+                      <Skeleton></Skeleton>
+                    </Avatar>
+                    {org_name}
+                    <CheckIcon
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        selectedOrg.org_name === org_name
+                          ? "opacity-100"
+                          : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
                 );
               })}
             </CommandList>
