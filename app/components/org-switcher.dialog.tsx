@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader } from "lucide-react";
+import { Loader, User } from "lucide-react";
 import axios from "axios";
 
 import {
@@ -41,7 +41,8 @@ interface OrgSwitcherDialogProps {
 const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   setShowNewOrgDialog,
 }) => {
-  const { uid } = UserAuth();
+  const { user } = UserAuth();
+  const { uid } = user;
   const [orgData, setOrgData] = useState<OrgDataProps>(OrgDataInit);
   const [isSave, setIsSave] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState({
@@ -49,7 +50,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
     error: false,
   });
   const [message, setMessage] = useState("");
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible({
@@ -99,7 +100,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   const handleSelectOnchangeData = (value: string) => {
     setOrgData((prev: OrgDataProps) => ({
       ...prev,
-      role: JSON.parse(value),
+      role: value.toUpperCase(),
     }));
   };
 
@@ -130,31 +131,6 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
               onChange={(e) => handleOnchangeData(e)}
             />
           </div>
-          {/* <div className="space-y-2">
-            <Label htmlFor="personal">Is the organization personal?</Label>
-            <Select
-              onValueChange={(e) => handleSelectOnchangeData(e)}
-              value={`${orgData.personal}`}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select true or false" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="true">
-                  <span className="font-medium">True</span> -{" "}
-                  <span className="text-muted-foreground">
-                    For personal use, you can only have one.
-                  </span>
-                </SelectItem>
-                <SelectItem value="false">
-                  <span className="font-medium">False</span> -{" "}
-                  <span className="text-muted-foreground">
-                    For organizational use.
-                  </span>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div> */}
           <div className="space-y-2">
             <Label htmlFor="personal">Select Role</Label>
             <Select
@@ -170,12 +146,12 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
                     <span className="font-medium">{role}</span> -{" "}
                     <span className="text-muted-foreground">
                       {role === ROLES.ADMIN
-                        ? "managing projects and users"
+                        ? "Managing projects and users"
                         : role === ROLES.MANAGER
-                        ? "oversee specific projects"
+                        ? "Oversee specific projects"
                         : role === ROLES.TESTER
-                        ? "identifying and reporting bugs"
-                      : "fixing reported bugs and implementing new features"}
+                        ? "Identifying and reporting bugs"
+                        : "Fixing reported bugs and implementing new features"}
                     </span>
                   </SelectItem>
                 ))}

@@ -43,8 +43,9 @@ export const GET = async (request: NextRequest) => {
 export const POST = async (request: NextRequest) => {
   try {
     const orgData = await request.json();
-
+    
     const { org_email } = orgData;
+    
     
     if (await checkIfExistsOrg(org_email)) {
       return NextResponse.json(
@@ -58,7 +59,7 @@ export const POST = async (request: NextRequest) => {
         }
       );
     }
-
+    
     await addOrg(orgData);
 
     return new Response(

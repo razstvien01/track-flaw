@@ -9,7 +9,6 @@ export interface UserDataProps {
 
 export interface OrgDataProps {
   image_url: string
-  org_image: string
   org_id: string
   org_name: string
   org_url: string

@@ -12,7 +12,6 @@ export const UserDataInit: UserDataProps = {
 export const OrgDataInit: OrgDataProps = {
   image_url: '',
   org_id: '',
-  org_image: '',
   org_name: '',
   org_url: '',
   personal: false,

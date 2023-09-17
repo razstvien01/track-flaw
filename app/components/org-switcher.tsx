@@ -26,9 +26,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import OrgSwitcherDialog from "./org-switcher.dialog";
-import { useGetOrgs } from "../services/org.service";
 import { Skeleton } from "@/components/ui/skeleton";
-import { OrgDataProps, UserDataProps } from "../types/types";
+import { OrgDataProps } from "../types/types";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -44,20 +43,7 @@ export default function OrgSwitcher({ className, org_refs }: OrgSwitcherProps) {
   const [selectedOrg, setSelectedOrg] = useState<any>({
     org_name: "Select organization",
   });
-
-  // const [userData, setUserData] = useState<UserDataProps>(UserDataInit)
-
-  // useEffect(() => {
-  //   console.log(userData)
-
-  //   return () => {
-
-  //   }
-  // }, [userData])
-
-  // useGetUser(user_id, setUserData)
-  // useGetOrgs(setOrgs);
-
+  
   return (
     <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>
       <Popover open={open} onOpenChange={setOpen}>

@@ -1,12 +1,12 @@
 import { db } from "../firebase";
-import { collection, getDoc, getDocs, query } from "firebase/firestore";
+import { collection, getDoc, getDocs, query, updateDoc } from "firebase/firestore";
 import { addDoc, where, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 interface OrganizationDetails {
-  org_id: string;
   org_name: string;
   org_email: string;
   creator_id: string;
+  role: boolean
 }
 
 export const checkIfExistsOrg = async (org_email: string) => {
@@ -22,14 +22,36 @@ export const checkIfExistsOrg = async (org_email: string) => {
 };
 
 export const addOrg = async (orgData: OrganizationDetails) => {
-  const { creator_id, ...restOrgData } = orgData;
-
+  const { creator_id, role, ...restOrgData } = orgData;
+  
   const creatorRef = doc(db, "users", creator_id);
-
+  
   const orgWithRefs = { ...restOrgData, creator_ref: creatorRef };
+  
+  // Add the organization document to the 'organizations' collection
+  const orgDocRef = await addDoc(collection(db, "organizations"), orgWithRefs);
 
-  await addDoc(collection(db, "organizations"), orgWithRefs);
+  // Update the user document to include the organization reference and role
+  const userDocRef = doc(db, "users", creator_id);
+  const userDoc = await getDoc(userDocRef);
+
+  if (userDoc.exists()) {
+    const userData = userDoc.data();
+    const joinedOrgs = userData.joined_orgs || [];
+    
+    // Add the new organization reference and role to the joined_orgs array
+    joinedOrgs.push({
+      org_ref: orgDocRef,
+      role: role
+    });
+
+    // Update the user document with the modified joined_orgs array
+    await updateDoc(userDocRef, {
+      joined_orgs: joinedOrgs
+    });
+  }
 };
+
 
 export const getOrgs = async () => {
   const q = query(collection(db, 'organizations'))
@@ -75,7 +97,11 @@ export const deleteOrg = async (org_id: string) => {
   await deleteDoc(doc(db, "organizations", org_id));
 };
 
-export const updateOrg = async (orgData: OrganizationDetails) => {
+interface OrganizationWithIdDetails extends OrganizationDetails {
+  org_id: string;
+}
+
+export const updateOrg = async (orgData: OrganizationWithIdDetails) => {
   const { org_id } = orgData;
 
   const userDocRef = doc(db, "organizations", org_id);
