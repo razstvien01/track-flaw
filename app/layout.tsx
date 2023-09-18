@@ -7,13 +7,13 @@ import { useState, useEffect } from "react";
 import { AuthContextProvider } from "./context/auth_context";
 import Header from "./components/header";
 import { Toaster } from "@/components/ui/toaster";
+import { Provider } from "jotai";
 
 const LoadingComponent = () => (
   <div className="flex justify-center items-center h-screen">
     <div className="animate-spin rounded-full h-16 w-16 border-t-8 border-b-8 border-rose-500"></div>
   </div>
 );
-
 
 export const metadata: Metadata = {
   title: "Track Flaw",
@@ -42,12 +42,18 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body>
           <AuthContextProvider>
-            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-              {isLoading ? <LoadingComponent /> : <Header />}
-              {children}
-            </ThemeProvider>
+            <Provider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+              >
+                {isLoading ? <LoadingComponent /> : <Header />}
+                {children}
+              </ThemeProvider>
+            </Provider>
           </AuthContextProvider>
-          <Toaster/>
+          <Toaster />
         </body>
       </html>
     </>

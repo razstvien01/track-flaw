@@ -14,14 +14,15 @@ import { useGetUser } from "../services/users.service";
 import { useState } from "react";
 import { UserDataProps } from "../types/types";
 import { UserDataInit } from "../types/init";
+import { useUserDataAtom } from "../hooks/user_data_atom";
 
 const Header = () => {
   const { user, logOut, googleSignIn, googleSignUp } = UserAuth();
   const { uid } = user;
 
-  const [userData, setUserData] = useState<UserDataProps>(UserDataInit);
+  const [userData, setUserData] = useUserDataAtom();
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
-  const [showNewOrgDialog, setShowNewOrgDialog] = useState<boolean>(false)
+  const [showNewOrgDialog, setShowNewOrgDialog] = useState<boolean>(false);
   const { org_refs } = userData;
 
   useGetUser(uid, setUserData, isUpdate, showNewOrgDialog);
@@ -30,7 +31,7 @@ const Header = () => {
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
         <Logo />
-        <MainNav className="mx-6" />
+        <MainNav />
         <div className="ml-auto flex items-center space-x-4">
           <Search />
           <OrgSwitcher

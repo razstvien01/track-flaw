@@ -1,7 +1,5 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { UserAuth } from "./context/auth_context";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 

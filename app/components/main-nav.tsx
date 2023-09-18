@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { UserDataProps } from "../types/types";
 
 const MAIN_COMPONENTS: Record<string, string> = {
   DASHBOARD: "DASHBOARD",
@@ -38,20 +39,21 @@ function NavigationItem({
   );
 }
 
+interface MainNavProps {
+  
+}
+
 export function MainNav({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLElement>) {
+}: MainNavProps) {
   const [clickedComponent, setClickedComponent] = useState<string>("");
 
   const handleComponentClick = (componentName: string) => {
     setClickedComponent(componentName);
   };
-
+  
   return (
     <nav
-      className={cn("flex items-center space-x-4 lg:space-x-6", className)}
-      {...props}
+      className={cn("flex items-center space-x-4 lg:space-x-6 mx-6")}
     >
       {Object.values(MAIN_COMPONENTS).map((component) => (
         <NavigationItem
@@ -64,4 +66,4 @@ export function MainNav({
       ))}
     </nav>
   );
-}
+} 
