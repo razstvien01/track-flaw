@@ -1,20 +1,23 @@
-'use client'
+"use client";
 
-import { useUserDataAtom } from '@/app/hooks/user_data_atom';
-import React, { useEffect } from 'react'
+import { useUserDataAtom } from "@/app/hooks/user_data_atom";
+import { PageHeader, PageHeaderHeading } from "@/components/page-header";
+import React, { useEffect } from "react";
 
 const Dashboard = () => {
-  
-  
   const [userData, setUserData] = useUserDataAtom();
-  
+  const { org_refs = []} = userData || {}
+  // TODO make a selected Organization hook atom
+  console.log(userData);
   return (
     <div>
-      {userData.full_name}
+      <PageHeader>
+        <PageHeaderHeading>Welcome !!!</PageHeaderHeading>
+      </PageHeader>
     </div>
-  // return (
-  //   <div>Dashboard</div>
-  )
-}
+    // return (
+    //   <div>Dashboard</div>
+  );
+};
 
-export default Dashboard
+export default Dashboard;
