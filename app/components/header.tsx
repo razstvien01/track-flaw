@@ -18,20 +18,20 @@ import { useUserDataAtom } from "../hooks/user_data_atom";
 
 const Header = () => {
   const { user, logOut, googleSignIn, googleSignUp } = UserAuth();
-  const { uid } = user;
+  const { uid = '' } = user || {};
 
   const [userData, setUserData] = useUserDataAtom();
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [showNewOrgDialog, setShowNewOrgDialog] = useState<boolean>(false);
-  const { org_refs } = userData;
+  const { org_refs = []}  = userData || {};
 
   useGetUser(uid, setUserData, isUpdate, showNewOrgDialog);
-
+  
   return user ? (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
         <Logo />
-        <MainNav />
+        <MainNav /> 
         <div className="ml-auto flex items-center space-x-4">
           <Search />
           <OrgSwitcher

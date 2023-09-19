@@ -41,7 +41,13 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
   setIsUpdate,
 }) => {
   const [isEditProfile, setIsEditProfile] = useState(false);
-  const { full_name, email_address, phone_number, photo_url, user_id } = user;
+  const {
+    full_name = "",
+    email_address = "",
+    phone_number = "",
+    photo_url = "",
+    user_id = "",
+  } = user || {};
   const [isVisible, setIsVisible] = useState({
     success: false,
     error: false,
@@ -77,7 +83,7 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
 
   const handleUpdate = () => {
     setIsUpdate(true);
-    const { org_refs, ...newUser} = newUserData 
+    const { org_refs, ...newUser } = newUserData;
     axios
       .put("/api/users", {
         ...newUser,
@@ -92,11 +98,11 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
         //   success: true
         // })
         const successToast = toast({
-          variant: 'default',
+          variant: "default",
           title: "Profile Updated",
           description: "Your profile has been updated successfully.",
         });
-        
+
         setTimeout(() => {
           successToast.dismiss(); // Close the toast after 3 seconds
         }, 3000);
@@ -107,7 +113,7 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
           title: "Uh oh! Something went wrong.",
           description: "There was a problem with your request.",
         });
-        
+
         setTimeout(() => {
           errorToast.dismiss(); // Close the toast after 3 seconds
         }, 3000);
@@ -148,12 +154,15 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
               </div>
             </div>
             <SheetFooter>
-              <Button onClick={() => {
-        toast({
-          title: "Uh oh! Something went wrong.",
-          description: "There was a problem with your request.",
-        })
-      }} variant={"outline"}>
+              <Button
+                onClick={() => {
+                  toast({
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem with your request.",
+                  });
+                }}
+                variant={"outline"}
+              >
                 Cancel
               </Button>
               <Button type="submit" onClick={handleUpdate} disabled={isUpdate}>
@@ -216,7 +225,6 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
           </SheetContent>
         )}
       </Sheet>
-      
     </>
   );
 };
