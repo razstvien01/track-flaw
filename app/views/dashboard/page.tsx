@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserDataAtom } from "@/app/hooks/user_data_atom";
-import { PageHeader, PageHeaderHeading } from "@/components/page-header";
+import { PageHeader, PageHeaderDescription, PageHeaderHeading } from "@/components/page-header";
 import React, { useEffect } from "react";
 
 const Dashboard = () => {
@@ -12,7 +12,8 @@ const Dashboard = () => {
   return (
     <div>
       <PageHeader>
-        <PageHeaderHeading>Welcome !!!</PageHeaderHeading>
+        <PageHeaderHeading>Welcome to the Dashboard!!!</PageHeaderHeading>
+        <PageHeaderDescription>Please select an organization.</PageHeaderDescription>
       </PageHeader>
     </div>
     // return (
