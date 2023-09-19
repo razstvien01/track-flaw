@@ -29,13 +29,13 @@ export default function RootLayout({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate a 3-second loading period
+    //* Simulate a 3-second loading period
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
 
     return () => clearTimeout(loadingTimeout);
-  }, []);
+  }, [isLoading]);
 
   return (
     <>
@@ -48,7 +48,7 @@ export default function RootLayout({
                 defaultTheme="light"
                 enableSystem
               >
-                {isLoading ? <LoadingComponent /> : <Header />}
+                {isLoading ? <LoadingComponent /> : <Header setIsLoading={setIsLoading}/>}
                 {children}
               </ThemeProvider>
             </Provider>

@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ProfileSheet from "./profile_detail.sheet";
 import { UserDataProps } from "../types/types";
 
@@ -20,15 +20,16 @@ interface UserNavProps {
   logOut: () => void;
   isUpdate: boolean
   setIsUpdate: Dispatch<SetStateAction<boolean>>
+  setIsLoading: Dispatch<SetStateAction<boolean>>
 }
 
-const UserNav: React.FC<UserNavProps> = ({ userData, logOut, isUpdate, setIsUpdate }) => {
+const UserNav: React.FC<UserNavProps> = ({ userData, logOut, isUpdate, setIsUpdate, setIsLoading }) => {
   const [isSheetVisible, setIsSheetVisible] = useState(false);
   const { full_name = '', email_address = '', photo_url = '' } = userData || {}
   
-  
   const handleSignOut = async () => {
     try {
+      setIsLoading(true)
       logOut();
       window.location.href = "http://localhost:3000";
     } catch (error) {

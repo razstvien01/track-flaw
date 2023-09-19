@@ -11,27 +11,29 @@ import { UserAuth } from "../context/auth_context";
 import AuthenticationPage from "../views/authentication/page";
 import UserNav from "./user-nav";
 import { useGetUser } from "../services/users.service";
-import { useState } from "react";
-import { UserDataProps } from "../types/types";
-import { UserDataInit } from "../types/init";
+import { Dispatch, useState, SetStateAction } from "react";
 import { useUserDataAtom } from "../hooks/user_data_atom";
 
-const Header = () => {
+interface HeaderProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>
+}
+
+const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
   const { user, logOut, googleSignIn, googleSignUp } = UserAuth();
-  const { uid = '' } = user || {};
+  const { uid = "" } = user || {};
 
   const [userData, setUserData] = useUserDataAtom();
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [showNewOrgDialog, setShowNewOrgDialog] = useState<boolean>(false);
-  const { org_refs = []}  = userData || {};
+  const { org_refs = [] } = userData || {};
 
   useGetUser(uid, setUserData, isUpdate, showNewOrgDialog);
-  
+
   return user ? (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
         <Logo />
-        <MainNav /> 
+        <MainNav />
         <div className="ml-auto flex items-center space-x-4">
           <Search />
           <OrgSwitcher
@@ -45,6 +47,7 @@ const Header = () => {
             logOut={logOut}
             isUpdate={isUpdate}
             setIsUpdate={setIsUpdate}
+            setIsLoading={setIsLoading}
           />
         </div>
       </div>
