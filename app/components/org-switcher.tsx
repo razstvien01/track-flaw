@@ -28,6 +28,7 @@ import {
 import OrgSwitcherDialog from "./org-switcher.dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { OrgDataProps } from "../types/types";
+import { OrgDataInit } from "../types/init";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -42,9 +43,7 @@ interface OrgSwitcherProps extends PopoverTriggerProps {
 export default function OrgSwitcher({ className, org_refs, showNewOrgDialog, setShowNewOrgDialog }: OrgSwitcherProps) {
   const [open, setOpen] = useState(false);
   
-  const [selectedOrg, setSelectedOrg] = useState<any>({
-    org_name: "Select organization",
-  });
+  const [selectedOrg, setSelectedOrg] = useState<OrgDataProps>(OrgDataInit);
   
   return (
     <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>
@@ -54,8 +53,8 @@ export default function OrgSwitcher({ className, org_refs, showNewOrgDialog, set
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            aria-label="Select a team"
-            className={cn("w-[200px] justify-between", className)}
+            aria-label="Select an organization"
+            className={cn("w-[250px] justify-between", className)}
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
@@ -68,7 +67,7 @@ export default function OrgSwitcher({ className, org_refs, showNewOrgDialog, set
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="w-[250px] p-0">
           <Command>
             <CommandList>
               <CommandInput placeholder="Search organization..." />
