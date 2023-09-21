@@ -4,6 +4,6 @@ import { OrgDataInit } from '../types/init';
 
 export const currOrgDataAtom = atom<OrgDataProps>(OrgDataInit);
 
-export function useUserDataAtom() {
+export function useCurrOrgDataAtom() {
   return useAtom(currOrgDataAtom);
 }

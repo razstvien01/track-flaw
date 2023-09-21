@@ -28,7 +28,7 @@ import {
 import OrgSwitcherDialog from "./org-switcher.dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { OrgDataProps } from "../types/types";
-import { OrgDataInit } from "../types/init";
+import { useCurrOrgDataAtom } from "../hooks/curr_org_data_atom";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -43,7 +43,7 @@ interface OrgSwitcherProps extends PopoverTriggerProps {
 export default function OrgSwitcher({ className, org_refs, showNewOrgDialog, setShowNewOrgDialog }: OrgSwitcherProps) {
   const [open, setOpen] = useState(false);
   
-  const [selectedOrg, setSelectedOrg] = useState<OrgDataProps>(OrgDataInit);
+  const [selectedOrg, setSelectedOrg] = useCurrOrgDataAtom()
   
   return (
     <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>

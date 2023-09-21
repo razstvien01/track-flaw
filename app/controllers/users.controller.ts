@@ -75,7 +75,7 @@ export const getUsers = async () => {
 
     for (const orgRef of org_refs) {
       const orgDoc = await getDoc(orgRef);
-      const { org_email, org_name, image_url, personal, org_url } =
+      const { org_email, org_name, image_url, personal, org_url, org_details } =
         orgDoc.data() as any;
 
       console.log(orgRef);
@@ -85,6 +85,7 @@ export const getUsers = async () => {
           // ...orgDoc.data() as any,
           org_email,
           org_name,
+          org_details,
           image_url,
           personal,
           org_url,
@@ -116,7 +117,7 @@ export const getUser = async (user_id: string) => {
         const orgDoc = await getDoc(org_ref);
 
         if (orgDoc.exists()) {
-          const { org_email, org_name, image_url, personal } =
+          const { org_email, org_name, image_url, personal, org_details } =
             orgDoc.data() as any;
 
           return {
@@ -126,6 +127,7 @@ export const getUser = async (user_id: string) => {
             image_url,
             personal,
             role,
+            org_details
           };
         }
         return null;
