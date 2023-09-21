@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader, User } from "lucide-react";
+import { Loader } from "lucide-react";
 import axios from "axios";
 
 import {
@@ -33,6 +33,7 @@ import { UserAuth } from "../context/auth_context";
 import { OrgDataProps } from "../types/types";
 import { OrgDataInit } from "../types/init";
 import { ROLES } from "../types/constants";
+import { Textarea } from "@/components/ui/textarea";
 
 interface OrgSwitcherDialogProps {
   setShowNewOrgDialog: Dispatch<SetStateAction<boolean>>;
@@ -92,8 +93,9 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
       });
   };
 
-  const handleOnchangeData = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOnchangeData = (e: any) => {
     const { id, value } = e.target;
+    console.log(id, ':', value)
     setOrgData((prev: OrgDataProps) => ({ ...prev, [id]: value }));
   };
 
@@ -132,7 +134,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="personal">Select Role</Label>
+            <Label htmlFor="role">Select Role</Label>
             <Select
               onValueChange={(e) => handleSelectOnchangeData(e)}
               value={`${orgData.role}`}
@@ -158,13 +160,20 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
               </SelectContent>
             </Select>
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="name">Organization url</Label>
             <Input
               id="org_url"
               placeholder="Enter organization url"
               onChange={(e) => handleOnchangeData(e)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Organization details</Label>
+            <Textarea
+              id='org_details'
+              onChange={(e) => handleOnchangeData(e)}
+              placeholder="Type your organization details here."
             />
           </div>
         </div>

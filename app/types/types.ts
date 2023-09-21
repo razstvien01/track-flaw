@@ -14,6 +14,7 @@ export interface OrgDataProps {
   org_url: string
   personal: boolean
   role: string
+  org_details: string
 }
 
 export interface NavItem {
