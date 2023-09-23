@@ -15,7 +15,7 @@ const LoadingComponent = () => (
   </div>
 );
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "Track Flaw",
   description:
     "It is a bug tracking app that makes it effortless for team members to report and manage bugs, ensuring seamless collaboration across the development and testing phases. It centralizes the management of software issues from initial reporting through resolution and verification.",
