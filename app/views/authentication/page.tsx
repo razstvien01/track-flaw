@@ -11,7 +11,7 @@ import { useState } from "react";
 import ModeToggle from "@/app/components/mode-toggle";
 import { Logo } from "@/app/components/logo";
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
 };
