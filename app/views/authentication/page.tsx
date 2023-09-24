@@ -44,7 +44,7 @@ const AuthenticationPage: React.FC<AuthenticationPageProps> = ({
             )}
             onClick={toggleLabel}
           >
-            {isSignUp ? "Login" : "Sign Up"}
+            {isSignUp ? "Sign in" : "Sign Up"}
           </Button>
         </div>
 

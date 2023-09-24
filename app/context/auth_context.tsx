@@ -16,6 +16,7 @@ import {
 import { auth } from "../firebase";
 import axios from "axios";
 import { addUser } from "../services/users.service";
+import { useLoadingAtom } from "../hooks/loading.atom";
 
 const AuthContext = createContext<any>(null);
 
@@ -26,24 +27,36 @@ interface AuthContextProviderProps {
 export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   children,
 }) => {
+  const [isLoading, setIsLoading] = useLoadingAtom();
   const [user, setUser] = useState(null);
 
-  const googleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
-  };
-
-  const googleSignUp = async () => {
+  const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
     try {
-
       const result = await signInWithPopup(auth, provider);
 
       //* Access user data from the authentication result
       const user = result.user;
       
-      addUser(user)
+      setIsLoading(true)
+
+      addUser(user);
+    } catch (error) {
+      console.log("Google Sign-In Error:", error);
+    }
+  };
+
+  const googleSignUp = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+
+      //* Access user data from the authentication result
+      const user = result.user;
       
+      setIsLoading(true)
+
+      addUser(user);
     } catch (error) {
       console.log("Google Sign-In Error:", error);
     }

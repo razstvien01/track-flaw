@@ -4,10 +4,13 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { useState, useEffect } from "react";
-import { AuthContextProvider } from "./context/auth_context";
+import { AuthContextProvider, UserAuth } from "./context/auth_context";
 import Header from "./components/header";
 import { Toaster } from "@/components/ui/toaster";
 import { Provider } from "jotai";
+import { useUserDataAtom } from "./hooks/user_data_atom";
+import { useGetUser } from "./services/users.service";
+import { useLoadingAtom } from "./hooks/loading.atom";
 
 const LoadingComponent = () => (
   <div className="flex justify-center items-center h-screen">
@@ -26,16 +29,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useLoadingAtom();
+  
+  const { user = {}, logOut, googleSignIn, googleSignUp } = UserAuth() || {};
+  const { uid = "" } = user || {};
+  const [userData, setUserData] = useUserDataAtom();
+  
+  useGetUser(uid, setUserData, isLoading);
 
   useEffect(() => {
     //* Simulate a 3-second loading period
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
-
+    
     return () => clearTimeout(loadingTimeout);
-  }, [isLoading]);
+  }, [isLoading, setIsLoading]);
 
   return (
     <>

@@ -106,10 +106,9 @@ export const getUsers = async () => {
 export const getUser = async (user_id: string) => {
   const userRef = doc(db, "users", user_id);
   const userDoc = await getDoc(userRef);
-
   if (userDoc.exists()) {
     const userData = userDoc.data();
-    const { joined_orgs, ...newUserData } = userData || [];
+    const { joined_orgs = [], ...newUserData } = userData || [];
 
     const orgDocs = await Promise.all(
       joined_orgs.map(async (joined_org: any) => {
@@ -117,6 +116,7 @@ export const getUser = async (user_id: string) => {
         const orgDoc = await getDoc(org_ref);
 
         if (orgDoc.exists()) {
+          console.log('D')
           const { org_email, org_name, image_url, personal, org_details } =
             orgDoc.data() as any;
 
@@ -133,6 +133,8 @@ export const getUser = async (user_id: string) => {
         return null;
       })
     );
+    
+    console.log('E')
 
     return {
       user_id,
