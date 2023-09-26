@@ -20,6 +20,7 @@ interface NavigationItemProps {
   onClick: () => void;
 }
 
+
 function NavigationItem({
   href,
   text,
