@@ -36,14 +36,14 @@ const Dashboard = () => {
         </PageHeader>
       </div>
       <div className="m-10">
-        <DataTable data={tasks} columns={columns} />
+        {currOrgData.org_id !== "" ? <DataTable data={tasks} columns={columns} /> : null}
       </div>
     </div>
     // return (
     //   <div>Dashboard</div>
   );
 };
-
+  
 export default Dashboard;
 
 const tasks = [
