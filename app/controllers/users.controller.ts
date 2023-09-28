@@ -78,7 +78,6 @@ export const getUsers = async () => {
       const { org_email, org_name, image_url, personal, org_url, org_details } =
         orgDoc.data() as any;
 
-      console.log(orgRef);
       if (orgDoc.exists()) {
         orgDocs.push({
           org_id: orgDoc.id,
@@ -116,7 +115,6 @@ export const getUser = async (user_id: string) => {
         const orgDoc = await getDoc(org_ref);
 
         if (orgDoc.exists()) {
-          console.log('D')
           const { org_email, org_name, image_url, personal, org_details } =
             orgDoc.data() as any;
 
@@ -134,8 +132,6 @@ export const getUser = async (user_id: string) => {
       })
     );
     
-    console.log('E')
-
     return {
       user_id,
       ...newUserData,
