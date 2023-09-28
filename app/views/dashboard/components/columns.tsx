@@ -42,8 +42,6 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Photo" />
     ),
     cell: ({ row }) => {
-      console.log(row.getValue("photo_url"));
-      // return <div className="w-[80px]">{row.getValue("photo_url")}</div>;
       return (
         <Avatar>
           <AvatarImage src={`${row.getValue("photo_url")}`} alt="@shadcn" />
@@ -70,7 +68,7 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="w-[150px]">{row.getValue("name")}</div>
+        <div className="w-100">{row.getValue("name")}</div>
       );
     },
     filterFn: (row, id, value) => {
@@ -84,6 +82,18 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       return <div className="w-[80px] ">{row.getValue("phone_number")}</div>;
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "role",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Role" />
+    ),
+    cell: ({ row }) => {
+      return <div className="w-[80px] ">{row.getValue("role")}</div>;
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));

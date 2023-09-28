@@ -5,6 +5,7 @@ export const taskSchema = z.object({
   name: z.string(),
   photo_url: z.string(),
   phone_number: z.string(),
+  role: z.string(),
 })
 
 export type Task = z.infer<typeof taskSchema>
