@@ -6,12 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { labels, priorities, statuses } from "../data/data";
-// import { priorities, statuses } from "../data/data"
 import { Task } from "../data/schema";
-// import { DataTableColumnHeader } from "./data-table-column-header"
-// import { DataTableRowActions } from "./data-table-row-actions"
 import { DataTableColumnHeader } from "./data_table_column_header";
 import { DataTableRowActions } from "./data_table_row_actions";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -19,7 +18,9 @@ export const columns: ColumnDef<Task>[] = [
     header: ({ table }) => (
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        onCheckedChange={(value: any) =>
+          table.toggleAllPageRowsSelected(!!value)
+        }
         aria-label="Select all"
         className="translate-y-[2px]"
       />
@@ -27,7 +28,7 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        onCheckedChange={(value: any) => row.toggleSelected(!!value)}
         aria-label="Select row"
         className="translate-y-[2px]"
       />
@@ -36,21 +37,19 @@ export const columns: ColumnDef<Task>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "photo_url",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Image" />
+      <DataTableColumnHeader column={column} title="Photo" />
     ),
     cell: ({ row }) => {
-      
-      // const { photo_url = 'No Photo' } = row || {}
-      // console.log(row.getValue("photo_url"))
-      // console.log(row.getValue("name"))
-      
-      // console.log(row.getValue("id"))
-      
-      // row.ma
-      console.log(row.getValue('photo_url'))
-      return <div className="w-[80px]">{row.getValue("photo_url")}</div>;
+      console.log(row.getValue("photo_url"));
+      // return <div className="w-[80px]">{row.getValue("photo_url")}</div>;
+      return (
+        <Avatar>
+          <AvatarImage src={`${row.getValue("photo_url")}`} alt="@shadcn" />
+          <AvatarFallback>ZZ</AvatarFallback>
+        </Avatar>
+      );
     },
     enableSorting: false,
     enableHiding: false,
@@ -61,17 +60,17 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => {
-    return (<div className="w-[80px]">{row.getValue('id')}</div>)
-    //   const label = labels.find((label) => label.value === row.original.name);
+      return <div className="w-[80px]">{row.getValue("id")}</div>;
+      //   const label = labels.find((label) => label.value === row.original.name);
 
-    //   return (
-    //     <div className="flex space-x-2">
-    //       {label && <Badge variant="outline">{label.label}</Badge>}
-    //       <span className="max-w-[500px] truncate font-medium">
-    //         {row.getValue("name")}
-    //       </span>
-    //     </div>
-    //   );
+      //   return (
+      //     <div className="flex space-x-2">
+      //       {label && <Badge variant="outline">{label.label}</Badge>}
+      //       <span className="max-w-[500px] truncate font-medium">
+      //         {row.getValue("name")}
+      //       </span>
+      //     </div>
+      //   );
     },
   },
   {
