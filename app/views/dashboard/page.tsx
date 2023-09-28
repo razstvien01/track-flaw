@@ -36,15 +36,28 @@ const Dashboard = () => {
         </PageHeader>
       </div>
       <div className="m-10">
-        {currOrgData.org_id !== "" ? <DataTable data={tasks} columns={columns} /> : null}
+        {currOrgData.org_id !== "" ? <DataTable data={sampleUsers} columns={columns} /> : null}
       </div>
     </div>
-    // return (
-    //   <div>Dashboard</div>
   );
 };
   
 export default Dashboard;
+
+const sampleUsers = [
+  {
+    id: '1L89Gv7CMJeeThuJa9zh8x0rCSx2',
+    name: 'Nicolen Evanz T. Aricayos',
+    photo_url: 'https://lh3.googleusercontent.com/a/ACg8ocLuvtSTZeqwiV8dguCuHuB-JTFhLKNFnPjlgH2j9_MpNw=s96-c',
+    phone_number: '09953988031',
+  },
+  {
+    id: '1L89Gv7CMJeeThuJa9zh8x0rCSx2',
+    name: 'Nicolen Evanz T. Aricayos',
+    photo_url: 'https://lh3.googleusercontent.com/a/ACg8ocLuvtSTZeqwiV8dguCuHuB-JTFhLKNFnPjlgH2j9_MpNw=s96-c',
+    phone_number: '09953988031',
+  }
+]
 
 const tasks = [
   {

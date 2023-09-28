@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table";
 
-import { Badge } from "@/components/ui/badge"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 
-import { labels, priorities, statuses } from "../data/data"
+import { labels, priorities, statuses } from "../data/data";
 // import { priorities, statuses } from "../data/data"
-import { Task } from "../data/schema"
+import { Task } from "../data/schema";
 // import { DataTableColumnHeader } from "./data-table-column-header"
 // import { DataTableRowActions } from "./data-table-row-actions"
-import { DataTableColumnHeader } from "./data_table_column_header"
-import { DataTableRowActions } from "./data_table_row_actions"
+import { DataTableColumnHeader } from "./data_table_column_header";
+import { DataTableRowActions } from "./data_table_row_actions";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -38,28 +38,40 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Task" />
+      <DataTableColumnHeader column={column} title="Image" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => {
+      
+      // const { photo_url = 'No Photo' } = row || {}
+      // console.log(row.getValue("photo_url"))
+      // console.log(row.getValue("name"))
+      
+      // console.log(row.getValue("id"))
+      
+      // row.ma
+      console.log(row.getValue('photo_url'))
+      return <div className="w-[80px]">{row.getValue("photo_url")}</div>;
+    },
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "title",
+    accessorKey: "id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+      <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.label)
+    return (<div className="w-[80px]">{row.getValue('id')}</div>)
+    //   const label = labels.find((label) => label.value === row.original.name);
 
-      return (
-        <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("title")}
-          </span>
-        </div>
-      )
+    //   return (
+    //     <div className="flex space-x-2">
+    //       {label && <Badge variant="outline">{label.label}</Badge>}
+    //       <span className="max-w-[500px] truncate font-medium">
+    //         {row.getValue("name")}
+    //       </span>
+    //     </div>
+    //   );
     },
   },
   {
@@ -70,10 +82,10 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       const status = statuses.find(
         (status) => status.value === row.getValue("status")
-      )
+      );
 
       if (!status) {
-        return null
+        return null;
       }
 
       return (
@@ -83,10 +95,10 @@ export const columns: ColumnDef<Task>[] = [
           )}
           <span>{status.label}</span>
         </div>
-      )
+      );
     },
     filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
+      return value.includes(row.getValue(id));
     },
   },
   {
@@ -97,10 +109,10 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       const priority = priorities.find(
         (priority) => priority.value === row.getValue("priority")
-      )
+      );
 
       if (!priority) {
-        return null
+        return null;
       }
 
       return (
@@ -110,14 +122,14 @@ export const columns: ColumnDef<Task>[] = [
           )}
           <span>{priority.label}</span>
         </div>
-      )
+      );
     },
     filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
+      return value.includes(row.getValue(id));
     },
   },
   {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
-]
+];
