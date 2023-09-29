@@ -1,6 +1,6 @@
 "use client";
 
-import { Cross2Icon, PlusIcon } from "@radix-ui/react-icons";
+import { Cross2Icon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { DataTableViewOptions } from "./data_table_view_options";
 
 import { roles } from "../../data/data";
 import { DataTableFacetedFilter } from "./data_table_faceted_filter";
+import { AddUserDialog } from "../dialogs/add_user_dialog";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -30,10 +31,7 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        <Button variant="default" onClick={() => {}} className="h-8 px-2 lg:px-3">
-          <PlusIcon className="mr-2 h-4 w-4" />
-          Add Member
-        </Button>
+        <AddUserDialog/>
         {table.getColumn("role") && (
           <DataTableFacetedFilter
             column={table.getColumn("role")}

@@ -1,33 +1,26 @@
 import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ArrowUpIcon,
-  CheckCircledIcon,
-  CircleIcon,
-  CrossCircledIcon,
-  QuestionMarkCircledIcon,
-  StopwatchIcon,
+  PersonIcon 
 } from "@radix-ui/react-icons"
 
 export const roles = [
   {
     value: "ADMIN",
     label: "Admin",
-    icon: QuestionMarkCircledIcon,
+    icon: PersonIcon ,
   },
   {
     value: "MANAGER",
     label: "Manager",
-    icon: CircleIcon,
+    icon: PersonIcon ,
   },
   {
     value: "TESTER",
     label: "Tester",
-    icon: StopwatchIcon,
+    icon: PersonIcon ,
   },
   {
     value: "DEVELOPER",
     label: "Developer",
-    icon: CheckCircledIcon,
+    icon: PersonIcon,
   },
 ]
