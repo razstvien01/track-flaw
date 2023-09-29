@@ -8,8 +8,8 @@ import {
   PageHeaderHeading,
 } from "@/components/page-header";
 import React, { useEffect } from "react";
-import { DataTable } from "./components/data_table";
-import { columns } from "./components/columns";
+import { DataTable } from "./components/table/data_table"; 
+import { columns } from "./components/table/columns";
 
 // const Dashboard = ({ tasks }: any) => {
 const Dashboard = () => {
