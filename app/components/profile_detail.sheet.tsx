@@ -156,10 +156,11 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
             <SheetFooter>
               <Button
                 onClick={() => {
-                  toast({
-                    title: "Uh oh! Something went wrong.",
-                    description: "There was a problem with your request.",
-                  });
+                  // toast({
+                  //   title: "Uh oh! Something went wrong.",
+                  //   description: "There was a problem with your request.",
+                  // });
+                  setIsSheetVisible(false);
                 }}
                 variant={"outline"}
               >

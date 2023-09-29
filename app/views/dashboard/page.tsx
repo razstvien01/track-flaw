@@ -18,6 +18,15 @@ const Dashboard = () => {
   // const { org_refs = []} = userData || {}
   // TODO make a selected Organization hook atom, make an additional attribute for the organization which is the details
   console.log(currOrgData);
+  
+  useEffect(() => {
+    
+  
+    return () => {
+      
+    }
+  }, [currOrgData])
+  
 
   return (
     <div>

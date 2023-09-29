@@ -44,7 +44,7 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       return (
         <Avatar>
-          <AvatarImage src={`${row.getValue("photo_url")}`} alt="@shadcn" />
+          <AvatarImage src={`${row.getValue("photo_url")}`}/>
           <AvatarFallback>ZZ</AvatarFallback>
         </Avatar>
       );
