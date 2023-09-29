@@ -24,31 +24,26 @@ export const labels = [
   },
 ]
 
-export const statuses = [
+export const roles = [
   {
-    value: "backlog",
-    label: "Backlog",
+    value: "ADMIN",
+    label: "Admin",
     icon: QuestionMarkCircledIcon,
   },
   {
-    value: "todo",
-    label: "Todo",
+    value: "MANAGER",
+    label: "Manager",
     icon: CircleIcon,
   },
   {
-    value: "in progress",
-    label: "In Progress",
+    value: "TESTER",
+    label: "Tester",
     icon: StopwatchIcon,
   },
   {
-    value: "done",
-    label: "Done",
+    value: "DEVELOPER",
+    label: "Developer",
     icon: CheckCircledIcon,
-  },
-  {
-    value: "canceled",
-    label: "Canceled",
-    icon: CrossCircledIcon,
   },
 ]
 
