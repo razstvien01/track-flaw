@@ -5,8 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { labels, priorities, statuses } from "../data/data";
-import { Task } from "../data/schema";
+import { Task } from "../../data/schema";
 import { DataTableColumnHeader } from "./data_table_column_header";
 import { DataTableRowActions } from "./data_table_row_actions";
 
@@ -44,7 +43,7 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       return (
         <Avatar>
-          <AvatarImage src={`${row.getValue("photo_url")}`}/>
+          <AvatarImage src={`${row.getValue("photo_url")}`} />
           <AvatarFallback>ZZ</AvatarFallback>
         </Avatar>
       );
@@ -67,9 +66,7 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => {
-      return (
-        <div className="w-100">{row.getValue("name")}</div>
-      );
+      return <div className="w-100">{row.getValue("name")}</div>;
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
@@ -93,7 +90,15 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Role" />
     ),
     cell: ({ row }) => {
-      return <div className="w-[80px] ">{row.getValue("role")}</div>;
+      // return <div className="w-[80px] ">{row.getValue("role")}</div>;
+      return (
+        <div className="flex space-x-2">
+          <Badge variant="outline">{row.getValue("role")}</Badge>
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("title")}
+          </span>
+        </div>
+      );
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
