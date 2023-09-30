@@ -39,12 +39,12 @@ export const getProjects = async () => {
     const data = doc.data();
     
     const organizationRef = data.org_ref;
-    const { id } = organizationRef
+    const { id = '' } = organizationRef || {}
 
     //* Fetch the document referred to by org_ref
     const orgDoc = await getDoc(organizationRef);
     
-    const { org_name, personal, org_url } = orgDoc.data() as any;
+    const { org_name = '', org_url = '' } = orgDoc.data() as any || {};
 
     // Create a new object with the extracted data
     const extractedData = {
@@ -56,7 +56,7 @@ export const getProjects = async () => {
         id,
         org_name,
         org_url,
-        personal
+        // personal
       }
     };
 
