@@ -14,7 +14,6 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { auth } from "../firebase";
-import axios from "axios";
 import { addUser } from "../services/users.service";
 import { useLoadingAtom } from "../hooks/loading.atom";
 

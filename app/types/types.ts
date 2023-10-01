@@ -12,11 +12,11 @@ export interface OrgDataProps {
   org_id: string
   org_name: string
   org_url: string
-  personal: boolean
-  role: string
   org_details: string
+  role: string
+  org_address: string
+  phone_number: string
 }
-
 export interface NavItem {
   title: string
   href?: string

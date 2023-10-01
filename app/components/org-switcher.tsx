@@ -54,7 +54,7 @@ export default function OrgSwitcher({ className, org_refs, showNewOrgDialog, set
             role="combobox"
             aria-expanded={open}
             aria-label="Select an organization"
-            className={cn("w-[250px] justify-between", className)}
+            className={cn("w-auto justify-between", className)}
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
@@ -67,7 +67,7 @@ export default function OrgSwitcher({ className, org_refs, showNewOrgDialog, set
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[250px] p-0">
+        <PopoverContent className="w-auto p-0">
           <Command>
             <CommandList>
               <CommandInput placeholder="Search organization..." />

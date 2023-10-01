@@ -51,7 +51,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
     error: false,
   });
   const [message, setMessage] = useState("");
-
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible({
@@ -118,7 +118,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
       <div>
         <div className="space-y-4 py-2 pb-4">
           <div className="space-y-2">
-            <Label htmlFor="org_name">Organization name</Label>
+            <Label>Organization name</Label>
             <Input
               id="org_name"
               placeholder="Enter organization name"
@@ -126,10 +126,26 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="org_email">Organization email address</Label>
+            <Label>Organization address</Label>
+            <Input
+              id="org_address"
+              placeholder="Enter organization address"
+              onChange={(e) => handleOnchangeData(e)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Organization email address</Label>
             <Input
               id="org_email"
               placeholder="Enter organization email address"
+              onChange={(e) => handleOnchangeData(e)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>Organization phone number</Label>
+            <Input
+              id="phone_number"
+              placeholder="Enter organization phone number"
               onChange={(e) => handleOnchangeData(e)}
             />
           </div>
@@ -138,6 +154,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
             <Select
               onValueChange={(e) => handleSelectOnchangeData(e)}
               value={`${orgData.role}`}
+              defaultValue='Admin'
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select true or false" />

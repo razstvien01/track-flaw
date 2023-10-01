@@ -14,7 +14,8 @@ export const OrgDataInit: OrgDataProps = {
   org_id: "",
   org_name: "Select Organization",
   org_url: "",
-  personal: false,
-  role: "Admin",
-  org_details: ''
+  org_details: '',
+  role: 'Admin',
+  org_address: '',
+  phone_number: ''
 };
