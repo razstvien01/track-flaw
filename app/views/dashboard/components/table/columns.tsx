@@ -95,7 +95,7 @@ export const columns: ColumnDef<Task>[] = [
         <div className="flex space-x-2">
           <Badge variant="outline">{row.getValue("role")}</Badge>
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("title")}
+            {row.getValue("role")}
           </span>
         </div>
       );
