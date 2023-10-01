@@ -10,7 +10,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 enum ORG_QUERY {
   GET_ORGS = "GET_ORGS",
+  UPDATE_ORG = 'UPDATE_ORG',
   GET_ORG_MEMBERS = "GET_ORG_MEMBERS",
+  ADD_ORG_MEMBER = 'ADD_ORG_MEMBER',
+  
 }
 
 export const GET = async (request: NextRequest) => {
@@ -122,9 +125,9 @@ export const DELETE = async (request: NextRequest) => {
 
 export const PUT = async (request: NextRequest) => {
   try {
-    const orgData = await request.json();
-
-    await updateOrg(orgData);
+    const data = await request.json();
+    console.log(data)
+    // await updateOrg(orgData);
 
     return new Response(
       JSON.stringify({

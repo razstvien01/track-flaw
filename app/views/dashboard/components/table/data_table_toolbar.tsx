@@ -9,7 +9,7 @@ import { DataTableViewOptions } from "./data_table_view_options";
 
 import { roles } from "../../data/data";
 import { DataTableFacetedFilter } from "./data_table_faceted_filter";
-import { AddUserDialog } from "../dialogs/add_user_dialog";
+import { AddMemberDialog } from "../dialogs/add_member_dialog";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -31,7 +31,7 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        <AddUserDialog/>
+        <AddMemberDialog/>
         {table.getColumn("role") && (
           <DataTableFacetedFilter
             column={table.getColumn("role")}

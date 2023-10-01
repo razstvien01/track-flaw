@@ -21,7 +21,6 @@ import { Loader } from "lucide-react";
 import axios from "axios";
 
 import {
-  ChangeEvent,
   Dispatch,
   SetStateAction,
   useEffect,
@@ -95,7 +94,6 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
 
   const handleOnchangeData = (e: any) => {
     const { id, value } = e.target;
-    console.log(id, ":", value);
     setOrgData((prev: OrgDataProps) => ({ ...prev, [id]: value }));
   };
 
