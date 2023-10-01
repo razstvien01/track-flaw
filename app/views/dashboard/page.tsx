@@ -13,9 +13,8 @@ import { columns } from "./components/table/columns";
 
 // const Dashboard = ({ tasks }: any) => {
 const Dashboard = () => {
-  const [userData, setUserData] = useUserDataAtom();
+  // const [userData, setUserData] = useUserDataAtom();
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
-  
   
   useEffect(() => {
     console.log(currOrgData)

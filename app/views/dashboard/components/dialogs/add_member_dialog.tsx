@@ -25,6 +25,7 @@ import { OrgDataInit } from "@/app/types/init";
 import axios from "axios";
 import AlertSuccess from "@/app/components/success_alert";
 import AlertDestructive from "@/app/components/alert_destructive";
+import { useCurrOrgDataAtom } from "@/app/hooks/curr_org_data_atom";
 
 interface AddMemberSubmitProps {
   user_id: string;
@@ -37,6 +38,9 @@ const AddMemberSubmitInit: AddMemberSubmitProps = {
 };
 
 export function AddMemberDialog() {
+  const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
+  const { org_id = '' } = currOrgData || {}
+  
   const [addMember, setAddMember] =
     useState<AddMemberSubmitProps>(AddMemberSubmitInit);
 
@@ -67,6 +71,7 @@ export function AddMemberDialog() {
     axios
       .post("/api/organizations", {
         ...addMember,
+        org_id,
         query: "ADD_ORG_MEMBER",
       })
       .then((response) => {

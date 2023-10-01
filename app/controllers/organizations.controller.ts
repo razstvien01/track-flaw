@@ -1,5 +1,6 @@
 import { db } from "../firebase";
 import {
+  arrayUnion,
   collection,
   getDoc,
   getDocs,
@@ -14,6 +15,12 @@ interface OrganizationDetails {
   creator_id: string;
   role: string;
   org_id: string;
+}
+
+interface AddMemberProps {
+  org_id: string;
+  role: string;
+  user_id: string;
 }
 
 export const checkIfExistsOrg = async (org_email: string) => {
@@ -114,6 +121,52 @@ export const getOrgs = async () => {
   return orgData;
 };
 
+export const deleteOrg = async (org_id: string) => {
+  await deleteDoc(doc(db, "organizations", org_id));
+};
+
+interface OrganizationWithIdDetails extends OrganizationDetails {
+  org_id: string;
+}
+
+export const updateOrg = async (orgData: OrganizationWithIdDetails) => {
+  const { org_id } = orgData;
+
+  const orgDocRef = doc(db, "organizations", org_id);
+  await setDoc(orgDocRef, orgData, { merge: true });
+};
+
+export const addMember = async (data: AddMemberProps) => {
+  const { org_id = "", role = "", user_id = "" } = data || {};
+
+  //* Reference to the organization document
+  const orgDocRef = doc(db, "organizations", org_id);
+  
+  //* Get the organization document
+  const orgDoc = await getDoc(orgDocRef);
+  const orgData = orgDoc.data();
+
+  //* Reference to the user document
+  const userDocRef = doc(db, "users", user_id);
+  
+  //* Check if user_ref already exists in joined_members
+  if (orgData?.joined_members) {
+    for (let member of orgData.joined_members) {
+      if (member.user_ref?.id === user_id) {
+        throw new Error('User is already a member of this organization.');
+      }
+    }
+  }
+
+  //* Update the organization document to add the new member
+  await updateDoc(orgDocRef, {
+    joined_members: arrayUnion({
+      role: role.toUpperCase(),
+      user_ref: userDocRef,
+    }),
+  });
+};
+
 export const getOrgMembers = async (org_id: string) => {
   console.log(org_id);
 
@@ -168,37 +221,5 @@ export const getOrgMembers = async (org_id: string) => {
     membersData = await Promise.all(memberPromises);
   }
 
-  // //* Create a new object with the extracted data
-  // const extractedData = {
-  //   org_name: data?.org_name,
-  //   org_email: data?.org_email,
-  //   org_url: data?.org_url,
-  //   org_address: data?.org_address,
-  //   id: orgDoc.id,
-  //   creator: {
-  //     user_id: id,
-  //     first_name,
-  //     last_name,
-  //   },
-  //   members: membersData,
-  // };
-
-  console.log(membersData);
-
   return membersData;
-};
-
-export const deleteOrg = async (org_id: string) => {
-  await deleteDoc(doc(db, "organizations", org_id));
-};
-
-interface OrganizationWithIdDetails extends OrganizationDetails {
-  org_id: string;
-}
-
-export const updateOrg = async (orgData: OrganizationWithIdDetails) => {
-  const { org_id } = orgData;
-
-  const userDocRef = doc(db, "organizations", org_id);
-  await setDoc(userDocRef, orgData, { merge: true });
 };

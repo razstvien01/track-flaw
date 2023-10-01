@@ -1,4 +1,5 @@
 import {
+  addMember,
   addOrg,
   checkIfExistsOrg,
   deleteOrg,
@@ -58,13 +59,14 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest) => {
-  try {
-    const data = await request.json();
-    const { query = "" } = data;
+  // try {
+  const data = await request.json();
+  const { query = "", ...restData } = data || {};
 
-    switch (query) {
-      case ORG_QUERY.ADD_ORG:
-        const { org_email } = data;
+  switch (query) {
+    case ORG_QUERY.ADD_ORG:
+      try {
+        const { org_email } = restData;
 
         if (await checkIfExistsOrg(org_email)) {
           return NextResponse.json(
@@ -79,7 +81,7 @@ export const POST = async (request: NextRequest) => {
           );
         }
 
-        await addOrg(data);
+        await addOrg(restData);
 
         return new Response(
           JSON.stringify({
@@ -87,28 +89,38 @@ export const POST = async (request: NextRequest) => {
             message: "Organization Created Successfully",
           })
         );
+      } catch (error) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Organization Registration Failed",
+          },
+          {
+            status: 500,
+          }
+        );
+      }
 
-      case ORG_QUERY.ADD_ORG_MEMBER:
-        console.log(data)
-        
+    case ORG_QUERY.ADD_ORG_MEMBER:
+      try {
+        await addMember(restData);
         return new Response(
           JSON.stringify({
             success: true,
             message: "Successfully Added a Member",
           })
         );
-        break;
-    }
-  } catch (error) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Organization Registration Failed",
-      },
-      {
-        status: 500,
+      } catch (error: any) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: error.message,
+          },
+          {
+            status: 500,
+          }
+        );
       }
-    );
   }
 };
 
