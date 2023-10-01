@@ -28,15 +28,19 @@ export const addOrg = async (orgData: OrganizationDetails) => {
   
   //* Add the organization document to the 'organizations' collection
   const orgDocRef = doc(collection(db, "organizations"));
+  
+  //* Update the user document to include the organization reference and role
+  const userDocRef = doc(db, "users", creator_id);
 
   //* Create an organization document data object
-  const orgDocData = { ...restOrgData, creator_ref: creatorRef };
+  const orgDocData = { ...restOrgData, creator_ref: creatorRef, joined_members: {
+    role: role.toUpperCase(),
+    user_ref: userDocRef
+  } };
 
   //* Set the data for the organization document
   await setDoc(orgDocRef, orgDocData);
 
-  //* Update the user document to include the organization reference and role
-  const userDocRef = doc(db, "users", creator_id);
   const userDoc = await getDoc(userDocRef);
 
   if (userDoc.exists()) {
