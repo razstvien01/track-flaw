@@ -95,7 +95,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
 
   const handleOnchangeData = (e: any) => {
     const { id, value } = e.target;
-    console.log(id, ':', value)
+    console.log(id, ":", value);
     setOrgData((prev: OrgDataProps) => ({ ...prev, [id]: value }));
   };
 
@@ -143,7 +143,20 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
                 <SelectValue placeholder="Select true or false" />
               </SelectTrigger>
               <SelectContent>
-                {Object.values(ROLES).map((role) => (
+                {[ROLES.ADMIN, ROLES.MANAGER].map((role) => (
+                  <SelectItem key={role} value={role}>
+                    <span className="font-medium">{role}</span> -{" "}
+                    <span className="text-muted-foreground">
+                      {role === ROLES.ADMIN
+                        ? "Managing projects and users"
+                        : role === ROLES.MANAGER
+                        ? "Oversee specific projects"
+                        : null}
+                    </span>
+                  </SelectItem>
+                ))}
+
+                {/* {Object.values(ROLES).map((role) => (
                   <SelectItem key={role} value={role}>
                     <span className="font-medium">{role}</span> -{" "}
                     <span className="text-muted-foreground">
@@ -156,7 +169,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
                         : "Fixing reported bugs and implementing new features"}
                     </span>
                   </SelectItem>
-                ))}
+                ))} */}
               </SelectContent>
             </Select>
           </div>
@@ -171,7 +184,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
           <div className="space-y-2">
             <Label>Organization details</Label>
             <Textarea
-              id='org_details'
+              id="org_details"
               onChange={(e) => handleOnchangeData(e)}
               placeholder="Type your organization details here."
             />
