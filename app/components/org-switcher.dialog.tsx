@@ -70,6 +70,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
       .post("/api/organizations", {
         ...orgData,
         creator_id: uid,
+        query: 'ADD_ORG'
       })
       .then((response) => {
         //* Handle a successful response

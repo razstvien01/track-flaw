@@ -23,6 +23,8 @@ import { useEffect, useState } from "react";
 import { ROLES } from "@/app/types/constants";
 import { OrgDataInit } from "@/app/types/init";
 import axios from "axios";
+import AlertSuccess from "@/app/components/success_alert";
+import AlertDestructive from "@/app/components/alert_destructive";
 
 interface AddMemberSubmitProps {
   user_id: string;
@@ -52,7 +54,7 @@ export function AddMemberDialog() {
         error: false,
         success: false,
       });
-      // setShowNewOrgDialog(false);
+      setShowDialog(false);
     }, 2000);
 
     return () => clearTimeout(timer);
@@ -61,11 +63,11 @@ export function AddMemberDialog() {
   //* Function to handle form submission
   const handleSubmit = () => {
     setIsSave(true);
-    
+
     axios
-      .put("/api/organizations", {
+      .post("/api/organizations", {
         ...addMember,
-        query: 'ADD_ORG_MEMBER'
+        query: "ADD_ORG_MEMBER",
       })
       .then((response) => {
         //* Handle a successful response
@@ -158,6 +160,8 @@ export function AddMemberDialog() {
             </Select>
           </div>
         </div>
+        {isVisible.success ? <AlertSuccess description={message} /> : null}
+        {isVisible.error ? <AlertDestructive description={message} /> : null}
         <DialogFooter>
           <Button variant="outline" onClick={() => setShowDialog(false)}>
             Cancel
