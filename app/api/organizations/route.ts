@@ -2,34 +2,45 @@ import {
   addOrg,
   checkIfExistsOrg,
   deleteOrg,
+  getOrgMembers,
   getOrgs,
   updateOrg,
 } from "@/app/controllers/organizations.controller";
 import { NextRequest, NextResponse } from "next/server";
 
+enum ORG_QUERY {
+  GET_ORGS = "GET_ORGS",
+  GET_ORG_MEMBERS = "GET_ORG_MEMBERS",
+}
+
 export const GET = async (request: NextRequest) => {
   try {
     const url = new URL(request.url);
     const query = url.searchParams.get("query");
-    
-    const orgs = await getOrgs();
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Fetch Organizations Successfully",
-        organization: [
-          {
-            label: "Personal",
-            orgs: [],
-          },
-          {
-            label: "Organizations",
+    switch (query) {
+      case ORG_QUERY.GET_ORGS:
+        const orgs = await getOrgs();
+        return new Response(
+          JSON.stringify({
+            success: true,
+            message: "Fetch Organizations Successfully",
             orgs,
-          },
-        ],
-      })
-    );
+          })
+        );
+
+      case ORG_QUERY.GET_ORG_MEMBERS:
+        const org_id = url.searchParams.get('org_id')
+        
+        const org_members = (org_id) ? await getOrgMembers(org_id) : null
+        return new Response(
+          JSON.stringify({
+            success: true,
+            message: "Fetch Organization Members Successfully",
+            org_members,
+          })
+        );
+    }
   } catch (error) {
     return NextResponse.json(
       {

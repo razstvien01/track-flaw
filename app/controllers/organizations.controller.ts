@@ -13,7 +13,7 @@ interface OrganizationDetails {
   org_email: string;
   creator_id: string;
   role: string;
-  org_id: string
+  org_id: string;
 }
 
 export const checkIfExistsOrg = async (org_email: string) => {
@@ -89,7 +89,7 @@ export const getOrgs = async () => {
 
     //* Extract first_name and last_name from the creatorDoc data
     const { first_name, last_name } = creatorDoc.data() as any;
-    
+
     // TODO
     //* Create a new object with the extracted data
     const extractedData = {
@@ -110,8 +110,82 @@ export const getOrgs = async () => {
 
   // Wait for all asynchronous operations to complete
   const orgData = await Promise.all(orgArr);
-  
+
   return orgData;
+};
+
+export const getOrgMembers = async (org_id: string) => {
+  console.log(org_id);
+
+  //* Create a reference to the specific organization document
+  const orgRef = doc(db, "organizations", org_id);
+
+  //* Fetch the document
+  const orgDoc = await getDoc(orgRef);
+
+  //* If document doesn't exist, return null or handle error
+  if (!orgDoc.exists()) {
+    return null;
+  }
+
+  const data = orgDoc.data();
+
+  //* Extract the DocumentReference for creator
+  const creatorRef = data?.creator_ref;
+  const { id } = creatorRef;
+
+  //* Fetch the document referred to by creatorRef
+  const creatorDoc = await getDoc(creatorRef);
+
+  //* Extract first_name and last_name from the creatorDoc data
+  // const { first_name, last_name } = creatorDoc.data() as any;
+
+  //* Handle joined_members
+  let membersData: any[] = [];
+  if (data?.joined_members && Array.isArray(data.joined_members)) {
+    const memberPromises = data.joined_members.map(async (memberRef: any) => {
+      console.log(memberRef);
+      console.log(memberRef.user_ref);
+
+      const memberDoc = await getDoc(memberRef.user_ref);
+      console.log(memberDoc);
+      const {
+        full_name = "",
+        phone_number = "",
+        photo_url = "",
+        user_id = "",
+      } = (memberDoc.data() as any) || {};
+
+      return {
+        id,
+        full_name,
+        phone_number,
+        photo_url,
+        user_id,
+      };
+    });
+
+    membersData = await Promise.all(memberPromises);
+  }
+
+  // //* Create a new object with the extracted data
+  // const extractedData = {
+  //   org_name: data?.org_name,
+  //   org_email: data?.org_email,
+  //   org_url: data?.org_url,
+  //   org_address: data?.org_address,
+  //   id: orgDoc.id,
+  //   creator: {
+  //     user_id: id,
+  //     first_name,
+  //     last_name,
+  //   },
+  //   members: membersData,
+  // };
+
+  console.log(membersData);
+
+  return membersData;
 };
 
 export const deleteOrg = async (org_id: string) => {

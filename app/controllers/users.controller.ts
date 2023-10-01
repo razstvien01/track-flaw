@@ -115,23 +115,30 @@ export const getUser = async (user_id: string) => {
         const orgDoc = await getDoc(org_ref);
 
         if (orgDoc.exists()) {
-          const { org_email, org_name, image_url, personal, org_details } =
-            orgDoc.data() as any;
+          const {
+            org_email = "",
+            org_name = "",
+            image_url = "",
+            org_details = "",
+            org_address = "",
+            phone_number = "",
+          } = (orgDoc.data() as any) || {};
 
           return {
             org_id: orgDoc.id,
             org_email,
             org_name,
             image_url,
-            personal,
             role,
-            org_details
+            org_details,
+            org_address,
+            phone_number,
           };
         }
         return null;
       })
     );
-    
+
     return {
       user_id,
       ...newUserData,

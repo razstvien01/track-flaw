@@ -18,7 +18,7 @@ const Dashboard = () => {
   
   
   useEffect(() => {
-    
+    console.log(currOrgData)
   
     return () => {
       
