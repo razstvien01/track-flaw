@@ -189,18 +189,17 @@ export const getOrgMembers = async (org_id: string) => {
 
   //* Fetch the document referred to by creatorRef
   const creatorDoc = await getDoc(creatorRef);
-
-  //* Extract first_name and last_name from the creatorDoc data
-  // const { first_name, last_name } = creatorDoc.data() as any;
-
+  
   //* Handle joined_members
   let membersData: any[] = [];
   if (data?.joined_members && Array.isArray(data.joined_members)) {
     const memberPromises = data.joined_members.map(async (memberRef: any) => {
       console.log(memberRef);
       console.log(memberRef.user_ref);
-
-      const memberDoc = await getDoc(memberRef.user_ref);
+      
+      const { role = '', user_ref = '' } = memberRef || {}
+      
+      const memberDoc = await getDoc(user_ref);
       console.log(memberDoc);
       const {
         full_name = "",
@@ -210,7 +209,7 @@ export const getOrgMembers = async (org_id: string) => {
       } = (memberDoc.data() as any) || {};
 
       return {
-        id,
+        role,
         full_name,
         phone_number,
         photo_url,

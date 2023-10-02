@@ -21,12 +21,12 @@ import { Label } from "@/components/ui/label";
 import { Loader, PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ROLES } from "@/app/types/constants";
-import axios from "axios";
 import AlertSuccess from "@/app/components/success_alert";
 import AlertDestructive from "@/app/components/alert_destructive";
 import { useCurrOrgDataAtom } from "@/app/hooks/curr_org_data_atom";
 import { ShowToast } from "@/components/show-toast";
-import { addMemberInOrg } from "@/app/services/org.service";
+import { addMemberInOrg, getMembersInOrgs } from "@/app/services/org.service";
+import { useCurrOrgMemberAtom } from "@/app/hooks/curr_org_members_atom";
 
 interface AddMemberSubmitProps {
   user_id: string;
@@ -39,6 +39,7 @@ const AddMemberSubmitInit: AddMemberSubmitProps = {
 };
 
 export function AddMemberDialog() {
+  const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom()
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const { org_id = "" } = currOrgData || {};
 
@@ -75,14 +76,29 @@ export function AddMemberDialog() {
       return () => clearTimeout(timer);
     }
   }, [isVisible.success, toastParams, hasSubmitted]);
-
+  
   useEffect(() => {
     if (showToast) {
       ShowToast(toastParams);
       setShowToast(false);
       setHasSubmitted(false);
+      
+      const fetchMembers = async () => {
+        if (org_id !== "") {
+          const result = await getMembersInOrgs(org_id);
+  
+          if (result.success) {
+            setOrgMembers(result.data);
+          } else {
+          }
+        }
+      };
+  
+      fetchMembers();
     }
-  }, [showToast, toastParams]);
+  }, [showToast, toastParams, setOrgMembers, org_id]);
+  
+  
 
   //* Function to handle form submission
   const handleSubmit = async () => {

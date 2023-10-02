@@ -27,6 +27,8 @@ export const useGetUser = (
       user_id,
     };
     
+    console.log('GET USER')
+    
     axios
       .get("/api/users", {
         params,

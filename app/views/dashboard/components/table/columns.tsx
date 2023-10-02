@@ -52,21 +52,21 @@ export const columns: ColumnDef<Task>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "user_id",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => {
-      return <div className="w-[80px] ">{row.getValue("id")}</div>;
+      return <div className="w-[80px] ">{row.getValue("user_id")}</div>;
     },
   },
   {
-    accessorKey: "name",
+    accessorKey: "full_name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => {
-      return <div className="w-100">{row.getValue("name")}</div>;
+      return <div className="w-100">{row.getValue("full_name")}</div>;
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));

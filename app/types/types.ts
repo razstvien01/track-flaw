@@ -23,3 +23,11 @@ export interface NavItem {
   disabled?: boolean
   external?: boolean
 }
+
+export interface OrgMembersType {
+  user_id: string;
+  full_name: string;
+  photo_url: string;
+  phone_number: string;
+  role: string;
+}
