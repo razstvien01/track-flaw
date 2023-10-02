@@ -34,7 +34,7 @@ export const useGetUser = (
       .then((response) => {
         setUser(response.data.user);
       })
-      .catch((error) => { 
+      .catch((error) => {
         console.error("Error retrieving users:", error);
       });
   }, [setUser, user_id, isUpdate, showNewOrgDialog]);
@@ -51,4 +51,16 @@ export const updateUser = async (newUserData: any, user_id: string) => {
   } catch (error: any) {
     return { success: false, error: error.response.data };
   }
+};
+
+export const addUser = async (user: any) => {
+  const { displayName, email, uid, phoneNumber, photoURL } = user;
+
+  await axios.post("http://localhost:3000/api/users", {
+    user_id: uid,
+    full_name: displayName,
+    email_address: email,
+    phone_number: phoneNumber,
+    photo_url: photoURL,
+  });
 };

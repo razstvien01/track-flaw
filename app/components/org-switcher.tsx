@@ -72,11 +72,11 @@ export default function OrgSwitcher({ className, org_refs, showNewOrgDialog, set
             <CommandList>
               <CommandInput placeholder="Search organization..." />
               <CommandEmpty>No organization found.</CommandEmpty>
-              {org_refs.map((org: any) => {
+              {org_refs.map((org: any, index: number) => {
                 const { org_name } = org;
                 return (
                   <CommandItem
-                    key={org_name}
+                    key={index}
                     onSelect={() => {
                       setSelectedOrg(org);
                       setOpen(false);

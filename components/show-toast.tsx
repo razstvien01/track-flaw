@@ -1,12 +1,12 @@
 import { toast } from "./ui/use-toast";
 
 interface ShowToastProps {
-  variant: "default" | "destructive";
-  title: string;
-  description: string;
+  variant?: "default" | "destructive";
+  title?: string;
+  description?: string;
 }
 
-export const ShowToast = ({ title, description, variant }: ShowToastProps) => {
+export const ShowToast = ({ title = '', description = '', variant = 'default' }: ShowToastProps) => {
   const showToast = toast({
     variant: variant,
     title: title,
@@ -14,6 +14,6 @@ export const ShowToast = ({ title, description, variant }: ShowToastProps) => {
   });
 
   setTimeout(() => {
-    showToast.dismiss(); // Close the toast after 3 seconds
+    showToast.dismiss(); //* Close the toast after 3 seconds
   }, 3000);
 };

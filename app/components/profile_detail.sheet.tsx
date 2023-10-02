@@ -72,16 +72,7 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
 
     return () => clearTimeout(timer);
   }, [isVisible.success]);
-
-  const handleButton = () => {
-    setIsEditProfile(!isEditProfile);
-  };
-
-  const handleOnchangeData = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target;
-    setNewUserData((prev: UserDataProps) => ({ ...prev, [id]: value }));
-  };
-
+  
   const handleUpdate = async () => {
     setIsUpdate(true);
 
@@ -106,6 +97,15 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
         variant: "destructive",
       });
     }
+  };
+  
+  const handleButton = () => {
+    setIsEditProfile(!isEditProfile);
+  };
+
+  const handleOnchangeData = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setNewUserData((prev: UserDataProps) => ({ ...prev, [id]: value }));
   };
 
   return (

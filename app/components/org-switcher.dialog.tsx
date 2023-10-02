@@ -19,12 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Loader } from "lucide-react";
 
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import AlertSuccess from "./success_alert";
 import AlertDestructive from "./alert_destructive";
 import { UserAuth } from "../context/auth_context";
@@ -33,6 +28,7 @@ import { OrgDataInit } from "../types/init";
 import { ROLES } from "../types/constants";
 import { Textarea } from "@/components/ui/textarea";
 import { createOrganization } from "../services/org.service";
+import { ShowToast } from "@/components/show-toast";
 
 interface OrgSwitcherDialogProps {
   setShowNewOrgDialog: Dispatch<SetStateAction<boolean>>;
@@ -50,26 +46,46 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
     error: false,
   });
   const [message, setMessage] = useState("");
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible({
-        error: false,
-        success: false,
-      });
-      setShowNewOrgDialog(false);
-    }, 2000);
+  const [toastParams, setToastParams] = useState<any>();
+  const [showToast, setShowToast] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
-    return () => clearTimeout(timer);
-  }, [isVisible.success, setShowNewOrgDialog]);
+  useEffect(() => {
+    if (hasSubmitted) {
+      const timer = setTimeout(() => {
+        setIsVisible({
+          error: false,
+          success: false,
+        });
+        setShowNewOrgDialog(false);
+        setShowToast(true);
+        setIsSave(false)
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible.success, toastParams, hasSubmitted, setShowNewOrgDialog]);
+
+  useEffect(() => {
+    if (showToast) {
+      ShowToast(toastParams);
+      setShowToast(false);
+      setHasSubmitted(false);
+    }
+  }, [showToast, toastParams]);
 
   //* Function to handle form submission
   const handleSubmit = async () => {
     setIsSave(true);
-    
     const result = await createOrganization(orgData, uid);
-  
+
     if (result.success) {
+      setHasSubmitted(true);
+      setToastParams({
+        title: "Creating Organization",
+        description: "You have successfully created an organization.",
+        variant: "default",
+      });
       setMessage(result.data.message);
       setIsVisible({
         error: false,
@@ -82,7 +98,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
         error: true,
       }));
     }
-    
+
     setIsSave(false);
   };
 
@@ -99,7 +115,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   };
 
   return (
-    <DialogContent>
+    <DialogContent >
       <DialogHeader>
         <DialogTitle>Create organization</DialogTitle>
         <DialogDescription>
@@ -146,7 +162,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
             <Select
               onValueChange={(e) => handleSelectOnchangeData(e)}
               value={`${orgData.role}`}
-              defaultValue='Admin'
+              defaultValue="Admin"
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select true or false" />
@@ -164,33 +180,10 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
                     </span>
                   </SelectItem>
                 ))}
-
-                {/* {Object.values(ROLES).map((role) => (
-                  <SelectItem key={role} value={role}>
-                    <span className="font-medium">{role}</span> -{" "}
-                    <span className="text-muted-foreground">
-                      {role === ROLES.ADMIN
-                        ? "Managing projects and users"
-                        : role === ROLES.MANAGER
-                        ? "Oversee specific projects"
-                        : role === ROLES.TESTER
-                        ? "Identifying and reporting bugs"
-                        : "Fixing reported bugs and implementing new features"}
-                    </span>
-                  </SelectItem>
-                ))} */}
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="name">Organization url</Label>
-            <Input
-              id="org_url"
-              placeholder="Enter organization url"
-              onChange={(e) => handleOnchangeData(e)}
-            />
-          </div>
-          <div className="space-y-2">
+          <div>
             <Label>Organization details</Label>
             <Textarea
               id="org_details"

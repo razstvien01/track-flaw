@@ -25,6 +25,8 @@ import axios from "axios";
 import AlertSuccess from "@/app/components/success_alert";
 import AlertDestructive from "@/app/components/alert_destructive";
 import { useCurrOrgDataAtom } from "@/app/hooks/curr_org_data_atom";
+import { ShowToast } from "@/components/show-toast";
+import { addMemberInOrg } from "@/app/services/org.service";
 
 interface AddMemberSubmitProps {
   user_id: string;
@@ -38,8 +40,8 @@ const AddMemberSubmitInit: AddMemberSubmitProps = {
 
 export function AddMemberDialog() {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
-  const { org_id = '' } = currOrgData || {}
-  
+  const { org_id = "" } = currOrgData || {};
+
   const [addMember, setAddMember] =
     useState<AddMemberSubmitProps>(AddMemberSubmitInit);
 
@@ -50,48 +52,64 @@ export function AddMemberDialog() {
   });
   const [message, setMessage] = useState("");
   const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [toastParams, setToastParams] = useState<any>({
+    title: "",
+    description: "",
+    variant: "default",
+  });
+  const [showToast, setShowToast] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible({
-        error: false,
-        success: false,
-      });
-      setShowDialog(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [isVisible.success]);
-
-  //* Function to handle form submission
-  const handleSubmit = () => {
-    setIsSave(true);
-
-    axios
-      .post("/api/organizations", {
-        ...addMember,
-        org_id,
-        query: "ADD_ORG_MEMBER",
-      })
-      .then((response) => {
-        //* Handle a successful response
-        setMessage(response.data.message);
+    if (hasSubmitted) {
+      const timer = setTimeout(() => {
         setIsVisible({
           error: false,
-          success: true,
+          success: false,
         });
         setIsSave(false);
-      })
-      .catch((error) => {
-        //* Handle any errors that occurred during the request
+        setShowDialog(false);
+        setShowToast(true);
+      }, 2000);
 
-        setMessage(error.response.data.message);
-        setIsVisible((prev) => ({
-          ...prev,
-          error: true,
-        }));
-        setIsSave(false);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible.success, toastParams, hasSubmitted]);
+
+  useEffect(() => {
+    if (showToast) {
+      ShowToast(toastParams);
+      setShowToast(false);
+      setHasSubmitted(false);
+    }
+  }, [showToast, toastParams]);
+
+  //* Function to handle form submission
+  const handleSubmit = async () => {
+    setIsSave(true);
+    const result = await addMemberInOrg({ memberData: addMember, org_id });
+
+    if (result.success) {
+      setHasSubmitted(true)
+      setToastParams({
+        title: "Add Member",
+        description: "Successfully added a member.",
+        variant: "default",
       });
+      setMessage(result.data.message);
+      setIsVisible({
+        error: false,
+        success: true,
+      });
+    } else {
+      setMessage(result.error.message);
+      setIsVisible((prev) => ({
+        ...prev,
+        error: true,
+      }));
+    }
+
+    setIsSave(false);
   };
 
   const handleOnchangeData = (e: any) => {

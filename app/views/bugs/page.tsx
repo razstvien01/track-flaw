@@ -7,9 +7,6 @@ import { columns } from './components/columns'
 import { DataTable } from './components/data_table'
 
 const Bugs = () => {
-  const { toast } = useToast()
-  
-  
   return (
     <DataTable data={tasks} columns={columns} />
   )
