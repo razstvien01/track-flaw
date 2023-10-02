@@ -19,9 +19,10 @@ import { Button } from "@/components/ui/button";
 import { UserDataProps } from "../types/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader } from "lucide-react";
-import axios from "axios";
 import { UserDataInit } from "../types/init";
 import { toast } from "@/components/ui/use-toast";
+import { updateUser } from "../services/users.service";
+import { ShowToast } from "@/components/show-toast";
 
 interface ProfileSheetProps {
   isSheetVisible: boolean;
@@ -81,43 +82,30 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
     setNewUserData((prev: UserDataProps) => ({ ...prev, [id]: value }));
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     setIsUpdate(true);
-    const { org_refs, ...newUser } = newUserData;
-    axios
-      .put("/api/users", {
-        ...newUser,
-        user_id: user_id,
-      })
-      .then((response) => {
-        setIsUpdate(false);
-        setIsSheetVisible(false);
-        handleButton();
-        // setIsVisible({
-        //   error: false,
-        //   success: true
-        // })
-        const successToast = toast({
-          variant: "default",
-          title: "Profile Updated",
-          description: "Your profile has been updated successfully.",
-        });
 
-        setTimeout(() => {
-          successToast.dismiss(); // Close the toast after 3 seconds
-        }, 3000);
-      })
-      .catch((error) => {
-        const errorToast = toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: "There was a problem with your request.",
-        });
+    const result = await updateUser(newUserData, user_id);
 
-        setTimeout(() => {
-          errorToast.dismiss(); // Close the toast after 3 seconds
-        }, 3000);
+    setIsUpdate(false);
+
+    if (result.success) {
+      setIsSheetVisible(false);
+      handleButton();
+      
+      ShowToast({
+        title: "Profile Updated",
+        description: "Your profile has been updated successfully.",
+        variant: "default",
       });
+    } else {
+      
+      ShowToast({
+        title: "Updating Profile",
+        description: "Updating profile failed.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

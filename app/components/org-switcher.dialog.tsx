@@ -18,7 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader } from "lucide-react";
-import axios from "axios";
 
 import {
   Dispatch,
@@ -33,6 +32,7 @@ import { OrgDataProps } from "../types/types";
 import { OrgDataInit } from "../types/init";
 import { ROLES } from "../types/constants";
 import { Textarea } from "@/components/ui/textarea";
+import { createOrganization } from "../services/org.service";
 
 interface OrgSwitcherDialogProps {
   setShowNewOrgDialog: Dispatch<SetStateAction<boolean>>;
@@ -64,33 +64,26 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   }, [isVisible.success, setShowNewOrgDialog]);
 
   //* Function to handle form submission
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsSave(true);
-    axios
-      .post("/api/organizations", {
-        ...orgData,
-        creator_id: uid,
-        query: 'ADD_ORG'
-      })
-      .then((response) => {
-        //* Handle a successful response
-        setMessage(response.data.message);
-        setIsVisible({
-          error: false,
-          success: true,
-        });
-        setIsSave(false);
-      })
-      .catch((error) => {
-        //* Handle any errors that occurred during the request
-
-        setMessage(error.response.data.message);
-        setIsVisible((prev) => ({
-          ...prev,
-          error: true,
-        }));
-        setIsSave(false);
+    
+    const result = await createOrganization(orgData, uid);
+  
+    if (result.success) {
+      setMessage(result.data.message);
+      setIsVisible({
+        error: false,
+        success: true,
       });
+    } else {
+      setMessage(result.error.message);
+      setIsVisible((prev) => ({
+        ...prev,
+        error: true,
+      }));
+    }
+    
+    setIsSave(false);
   };
 
   const handleOnchangeData = (e: any) => {

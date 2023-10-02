@@ -21,7 +21,6 @@ import { Label } from "@/components/ui/label";
 import { Loader, PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ROLES } from "@/app/types/constants";
-import { OrgDataInit } from "@/app/types/init";
 import axios from "axios";
 import AlertSuccess from "@/app/components/success_alert";
 import AlertDestructive from "@/app/components/alert_destructive";
