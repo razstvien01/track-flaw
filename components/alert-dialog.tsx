@@ -10,19 +10,25 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
+import { Dispatch, SetStateAction } from "react"
 
 interface AlertDialogPopProps {
   title: string
   label: string
   description: string
+  openDeleteDialog: boolean
+  setOpenDeleteDialog: Dispatch<SetStateAction<boolean>>
 }
 
-export function AlertDialogPop() {
+export function AlertDialogPop({
+  title,
+  description,
+  label,
+  openDeleteDialog,
+  setOpenDeleteDialog,
+}: AlertDialogPopProps) {
   return (
-    <AlertDialog >
-      <AlertDialogTrigger asChild>
-        <Button variant="outline">Show Dialog</Button>
-      </AlertDialogTrigger>
+    <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

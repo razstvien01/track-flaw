@@ -20,6 +20,7 @@ import {
 
 import { taskSchema } from "../../data/schema" 
 import { useState } from "react"
+import { AlertDialogPop } from "@/components/alert-dialog"
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -32,6 +33,14 @@ export function DataTableRowActions<TData>({
   const [ openDeleteDialog, setOpenDeleteDialog ] = useState<boolean>(false)
 
   return (
+    <>
+    <AlertDialogPop
+    title=""
+      description=""
+      label=""
+      openDeleteDialog={openDeleteDialog}
+      setOpenDeleteDialog={setOpenDeleteDialog}
+    />
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
@@ -48,13 +57,12 @@ export function DataTableRowActions<TData>({
         <DropdownMenuItem>Favorite</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => {
-          console.log('DELETE')
-        }}>
+        <DropdownMenuItem onClick={() => setOpenDeleteDialog(true)}>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+    </>
   )
 }
