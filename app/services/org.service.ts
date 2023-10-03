@@ -71,9 +71,7 @@ export const getMembersInOrgs = async (org_id: string) => {
     const response = await axios.get("/api/organizations", {
       params,
     });
-
-    console.log(response.data);
-
+    
     return {
       success: true,
       data: response.data.org_members,

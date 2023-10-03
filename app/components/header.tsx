@@ -28,8 +28,12 @@ const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
   const { org_refs = [] } = userData || {};
 
   useGetUser(uid, setUserData, isUpdate, showNewOrgDialog);
+  
+  if (!user) {
+    return <AuthenticationPage googleSignIn={googleSignIn} googleSignUp={googleSignUp} />;
+  }
 
-  return user ? (
+  return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
         <Logo />
@@ -52,12 +56,7 @@ const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
         </div>
       </div>
     </div>
-  ) : (
-    <AuthenticationPage
-      googleSignIn={googleSignIn}
-      googleSignUp={googleSignUp}
-    />
-  );
+  )
 };
 
 export default Header;

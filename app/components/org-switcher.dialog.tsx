@@ -183,7 +183,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
               </SelectContent>
             </Select>
           </div>
-          <div>
+          <div className="space-y-2">
             <Label>Organization details</Label>
             <Textarea
               id="org_details"

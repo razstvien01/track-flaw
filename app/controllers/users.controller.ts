@@ -1,5 +1,5 @@
 import { db } from "../firebase";
-import { collection, getDoc, getDocs, query } from "firebase/firestore";
+import { collection, getDoc, getDocs, query, serverTimestamp } from "firebase/firestore";
 import { addDoc, where, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 interface UserDetails {
@@ -34,19 +34,6 @@ export const checkIfExistsUserId = async (user_id: string) => {
 };
 
 export const addUser = async (userData: UserDetails) => {
-  // const { role_id, org_ids, ...restUserData } = userData;
-
-  //* Create references for the role and organizations based on their IDs
-  // const roleRef = doc(db, "roles", role_id);
-  // const orgRefs = org_ids.map((org_id) => doc(db, "organizations", org_id));
-
-  //* Add the role and organizations references to the user data
-  // const userWithRefs = {
-  // ...restUserData,
-  // role_ref: roleRef,
-  // org_refs: orgRefs,
-  // };
-
   //* Add the user document with role and organizations references
   const { user_id } = userData;
 
@@ -55,7 +42,7 @@ export const addUser = async (userData: UserDetails) => {
     const userDocRef = doc(db, "users", user_id);
 
     //* Set the document data with the specified document ID
-    await setDoc(userDocRef, userData);
+    await setDoc(userDocRef, {...userData, created_at: serverTimestamp()});
   } else {
     await addDoc(collection(db, "users"), userData);
   }
@@ -122,6 +109,7 @@ export const getUser = async (user_id: string) => {
             org_details = "",
             org_address = "",
             phone_number = "",
+            created_at = ''
           } = (orgDoc.data() as any) || {};
 
           return {
@@ -133,6 +121,7 @@ export const getUser = async (user_id: string) => {
             org_details,
             org_address,
             phone_number,
+            created_at
           };
         }
         return null;

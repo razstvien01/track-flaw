@@ -25,8 +25,6 @@ const Dashboard = () => {
         const result = await getMembersInOrgs(org_id);
 
         if (result.success) {
-          console.log(result.data);
-          console.log(sampleUsers);
           setOrgMembers(result.data);
         } else {
         }
@@ -34,7 +32,6 @@ const Dashboard = () => {
     };
 
     fetchMembers();
-
     return () => {};
   }, [currOrgData, org_id, setOrgMembers]);
 

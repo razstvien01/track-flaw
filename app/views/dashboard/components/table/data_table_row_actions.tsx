@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { taskSchema } from "../../data/schema" 
+import { useState } from "react"
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -28,6 +29,7 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const task = taskSchema.parse(row.original)
+  const [ openDeleteDialog, setOpenDeleteDialog ] = useState<boolean>(false)
 
   return (
     <DropdownMenu>
@@ -46,7 +48,9 @@ export function DataTableRowActions<TData>({
         <DropdownMenuItem>Favorite</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => {
+          console.log('DELETE')
+        }}>
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>

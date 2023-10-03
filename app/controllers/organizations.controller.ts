@@ -5,6 +5,7 @@ import {
   getDoc,
   getDocs,
   query,
+  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { where, doc, deleteDoc, setDoc } from "firebase/firestore";
@@ -56,6 +57,7 @@ export const addOrg = async (orgData: OrganizationDetails) => {
         user_ref: userDocRef,
       },
     ],
+    created_at: serverTimestamp(),
   };
 
   //* Set the data for the organization document
@@ -141,19 +143,19 @@ export const addMember = async (data: AddMemberProps) => {
 
   //* Reference to the organization document
   const orgDocRef = doc(db, "organizations", org_id);
-  
+
   //* Get the organization document
   const orgDoc = await getDoc(orgDocRef);
   const orgData = orgDoc.data();
 
   //* Reference to the user document
   const userDocRef = doc(db, "users", user_id);
-  
+
   //* Check if user_ref already exists in joined_members
   if (orgData?.joined_members) {
     for (let member of orgData.joined_members) {
       if (member.user_ref?.id === user_id) {
-        throw new Error('User is already a member of this organization.');
+        throw new Error("User is already a member of this organization.");
       }
     }
   }
@@ -163,12 +165,12 @@ export const addMember = async (data: AddMemberProps) => {
     joined_members: arrayUnion({
       role: role.toUpperCase(),
       user_ref: userDocRef,
+      created_at: serverTimestamp(),
     }),
   });
 };
 
 export const getOrgMembers = async (org_id: string) => {
-  console.log(org_id);
 
   //* Create a reference to the specific organization document
   const orgRef = doc(db, "organizations", org_id);
@@ -180,40 +182,41 @@ export const getOrgMembers = async (org_id: string) => {
   if (!orgDoc.exists()) {
     return null;
   }
-
+  
   const data = orgDoc.data();
-
+  
   //* Extract the DocumentReference for creator
   const creatorRef = data?.creator_ref;
   const { id } = creatorRef;
 
   //* Fetch the document referred to by creatorRef
   const creatorDoc = await getDoc(creatorRef);
-  
+
   //* Handle joined_members
-  let membersData: any[] = [];
+  let membersData: {
+    role: string;
+    full_name: string;
+    phone_number: string;
+    user_id: string;
+  }[] = [];
   if (data?.joined_members && Array.isArray(data.joined_members)) {
     const memberPromises = data.joined_members.map(async (memberRef: any) => {
-      console.log(memberRef);
-      console.log(memberRef.user_ref);
-      
-      const { role = '', user_ref = '' } = memberRef || {}
-      
+
+      const { role = "", user_ref = "" } = memberRef || {};
+
+      const getValueOrDefault = (value: any, defaultValue: any = "") =>
+        value ?? defaultValue;
+
       const memberDoc = await getDoc(user_ref);
-      console.log(memberDoc);
-      const {
-        full_name = "",
-        phone_number = "",
-        photo_url = "",
-        user_id = "",
-      } = (memberDoc.data() as any) || {};
+      const memberData = memberDoc.data() as any;
 
       return {
         role,
-        full_name,
-        phone_number,
-        photo_url,
-        user_id,
+        full_name: getValueOrDefault(memberData?.full_name),
+        phone_number: getValueOrDefault(memberData?.phone_number),
+        photo_url: getValueOrDefault(memberData?.photo_url),
+        user_id: getValueOrDefault(memberData?.user_id),
+        created_at: getValueOrDefault(memberData?.created_at)
       };
     });
 

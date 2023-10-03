@@ -35,7 +35,7 @@ export const GET = async (request: NextRequest) => {
 
       case ORG_QUERY.GET_ORG_MEMBERS:
         const org_id = url.searchParams.get("org_id");
-
+        
         const org_members = org_id ? await getOrgMembers(org_id) : null;
         return new Response(
           JSON.stringify({

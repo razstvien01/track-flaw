@@ -1,5 +1,5 @@
 import { db } from "../firebase";
-import { collection, getDoc, getDocs, query } from "firebase/firestore";
+import { collection, getDoc, getDocs, query, serverTimestamp } from "firebase/firestore";
 import { addDoc, where, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 interface ProjectDetails {
@@ -26,7 +26,7 @@ export const addProject = async (orgData: ProjectDetails) => {
 
   const orgRef = doc(db, "organizations", org_id);
 
-  const orgWithRefs = { ...restOrgData, org_ref: orgRef };
+  const orgWithRefs = { ...restOrgData, org_ref: orgRef, created_at: serverTimestamp(), };
 
   await addDoc(collection(db, "projects"), orgWithRefs);
 };

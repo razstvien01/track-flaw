@@ -29,9 +29,9 @@ export function DataTableToolbar<TData>({
           onChange={(event) =>
             table.getColumn("full_name")?.setFilterValue(event.target.value)
           }
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 max-w-sm"
         />
-        <AddMemberDialog/>
+        <AddMemberDialog />
         {table.getColumn("role") && (
           <DataTableFacetedFilter
             column={table.getColumn("role")}
