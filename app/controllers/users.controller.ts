@@ -12,6 +12,7 @@ interface UserDetails {
   org_ids: string[];
   full_name: string;
   photo_url: string;
+  created_at: string
 }
 
 export const checkIfExistsUser = async (email_address: string) => {
@@ -35,16 +36,16 @@ export const checkIfExistsUserId = async (user_id: string) => {
 
 export const addUser = async (userData: UserDetails) => {
   //* Add the user document with role and organizations references
-  const { user_id } = userData;
+  const { user_id, ...restData } = userData;
 
   if (user_id) {
     //* Reference the specific document by specifying its path
     const userDocRef = doc(db, "users", user_id);
 
     //* Set the document data with the specified document ID
-    await setDoc(userDocRef, {...userData, created_at: serverTimestamp()});
+    await setDoc(userDocRef, {...restData, created_at: serverTimestamp()});
   } else {
-    await addDoc(collection(db, "users"), userData);
+    await addDoc(collection(db, "users"), {...restData, created_at: serverTimestamp()});
   }
 };
 
@@ -144,7 +145,8 @@ export const deleteUser = async (user_id: string) => {
 
 export const updateUser = async (userData: UserDetails) => {
   const { user_id } = userData;
-
+  const { created_at, ...restData } = userData
+  
   const userDocRef = doc(db, "users", user_id);
-  await setDoc(userDocRef, userData, { merge: true });
+  await setDoc(userDocRef, restData, { merge: true });
 };

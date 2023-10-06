@@ -165,7 +165,7 @@ export const addMember = async (data: AddMemberProps) => {
     joined_members: arrayUnion({
       role: role.toUpperCase(),
       user_ref: userDocRef,
-      created_at: serverTimestamp(),
+      // created_at: serverTimestamp(),
     }),
   });
 };
