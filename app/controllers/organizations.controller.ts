@@ -165,9 +165,16 @@ export const addMember = async (data: AddMemberProps) => {
     joined_members: arrayUnion({
       role: role.toUpperCase(),
       user_ref: userDocRef,
-      // created_at: serverTimestamp(),
     }),
   });
+  
+  //* Update or push the user's joined_orgs[] with the value of the org_ref and the role
+  await updateDoc(userDocRef, {
+    joined_orgs: arrayUnion({
+      role: role.toUpperCase(),
+      org_ref: orgDocRef
+    })
+  })
 };
 
 export const getOrgMembers = async (org_id: string) => {

@@ -7,15 +7,8 @@ import {
   getOrgs,
   updateOrg,
 } from "@/app/controllers/organizations.controller";
+import { ORG_QUERY } from "@/app/types/constants";
 import { NextRequest, NextResponse } from "next/server";
-
-enum ORG_QUERY {
-  GET_ORGS = "GET_ORGS",
-  ADD_ORG = "ADD_ORG",
-  UPDATE_ORG = "UPDATE_ORG",
-  GET_ORG_MEMBERS = "GET_ORG_MEMBERS",
-  ADD_ORG_MEMBER = "ADD_ORG_MEMBER",
-}
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -126,17 +119,33 @@ export const POST = async (request: NextRequest) => {
 
 export const DELETE = async (request: NextRequest) => {
   try {
-    const orgData = await request.json();
-    const { org_id } = orgData;
-
-    await deleteOrg(org_id);
-
+    const data = await request.json();
+    const { query = '', ...restData } = data || {};
+    let message = ''
+    let success = false
+    
+    switch (query) {
+      case ORG_QUERY.DELETE_ORG:
+        const { org_id = '' } = restData || {}
+        
+        message = "Organization Deleted Successfully"
+        success = true
+        await deleteOrg(org_id)
+        break;
+    
+      case ORG_QUERY.REMOVE_ORG_MEMBER:
+        console.log('hellow rowlrdo')
+        break;
+    }
+    
     return new Response(
       JSON.stringify({
-        success: true,
-        message: "Organization Deleted Successfully",
+        success,
+        message,
       })
     );
+    
+    
   } catch (error) {
     return NextResponse.json(
       {

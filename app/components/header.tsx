@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [showNewOrgDialog, setShowNewOrgDialog] = useState<boolean>(false);
   const { org_refs = [] } = userData || {};
-
+  
   useGetUser(uid, setUserData, isUpdate, showNewOrgDialog);
   
   if (!user) {

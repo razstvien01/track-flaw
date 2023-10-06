@@ -1,13 +1,6 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useEffect } from "react";
-
-enum ORG_QUERY {
-  GET_ORGS = "GET_ORGS",
-  ADD_ORG = "ADD_ORG",
-  UPDATE_ORG = "UPDATE_ORG",
-  GET_ORG_MEMBERS = "GET_ORG_MEMBERS",
-  ADD_ORG_MEMBER = "ADD_ORG_MEMBER",
-}
+import { ORG_QUERY } from "../types/constants";
 
 export const useGetOrgs = (setOrgs: Dispatch<SetStateAction<any[]>>) => {
   useEffect(() => {
@@ -71,7 +64,7 @@ export const getMembersInOrgs = async (org_id: string) => {
     const response = await axios.get("/api/organizations", {
       params,
     });
-    
+
     return {
       success: true,
       data: response.data.org_members,
@@ -80,6 +73,28 @@ export const getMembersInOrgs = async (org_id: string) => {
     return {
       success: false,
       error: error.response.data,
+    };
+  }
+};
+
+export const removeMember = async (user_id: string) => {
+  try {
+    const params = {
+      user_id,
+      query: ORG_QUERY.REMOVE_ORG_MEMBER,
+    };
+    const response = await axios.delete("/api/organizations", {
+      params,
+    });
+
+    return {
+      success: true,
+      // data: response.data.org_members,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      // error: error.response.data,
     };
   }
 };
