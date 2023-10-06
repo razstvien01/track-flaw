@@ -28,7 +28,7 @@ export const GET = async (request: NextRequest) => {
 
       case ORG_QUERY.GET_ORG_MEMBERS:
         const org_id = url.searchParams.get("org_id");
-        
+
         const org_members = org_id ? await getOrgMembers(org_id) : null;
         return new Response(
           JSON.stringify({
@@ -119,38 +119,41 @@ export const POST = async (request: NextRequest) => {
 
 export const DELETE = async (request: NextRequest) => {
   try {
-    const data = await request.json();
-    const { query = '', ...restData } = data || {};
-    let message = ''
-    let success = false
+    const url = new URL(request.url);
+    const query = url.searchParams.get("query");
+    const org_id = url.searchParams.get("org_id")
+    const user_id = url.searchParams.get("user_id")
+    let message = "";
+    let success = false;
     
     switch (query) {
       case ORG_QUERY.DELETE_ORG:
-        const { org_id = '' } = restData || {}
         
-        message = "Organization Deleted Successfully"
-        success = true
-        await deleteOrg(org_id)
+        message = "Organization Deleted Successfully";
+        success = true;
+        (org_id) ? await deleteOrg(org_id) : null;
         break;
-    
+
       case ORG_QUERY.REMOVE_ORG_MEMBER:
-        console.log('hellow rowlrdo')
+        
+        
+        message = "Removed Member Successfully";
+        success = true;
         break;
     }
-    
+
     return new Response(
       JSON.stringify({
         success,
         message,
       })
     );
-    
-    
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
         message: "Deleting the Organization Failed",
+        request,
       },
       {
         status: 500,

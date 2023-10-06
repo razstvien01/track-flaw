@@ -84,6 +84,9 @@ export const removeMember = async (org_id: string, user_id: string) => {
       user_id,
       query: ORG_QUERY.REMOVE_ORG_MEMBER,
     };
+    
+    console.log(params)
+    
     const response = await axios.delete("/api/organizations", {
       params,
     });
