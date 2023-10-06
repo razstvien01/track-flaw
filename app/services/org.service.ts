@@ -77,9 +77,10 @@ export const getMembersInOrgs = async (org_id: string) => {
   }
 };
 
-export const removeMember = async (user_id: string) => {
+export const removeMember = async (org_id: string, user_id: string) => {
   try {
     const params = {
+      org_id,
       user_id,
       query: ORG_QUERY.REMOVE_ORG_MEMBER,
     };
