@@ -53,7 +53,7 @@ export function MainNav({}: MainNavProps) {
   return (
     <nav className={cn("flex items-center space-x-4 lg:space-x-6 mx-6")}>
       {Object.values(MAIN_COMPONENTS).map((component) => {
-        const routeStr = `/views/${component.toLowerCase()}/${(component === 'DASHBOARD') ? org_id : ''}`;
+        const routeStr = `/${component.toLowerCase()}/${(component === 'DASHBOARD') ? org_id : ''}`;
         
         return (
           <NavigationItem

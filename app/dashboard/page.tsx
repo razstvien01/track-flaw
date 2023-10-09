@@ -1,18 +1,18 @@
 "use client";
 
-import { useCurrOrgDataAtom } from "@/app/hooks/curr_org_data_atom";
-import { useUserDataAtom } from "@/app/hooks/user_data_atom";
+import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
+import { useUserDataAtom } from "@/hooks/user_data_atom";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
 } from "@/components/page-header";
 import React, { useEffect, useState } from "react";
-import { DataTable } from "../components/table/data_table";
-import { columns } from "../components/table/columns";
-import { getMembersInOrgs } from "@/app/services/org.service";
-import { OrgMembersType } from "@/app/types/types";
-import { useCurrOrgMemberAtom } from "@/app/hooks/curr_org_members_atom";
+import { DataTable } from "./components/table/data_table";
+import { columns } from "./components/table/columns";
+import { getMembersInOrgs } from "@/services/org.service";
+import { OrgMembersType } from "@/types/types";
+import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 
 const Dashboard = () => {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
@@ -52,9 +52,9 @@ const Dashboard = () => {
         </PageHeader>
       </div>
       <div className="m-10">
-        {/* {currOrgData.org_id !== "" ? ( */}
+        {currOrgData.org_id !== "" ? (
           <DataTable data={orgMembers || []} columns={columns} />
-        {/* ) : null} */}
+        ) : null}
       </div>
     </div>
   );

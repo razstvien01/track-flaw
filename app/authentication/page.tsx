@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { UserAuthSignupForm } from "./components/user_auth_form_sign_up";
 import { useState } from "react";
-import ModeToggle from "@/app/components/mode-toggle";
-import { Logo } from "@/app/components/logo";
+import ModeToggle from "@/components/mode-toggle";
+import { Logo } from "@/components/logo";
 
 const metadata: Metadata = {
   title: "Authentication",

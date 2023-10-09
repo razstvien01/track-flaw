@@ -6,8 +6,8 @@ import {
   getOrgMembers,
   getOrgs,
   updateOrg,
-} from "@/app/controllers/organizations.controller";
-import { ORG_QUERY } from "@/app/types/constants";
+} from "@/controllers/organizations.controller";
+import { ORG_QUERY } from "@/types/constants";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {

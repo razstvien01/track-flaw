@@ -4,7 +4,7 @@ import {
   deleteProject,
   getProjects,
   updateProject,
-} from "@/app/controllers/projects.controller";
+} from "@/controllers/projects.controller";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {

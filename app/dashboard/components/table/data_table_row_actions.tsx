@@ -21,8 +21,8 @@ import {
 import { taskSchema } from "../../data/schema";
 import { useEffect, useState } from "react";
 import { AlertDialogPop } from "@/components/alert-dialog";
-import { useCurrOrgDataAtom } from "@/app/hooks/curr_org_data_atom";
-import { removeMember } from "@/app/services/org.service";
+import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
+import { removeMember } from "@/services/org.service";
 import { ShowToast } from "@/components/show-toast";
 
 interface DataTableRowActionsProps<TData> {

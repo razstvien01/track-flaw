@@ -6,7 +6,7 @@ import {
   updateUser,
   checkIfExistsUserId,
   getUser,
-} from "@/app/controllers/users.controller";
+} from "@/controllers/users.controller";
 import { NextRequest, NextResponse } from "next/server";
 
 enum USER_QUERY {

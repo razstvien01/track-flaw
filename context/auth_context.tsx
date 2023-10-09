@@ -13,7 +13,7 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../app/firebase";
 import { addUser } from "../services/users.service";
 import { useLoadingAtom } from "../hooks/loading.atom";
 

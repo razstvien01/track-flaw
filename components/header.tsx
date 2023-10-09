@@ -8,7 +8,7 @@ import { Logo } from "./logo";
 import { MainNav } from "./main-nav";
 import { Search } from "./search";
 import { UserAuth } from "../context/auth_context";
-import AuthenticationPage from "../views/authentication/page";
+import AuthenticationPage from "../app/authentication/page";
 import UserNav from "./user-nav";
 import { useGetUser } from "../services/users.service";
 import { Dispatch, useState, SetStateAction } from "react";

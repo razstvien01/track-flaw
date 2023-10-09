@@ -1,4 +1,4 @@
-import { OrgDataProps } from "@/app/types/types";
+import { OrgDataProps } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,13 +20,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader, PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { ROLES } from "@/app/types/constants";
-import AlertSuccess from "@/app/components/success_alert";
-import AlertDestructive from "@/app/components/alert_destructive";
-import { useCurrOrgDataAtom } from "@/app/hooks/curr_org_data_atom";
+import { ROLES } from "@/types/constants";
+import AlertSuccess from "@/components/success_alert";
+import AlertDestructive from "@/components/alert_destructive";
+import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 import { ShowToast } from "@/components/show-toast";
-import { addMemberInOrg, getMembersInOrgs } from "@/app/services/org.service";
-import { useCurrOrgMemberAtom } from "@/app/hooks/curr_org_members_atom";
+import { addMemberInOrg, getMembersInOrgs } from "@/services/org.service";
+import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 
 interface AddMemberSubmitProps {
   user_id: string;

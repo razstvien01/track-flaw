@@ -9,7 +9,7 @@ import { DataTableViewOptions } from "./data_table_view_options";
 
 import { roles } from "../../data/data";
 import { DataTableFacetedFilter } from "./data_table_faceted_filter";
-import { AddMemberDialog } from "../dialogs/add_member_dialog";
+import { AddMemberDialog } from "../../dialogs/add_member_dialog";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
