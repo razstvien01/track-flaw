@@ -108,3 +108,36 @@ export const getOrgDetails = async (org_id: string) => {
     };
   }
 };
+
+interface UpdateMemberParams {
+  memberData: object;
+  org_id: string;
+  user_id: string
+}
+
+export const updateMemberInOrg = async ({
+  memberData,
+  org_id,
+  user_id
+}: UpdateMemberParams) => {
+  
+  console.log(memberData)
+  console.log(org_id)
+  try {
+    const response = await axios.put("/api/organizations", {
+      ...memberData,
+      org_id,
+      user_id,
+      query: ORG_QUERY.UPDATE_MEMBER,
+    });
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.response.data,
+    };
+  }
+};

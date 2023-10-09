@@ -305,3 +305,10 @@ export const removeMember = async (
     await updateDoc(userDocRef, { joined_orgs: updatedOrgs });
   }
 };
+
+export const updateMemberInOrg = async (role: string, org_id: string, user_id: string) => {
+  console.log(user_id)
+  console.log(org_id)
+  
+  
+}

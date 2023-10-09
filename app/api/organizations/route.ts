@@ -7,7 +7,8 @@ import {
   getOrgMembers,
   getOrgs,
   updateOrg,
-  removeMember
+  removeMember,
+  updateMemberInOrg
 } from "@/controllers/organizations.controller";
 import { ORG_QUERY } from "@/types/constants";
 import { NextRequest, NextResponse } from "next/server";
@@ -175,9 +176,25 @@ export const DELETE = async (request: NextRequest) => {
 
 export const PUT = async (request: NextRequest) => {
   try {
-    const data = await request.json();
-
-    await updateOrg(data);
+    // const data = await request.json();
+    const data = await request.json()
+    // const query = url.searchParams.get("query");
+    // const data = url.searchParams.get('memberData')
+    // const org_id = url.searchParams.get('org_id')
+    // const user_id = url.searchParams.get('user_id')
+    const { query = "", ...restData } = data || {};
+    
+    switch (query) {
+      case ORG_QUERY.UPDATE_MEMBER:
+        // console.log(restData)
+        const { role, org_id, user_id } = restData || {}
+        await updateMemberInOrg(role, org_id, user_id)
+        break;
+    
+      default:
+        break;
+    }
+    // await updateOrg(data);
 
     return new Response(
       JSON.stringify({
