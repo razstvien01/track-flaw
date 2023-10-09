@@ -24,7 +24,7 @@ export const GET = async (request: NextRequest) => {
             message: "Fetch Organizations Successfully",
             orgs,
           })
-        );
+        );  
 
       case ORG_QUERY.GET_ORG_MEMBERS:
         const org_id = url.searchParams.get("org_id");

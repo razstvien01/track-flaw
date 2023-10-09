@@ -1,3 +1,10 @@
+export const MAIN_COMPONENTS: Record<string, string> = {
+  DASHBOARD: "DASHBOARD",
+  PROJECTS: "PROJECTS",
+  TEAMS: "TEAMS",
+  BUGS: "BUGS",
+};
+
 export enum ROLES {
   ADMIN = 'Admin',
   MANAGER = 'Manager',
