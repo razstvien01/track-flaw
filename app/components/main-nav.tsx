@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { cn } from "@/lib/utils";
-import { UserDataProps } from "../types/types";
 import { useCurrOrgDataAtom } from "../hooks/curr_org_data_atom";
 import { MAIN_COMPONENTS } from "../types/constants";
 
@@ -13,7 +12,7 @@ interface NavigationItemProps {
   text: string;
   isActive: boolean;
   onClick: () => void;
-  query?: { [key: string]: string | undefined };
+  query?: string;
 }
 
 function NavigationItem({
@@ -23,13 +22,9 @@ function NavigationItem({
   onClick,
   query,
 }: NavigationItemProps) {
-  console.log("QUERT", query);
   return (
     <Link
-      href={{
-        pathname: href,
-        query: query,
-      }}
+      href={href}
       className={`text-lg font-medium transition-colors hover:text-primary ${
         isActive ? "" : "text-muted-foreground"
       }`}
@@ -54,16 +49,12 @@ export function MainNav({}: MainNavProps) {
     setClickedComponent(componentName);
   };
 
-  useEffect(() => {
-    console.log("org_id changed to:", org_id);
-  }, [org_id]);
-
+  
   return (
     <nav className={cn("flex items-center space-x-4 lg:space-x-6 mx-6")}>
       {Object.values(MAIN_COMPONENTS).map((component) => {
-        const routeStr = `/views/${component.toLowerCase()}`;
-        const query = component === "DASHBOARD" && org_id ? { org_id } : {};
-
+        const routeStr = `/views/${component.toLowerCase()}/${(component === 'DASHBOARD') ? org_id : ''}`;
+        
         return (
           <NavigationItem
             key={component}
@@ -71,7 +62,6 @@ export function MainNav({}: MainNavProps) {
             text={component}
             isActive={clickedComponent === component}
             onClick={() => handleComponentClick(component)}
-            query={query}
           />
         );
       })}
