@@ -13,7 +13,7 @@ import { columns } from "../components/table/columns";
 import { getMembersInOrgs, getOrgDetails } from "@/services/org.service";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 
-const Dashboard = ({ params }: any) => {
+const Organization = ({ params }: any) => {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const org_id = params.org_id;
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom();
@@ -70,4 +70,4 @@ const Dashboard = ({ params }: any) => {
   );
 };
 
-export default Dashboard;
+export default Organization;
