@@ -67,7 +67,7 @@ export const addOrg = async (orgData: OrganizationDetails) => {
 
   if (userDoc.exists()) {
     const userData = userDoc.data();
-    const joinedOrgs = userData.joined_orgs || [];
+    const joinedOrgs = userData.joined_orgs || [] ;
 
     //* Add the new organization reference and role to the joined_orgs array
     joinedOrgs.push({
@@ -231,4 +231,47 @@ export const getOrgMembers = async (org_id: string) => {
   }
 
   return membersData;
+};
+
+export const getOrgDetails = async (org_id: string) => {
+  // Get a reference to the document with the specified org_id
+  const orgDocRef = doc(db, "organizations", org_id);
+  
+  
+  // Fetch the document
+  const orgDoc = await getDoc(orgDocRef);
+
+  // Check if the document exists
+  if (!orgDoc.exists()) {
+    return null;  // or you could throw an error or handle it differently
+  }
+  
+  const data = orgDoc.data();
+
+  //* Extract the DocumentReference
+  const creatorRef = data.creator_ref;
+  const { id } = creatorRef;
+
+  //* Fetch the document referred to by creatorRef
+  const creatorDoc = await getDoc(creatorRef);
+
+  //* Extract first_name and last_name from the creatorDoc data
+  const { first_name, last_name } = creatorDoc.data() as any;
+
+  //* Create a new object with the extracted data
+  const extractedData = {
+    org_name: data.org_name,
+    org_email: data.org_email,
+    org_url: data.org_url,
+    org_address: data.org_address,
+    org_details: data.org_details,
+    org_id: orgDoc.id,
+    creator: {
+      user_id: id,
+      first_name,
+      last_name,
+    },
+  };
+
+  return extractedData;
 };

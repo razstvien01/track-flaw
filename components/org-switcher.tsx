@@ -48,10 +48,13 @@ export default function OrgSwitcher({
   setShowNewOrgDialog,
 }: OrgSwitcherProps) {
   const router = useRouter();
-
   const [open, setOpen] = useState(false);
 
   const [selectedOrg, setSelectedOrg] = useCurrOrgDataAtom();
+  
+  const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
+  
+  console.log(currOrgData)
 
   return (
     <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>

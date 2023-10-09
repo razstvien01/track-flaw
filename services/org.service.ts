@@ -85,7 +85,6 @@ export const removeMember = async (org_id: string, user_id: string) => {
       query: ORG_QUERY.REMOVE_ORG_MEMBER,
     };
     
-    console.log(params)
     
     const response = await axios.delete("/api/organizations", {
       params,
@@ -99,6 +98,28 @@ export const removeMember = async (org_id: string, user_id: string) => {
     return {
       success: false,
       // error: error.response.data,
+    };
+  }
+};
+
+export const getOrgDetails = async (org_id: string) => {
+  try {
+    const params = {
+      org_id,
+      query: ORG_QUERY.GET_ORG_DETAILS,
+    };
+    const response = await axios.get("/api/organizations", {
+      params,
+    });
+
+    return {
+      success: true,
+      data: response.data.org,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.response.data,
     };
   }
 };
