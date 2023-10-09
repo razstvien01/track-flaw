@@ -8,23 +8,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 import { taskSchema } from "../../data/schema";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AlertDialogPop } from "@/components/alert-dialog";
 import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
-import { removeMember } from "@/services/org.service";
+import { getMembersInOrgs, removeMember } from "@/services/org.service";
 import { ShowToast } from "@/components/show-toast";
-
+import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
@@ -39,19 +34,33 @@ export function DataTableRowActions<TData>({
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastParams, setToastParams] = useState<any>();
-  
+  const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom();
+
+  const { user_id = "", role = "" } = member || {};
+  const { org_id = "" } = currOrgData || {};
+
+  const fetchMembers = useCallback(async () => {
+    if (org_id !== "") {
+      const result = await getMembersInOrgs(org_id);
+      if (result.success) {
+        setOrgMembers(result.data);
+      }
+    }
+  }, [org_id, setOrgMembers]);
+
   useEffect(() => {
     if (hasSubmitted) {
       const timer = setTimeout(() => {
         setShowToast(true);
-        setIsSave(false)
-        setOpenDeleteDialog(false)
+        setIsSave(false);
+        setOpenDeleteDialog(false);
+        fetchMembers()
       }, 2000);
 
       return () => clearTimeout(timer);
     }
-  }, [hasSubmitted]);
-  
+  }, [hasSubmitted, fetchMembers]);
+
   useEffect(() => {
     if (showToast) {
       ShowToast(toastParams);
@@ -59,33 +68,29 @@ export function DataTableRowActions<TData>({
       setHasSubmitted(false);
     }
   }, [showToast, toastParams]);
-  
+
   const handleContinue = async () => {
-    setIsSave(true)
+    setIsSave(true);
     
-    
-    const { user_id = '' } = member || {}
-    const { org_id = "" } = currOrgData || {};
-    
-    const result = await removeMember(org_id, user_id)
-    
-    if(result.success){
-      setHasSubmitted(true)
+    const result = await removeMember(org_id, user_id, role);
+
+    if (result.success) {
+      setHasSubmitted(true);
       setToastParams({
-        title: "Creating Organization",
-        description: "You have successfully remove a member in the organization.",
+        title: "Remove Member",
+        description:
+          "You have successfully remove a member in the organization.",
         variant: "default",
       });
     } else {
-      setHasSubmitted(true)
+      setHasSubmitted(true);
       setToastParams({
-        title: "Creating Organization",
+        title: "Remove Member",
         description: "Failed in removing a member in the organization.",
         variant: "destructive",
       });
     }
-    
-  }
+  };
 
   return (
     <>
@@ -115,7 +120,7 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSeparator />
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setOpenDeleteDialog(true)}>
-            Delete
+            Remove
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>

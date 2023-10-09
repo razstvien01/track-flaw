@@ -17,7 +17,7 @@ const Organization = ({ params }: any) => {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const org_id = params.org_id;
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom();
-  
+
   const fetchMembers = useCallback(async () => {
     if (org_id !== "") {
       const result = await getMembersInOrgs(org_id);
@@ -26,7 +26,7 @@ const Organization = ({ params }: any) => {
       }
     }
   }, [org_id, setOrgMembers]);
-  
+
   const fetchOrgDetails = useCallback(async () => {
     if (org_id !== "") {
       const result = await getOrgDetails(org_id);
@@ -34,37 +34,28 @@ const Organization = ({ params }: any) => {
         setCurrOrgData(result.data);
       }
     }
-    
   }, [org_id, setCurrOrgData]);
 
   useEffect(() => {
     fetchMembers();
   }, [fetchMembers]);
-  
+
   useEffect(() => {
-    fetchOrgDetails()
-  }, [fetchOrgDetails])
+    fetchOrgDetails();
+  }, [fetchOrgDetails]);
 
   return (
     <div>
       <div>
         <PageHeader>
-          <PageHeaderHeading>
-            {currOrgData.org_id !== ""
-              ? currOrgData.org_name
-              : "Welcome to the Dashboard !!!"}
-          </PageHeaderHeading>
+          <PageHeaderHeading>{currOrgData.org_name}</PageHeaderHeading>
           <PageHeaderDescription>
-            {currOrgData.org_details !== ""
-              ? currOrgData.org_details
-              : "Please select an organization."}
+            {currOrgData.org_details}
           </PageHeaderDescription>
         </PageHeader>
       </div>
       <div className="m-10">
-        {/* {currOrgData.org_id !== "" ? ( */}
         <DataTable data={orgMembers || []} columns={columns} />
-        {/* ) : null} */}
       </div>
     </div>
   );

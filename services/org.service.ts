@@ -1,19 +1,6 @@
-import axios from "axios";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { ORG_QUERY } from "../types/constants";
 
-export const useGetOrgs = (setOrgs: Dispatch<SetStateAction<any[]>>) => {
-  useEffect(() => {
-    axios
-      .get("/api/organizations")
-      .then((response) => {
-        setOrgs(response.data.organization);
-      })
-      .catch((error) => {
-        console.error("Error retrieving users:", error);
-      });
-  }, [setOrgs]);
-};
+import axios from "axios";
+import { ORG_QUERY } from "../types/constants";
 
 export const createOrganization = async (orgData: any, uid: string) => {
   try {
@@ -77,11 +64,12 @@ export const getMembersInOrgs = async (org_id: string) => {
   }
 };
 
-export const removeMember = async (org_id: string, user_id: string) => {
+export const removeMember = async (org_id: string, user_id: string, role: string) => {
   try {
     const params = {
       org_id,
       user_id,
+      role,
       query: ORG_QUERY.REMOVE_ORG_MEMBER,
     };
     
@@ -91,13 +79,10 @@ export const removeMember = async (org_id: string, user_id: string) => {
     });
 
     return {
-      success: true,
-      // data: response.data.org_members,
-    };
+      success: true,    };
   } catch (error: any) {
     return {
       success: false,
-      // error: error.response.data,
     };
   }
 };

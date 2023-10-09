@@ -38,7 +38,7 @@ export function AlertDialogPop({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => setOpenDeleteDialog(false)}>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={handleContinue}>
             {isSave ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : null}
             Continue

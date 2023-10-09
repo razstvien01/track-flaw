@@ -67,7 +67,7 @@ export const addOrg = async (orgData: OrganizationDetails) => {
 
   if (userDoc.exists()) {
     const userData = userDoc.data();
-    const joinedOrgs = userData.joined_orgs || [] ;
+    const joinedOrgs = userData.joined_orgs || [];
 
     //* Add the new organization reference and role to the joined_orgs array
     joinedOrgs.push({
@@ -167,18 +167,17 @@ export const addMember = async (data: AddMemberProps) => {
       user_ref: userDocRef,
     }),
   });
-  
+
   //* Update or push the user's joined_orgs[] with the value of the org_ref and the role
   await updateDoc(userDocRef, {
     joined_orgs: arrayUnion({
       role: role.toUpperCase(),
-      org_ref: orgDocRef
-    })
-  })
+      org_ref: orgDocRef,
+    }),
+  });
 };
 
 export const getOrgMembers = async (org_id: string) => {
-
   //* Create a reference to the specific organization document
   const orgRef = doc(db, "organizations", org_id);
 
@@ -189,9 +188,9 @@ export const getOrgMembers = async (org_id: string) => {
   if (!orgDoc.exists()) {
     return null;
   }
-  
+
   const data = orgDoc.data();
-  
+
   //* Extract the DocumentReference for creator
   const creatorRef = data?.creator_ref;
   const { id } = creatorRef;
@@ -208,7 +207,6 @@ export const getOrgMembers = async (org_id: string) => {
   }[] = [];
   if (data?.joined_members && Array.isArray(data.joined_members)) {
     const memberPromises = data.joined_members.map(async (memberRef: any) => {
-
       const { role = "", user_ref = "" } = memberRef || {};
 
       const getValueOrDefault = (value: any, defaultValue: any = "") =>
@@ -223,7 +221,7 @@ export const getOrgMembers = async (org_id: string) => {
         phone_number: getValueOrDefault(memberData?.phone_number),
         photo_url: getValueOrDefault(memberData?.photo_url),
         user_id: getValueOrDefault(memberData?.user_id),
-        created_at: getValueOrDefault(memberData?.created_at)
+        created_at: getValueOrDefault(memberData?.created_at),
       };
     });
 
@@ -236,16 +234,15 @@ export const getOrgMembers = async (org_id: string) => {
 export const getOrgDetails = async (org_id: string) => {
   // Get a reference to the document with the specified org_id
   const orgDocRef = doc(db, "organizations", org_id);
-  
-  
+
   // Fetch the document
   const orgDoc = await getDoc(orgDocRef);
 
   // Check if the document exists
   if (!orgDoc.exists()) {
-    return null;  // or you could throw an error or handle it differently
+    return null; // or you could throw an error or handle it differently
   }
-  
+
   const data = orgDoc.data();
 
   //* Extract the DocumentReference
@@ -274,4 +271,37 @@ export const getOrgDetails = async (org_id: string) => {
   };
 
   return extractedData;
+};
+
+export const removeMember = async (
+  org_id: string,
+  user_id: string,
+  role: string
+) => {
+  const orgDocRef = doc(db, "organizations", org_id);
+  const orgDoc = await getDoc(orgDocRef);
+  const orgData = orgDoc.data();
+
+  const userDocRef = doc(db, "users", user_id);
+  const userDoc = await getDoc(userDocRef);
+  const userData = userDoc.data();
+
+  //* Remove the member from the organization's joined_members array
+  if (orgData && orgData.joined_members) {
+    const updatedMembers = orgData.joined_members.filter(
+      (member: any) =>
+        member.user_ref.id !== userDocRef.id &&
+        member.role !== role.toUpperCase()
+    );
+    await updateDoc(orgDocRef, { joined_members: updatedMembers });
+  }
+
+  //* Remove the organization from the user's joined_orgs array
+  if (userData && userData.joined_orgs) {
+    const updatedOrgs = userData.joined_orgs.filter(
+      (org: any) =>
+        org.org_ref.id !== orgDocRef.id && org.role !== role.toUpperCase()
+    );
+    await updateDoc(userDocRef, { joined_orgs: updatedOrgs });
+  }
 };

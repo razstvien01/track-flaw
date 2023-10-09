@@ -7,6 +7,7 @@ import {
   getOrgMembers,
   getOrgs,
   updateOrg,
+  removeMember
 } from "@/controllers/organizations.controller";
 import { ORG_QUERY } from "@/types/constants";
 import { NextRequest, NextResponse } from "next/server";
@@ -134,6 +135,7 @@ export const DELETE = async (request: NextRequest) => {
     const query = url.searchParams.get("query");
     const org_id = url.searchParams.get("org_id");
     const user_id = url.searchParams.get("user_id");
+    const role = url.searchParams.get("role");
     let message = "";
     let success = false;
 
@@ -147,6 +149,7 @@ export const DELETE = async (request: NextRequest) => {
       case ORG_QUERY.REMOVE_ORG_MEMBER:
         message = "Removed Member Successfully";
         success = true;
+        org_id && user_id && role ? await removeMember(org_id, user_id, role): null
         break;
     }
 
