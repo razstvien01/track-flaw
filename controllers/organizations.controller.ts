@@ -336,15 +336,7 @@ export const updateMemberInOrg = async (
   }
 
   if (!existingMemberData) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "User is not a member of this organization.",
-      },
-      {
-        status: 500,
-      }
-    );
+    throw new Error("User is not a member of this organization.");
   }
   
 
@@ -375,15 +367,7 @@ export const updateMemberInOrg = async (
   }
 
   if (!existingOrgData) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Organization not found in user's joined organizations.",
-      },
-      {
-        status: 500,
-      }
-    );
+    throw new Error("Organization not found in user's joined organizations.");
   }
 
   //* Update the user's joined_orgs with the updated role
