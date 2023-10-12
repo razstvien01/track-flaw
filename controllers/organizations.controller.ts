@@ -1,5 +1,6 @@
 import { db } from "../app/firebase";
 import {
+  arrayRemove,
   arrayUnion,
   collection,
   getDoc,
@@ -9,6 +10,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { where, doc, deleteDoc, setDoc } from "firebase/firestore";
+import { NextResponse } from "next/server";
 
 interface OrganizationDetails {
   org_name: string;
@@ -99,7 +101,6 @@ export const getOrgs = async () => {
     //* Extract first_name and last_name from the creatorDoc data
     const { first_name, last_name } = creatorDoc.data() as any;
 
-    // TODO
     //* Create a new object with the extracted data
     const extractedData = {
       org_name: data.org_name,
@@ -306,9 +307,92 @@ export const removeMember = async (
   }
 };
 
-export const updateMemberInOrg = async (role: string, org_id: string, user_id: string) => {
-  console.log(user_id)
-  console.log(org_id)
+export const updateMemberInOrg = async (
+  role: string,
+  org_id: string,
+  user_id: string
+) => {
+  //! UPDATING THE ORG
+
+  //* reference to the organization document
+  const orgDocRef = doc(db, "organizations", org_id);
+
+  const orgDoc = await getDoc(orgDocRef);
+  const orgData = orgDoc.data();
+
+  //* Reference to the user document
+  const userDocRef = doc(db, "users", user_id);
+
+  //* Check if user_ref exists in joined_members
+  let existingMemberData = null;
+  if (orgData?.joined_members) {
+    for (let member of orgData.joined_members) {
+      if (member.user_ref?.id === user_id) {
+        existingMemberData = member;
+        console.log(member)
+        break;
+      }
+    }
+  }
+
+  if (!existingMemberData) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "User is not a member of this organization.",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
   
-  
-}
+
+  //* Update the organization document to update the member's role
+  await updateDoc(orgDocRef, {
+    joined_members: arrayRemove(existingMemberData),
+  });
+
+  existingMemberData.role = role.toUpperCase();
+
+  await updateDoc(orgDocRef, {
+    joined_members: arrayUnion(existingMemberData),
+  });
+
+  //! UPDATING THE USER
+  //* Get user document to find the organization data and update the role
+  const userDoc = await getDoc(userDocRef);
+  const userData = userDoc.data();
+
+  let existingOrgData = null;
+  if (userData?.joined_orgs) {
+    for (let org of userData.joined_orgs) {
+      if (org.org_ref?.id === org_id) {
+        existingOrgData = org;
+        break;
+      }
+    }
+  }
+
+  if (!existingOrgData) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Organization not found in user's joined organizations.",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+
+  //* Update the user's joined_orgs with the updated role
+  await updateDoc(userDocRef, {
+    joined_orgs: arrayRemove(existingOrgData),
+  });
+
+  existingOrgData.role = role.toUpperCase();
+  await updateDoc(userDocRef, {
+    joined_orgs: arrayUnion(existingOrgData),
+  });
+};

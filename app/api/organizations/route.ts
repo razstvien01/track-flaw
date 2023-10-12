@@ -178,30 +178,32 @@ export const PUT = async (request: NextRequest) => {
   try {
     // const data = await request.json();
     const data = await request.json()
-    // const query = url.searchParams.get("query");
-    // const data = url.searchParams.get('memberData')
-    // const org_id = url.searchParams.get('org_id')
-    // const user_id = url.searchParams.get('user_id')
     const { query = "", ...restData } = data || {};
+    const { role, org_id, user_id } = restData || {}
     
     switch (query) {
       case ORG_QUERY.UPDATE_MEMBER:
-        // console.log(restData)
-        const { role, org_id, user_id } = restData || {}
         await updateMemberInOrg(role, org_id, user_id)
-        break;
+        return new Response(
+          JSON.stringify(
+            {
+              success: true,
+              message: "Successfully updated the user's role in the organization.",
+            }
+          )
+        );
     
       default:
         break;
     }
     // await updateOrg(data);
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: "Organization Details Updated Successfully",
-      })
-    );
+    // return new Response(
+    //   JSON.stringify({
+    //     success: true,
+    //     message: "Organization Details Updated Successfully",
+    //   })
+    // );
   } catch (error) {
     return NextResponse.json(
       {
