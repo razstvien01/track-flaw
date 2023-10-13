@@ -96,7 +96,7 @@ export const getOrgDetails = async (org_id: string) => {
     const response = await axios.get("/api/organizations", {
       params,
     });
-
+    
     return {
       success: true,
       data: response.data.org,
@@ -120,9 +120,6 @@ export const updateMemberInOrg = async ({
   org_id,
   user_id
 }: UpdateMemberParams) => {
-  
-  console.log(memberData)
-  console.log(org_id)
   try {
     const response = await axios.put("/api/organizations", {
       ...memberData,

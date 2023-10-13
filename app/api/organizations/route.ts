@@ -58,7 +58,7 @@ export const GET = async (request: NextRequest) => {
         message: "Failure in Fetching the Organizations",
       },
       {
-        status: 500,
+        status: 404,
       }
     );
   }

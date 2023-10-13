@@ -10,7 +10,6 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { where, doc, deleteDoc, setDoc } from "firebase/firestore";
-import { NextResponse } from "next/server";
 
 interface OrganizationDetails {
   org_name: string;
@@ -241,7 +240,7 @@ export const getOrgDetails = async (org_id: string) => {
 
   // Check if the document exists
   if (!orgDoc.exists()) {
-    return null; // or you could throw an error or handle it differently
+    throw new Error("The organization doens't exists.")
   }
 
   const data = orgDoc.data();
@@ -270,7 +269,7 @@ export const getOrgDetails = async (org_id: string) => {
       last_name,
     },
   };
-
+  
   return extractedData;
 };
 

@@ -1,22 +1,24 @@
 "use client";
 
 import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
-import { useUserDataAtom } from "@/hooks/user_data_atom";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
 } from "@/components/page-header";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DataTable } from "../components/table/data_table";
 import { columns } from "../components/table/columns";
 import { getMembersInOrgs, getOrgDetails } from "@/services/org.service";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
+import { notFound } from "next/navigation";
+import NotFound from "./not-found";
 
 const Organization = ({ params }: any) => {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const org_id = params.org_id;
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom();
+  const [error, setError] = useState<any>(null);
 
   const fetchMembers = useCallback(async () => {
     if (org_id !== "") {
@@ -32,6 +34,8 @@ const Organization = ({ params }: any) => {
       const result = await getOrgDetails(org_id);
       if (result.success) {
         setCurrOrgData(result.data);
+      } else {
+        setError('Organization not found');
       }
     }
   }, [org_id, setCurrOrgData]);
@@ -43,14 +47,18 @@ const Organization = ({ params }: any) => {
   useEffect(() => {
     fetchOrgDetails();
   }, [fetchOrgDetails]);
+  
+  if (error) {
+    return (<NotFound/>);
+  }
 
   return (
     <div>
       <div>
         <PageHeader>
-          <PageHeaderHeading>{currOrgData.org_name}</PageHeaderHeading>
+          <PageHeaderHeading>{currOrgData?.org_name}</PageHeaderHeading>
           <PageHeaderDescription>
-            {currOrgData.org_details}
+            {currOrgData?.org_details}
           </PageHeaderDescription>
         </PageHeader>
       </div>
