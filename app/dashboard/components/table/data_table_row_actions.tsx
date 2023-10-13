@@ -21,6 +21,7 @@ import { getMembersInOrgs, removeMember } from "@/services/org.service";
 import { ShowToast } from "@/components/show-toast";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 import { UpdateMemberDialog } from "../dialogs/update_member_dialog";
+import { ViewMemberDialog } from "../dialogs/view_member_dialog";
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
@@ -31,6 +32,7 @@ export function DataTableRowActions<TData>({
   const member = taskSchema.parse(row.original);
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
   const [openEditDialog, setOpenEditDialog] = useState<boolean>(false);
+  const [openViewDialog, setOpenViewDialog] = useState<boolean>(false);
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const [isSave, setIsSave] = useState<boolean>(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -56,7 +58,7 @@ export function DataTableRowActions<TData>({
         setShowToast(true);
         setIsSave(false);
         setOpenDeleteDialog(false);
-        fetchMembers()
+        fetchMembers();
       }, 2000);
 
       return () => clearTimeout(timer);
@@ -73,7 +75,7 @@ export function DataTableRowActions<TData>({
 
   const handleContinue = async () => {
     setIsSave(true);
-    
+
     const result = await removeMember(org_id, user_id, role);
 
     if (result.success) {
@@ -105,7 +107,18 @@ export function DataTableRowActions<TData>({
         handleContinue={handleContinue}
         isSave={isSave}
       />
-      <UpdateMemberDialog showDialog={openEditDialog} setShowDialog={setOpenEditDialog} currentRole={role} user_id={user_id}/>
+      <UpdateMemberDialog
+        showDialog={openEditDialog}
+        setShowDialog={setOpenEditDialog}
+        currentRole={role}
+        user_id={user_id}
+      />
+      <ViewMemberDialog
+        showDialog={openViewDialog}
+        setShowDialog={setOpenViewDialog}
+        currentRole={role}
+        member={member}
+      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -117,8 +130,13 @@ export function DataTableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem onClick={() => setOpenEditDialog(true)}>Edit</DropdownMenuItem>
-          <DropdownMenuItem>View User</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpenViewDialog(true)}>
+            View Member
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpenEditDialog(true)}>
+            Edit
+          </DropdownMenuItem>
+
           <DropdownMenuSeparator />
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setOpenDeleteDialog(true)}>
