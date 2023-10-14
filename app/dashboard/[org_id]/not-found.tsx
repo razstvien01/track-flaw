@@ -31,7 +31,7 @@ const NotFound = () => {
             router.push("/dashboard");
           }}
         >
-          Dashboaord
+          Dashboard
         </Button>
       </p>
     </main>
