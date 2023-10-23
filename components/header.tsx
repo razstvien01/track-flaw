@@ -13,6 +13,7 @@ import UserNav from "./user-nav";
 import { useGetUser } from "../services/users.service";
 import { Dispatch, useState, SetStateAction } from "react";
 import { useUserDataAtom } from "../hooks/user_data_atom";
+import Notifications from "./notifications";
 
 interface HeaderProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>
@@ -46,6 +47,7 @@ const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
             setShowNewOrgDialog={setShowNewOrgDialog}
           />
           <ModeToggle />
+          <Notifications/>
           <UserNav
             userData={userData}
             logOut={logOut}
