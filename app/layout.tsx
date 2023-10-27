@@ -3,7 +3,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { AuthContextProvider, UserAuth } from "../context/auth_context";
 import Header from "../components/header";
 import { Toaster } from "@/components/ui/toaster";
