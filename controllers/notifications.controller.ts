@@ -14,6 +14,8 @@ import {
   deleteDoc,
   setDoc,
   QueryDocumentSnapshot,
+  orderBy,
+  limit,
 } from "firebase/firestore";
 
 
@@ -48,6 +50,9 @@ export const getNotifs = async (data: NotifIds) => {
   if (data.org_id) {
     conditions.push(where("org_id", "==", data.org_id));
   }
+  
+  conditions.push(orderBy("time", "desc"));
+  conditions.push(limit(50));
   
   const querySnapshot =
     conditions.length > 0

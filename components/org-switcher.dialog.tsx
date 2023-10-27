@@ -94,7 +94,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
         user_id,
         org_id,
         photo_url,
-        title: "Create Organization",
+        title: "Organization Created",
         description: `${full_name} created ${org_name} organization`,
         type: "organization",
       };

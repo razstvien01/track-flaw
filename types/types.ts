@@ -45,4 +45,6 @@ export interface NotifData extends NotifIds {
   type: string;
   author: string;
   date: string;
+  photo_url: string;
+  time: any
 }
