@@ -86,13 +86,14 @@ export const POST = async (request: NextRequest) => {
             }
           );
         }
-
-        await addOrg(restData);
-
+        const {org_id, org_name} = await addOrg(restData);
+        
         return new Response(
           JSON.stringify({
             success: true,
             message: "Organization Created Successfully",
+            org_name,
+            org_id
           })
         );
       } catch (error) {

@@ -23,30 +23,27 @@ interface NotifData {
   bug_id: string;
   user_id: string;
   project_id: string;
+  org_id: string;
 }
 
-export const createOrgNotif = async (orgData: NotifData) => {
+export const createNotif = async (data: NotifData) => {
   try {
-    const { title, description, type, user_id, project_id } = orgData;
-
     //* Create the notification object
     const notification = {
-      title,
-      description,
-      user: user_id,
+      ...data,
       time: serverTimestamp(), //() Use serverTimestamp for consistent time across all users
-      type,
-      project_id, //* Assuming you want to store the project_id in the notification
     };
 
     //* Reference to the "notifications" collection
-    const notificationsRef = collection(db, "notifications");
+    const notificationsRef = doc(collection(db, "notifications"));
 
     // Add the notification to the "notifications" collection
-    const docRef = await setDoc(doc(notificationsRef), notification);
+    const docRef = await setDoc(notificationsRef, notification);
 
-    console.log('Notification created successfully');
+    // console.log('Notification created successfully');
+    // return true;
   } catch (error) {
-    console.error('Error creating notification:', error);
+    console.error("Error creating notification:", error);
+    // return false;
   }
 };

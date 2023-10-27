@@ -8,8 +8,11 @@ import {
   query,
   serverTimestamp,
   updateDoc,
+  where,
+  doc,
+  deleteDoc,
+  setDoc,
 } from "firebase/firestore";
-import { where, doc, deleteDoc, setDoc } from "firebase/firestore";
 
 interface OrganizationDetails {
   org_name: string;
@@ -80,6 +83,11 @@ export const addOrg = async (orgData: OrganizationDetails) => {
     await updateDoc(userDocRef, {
       joined_orgs: joinedOrgs,
     });
+  }
+  
+  return {
+    org_name: restOrgData.org_name,
+    org_id: orgDocRef.id
   }
 };
 
@@ -240,7 +248,7 @@ export const getOrgDetails = async (org_id: string) => {
 
   // Check if the document exists
   if (!orgDoc.exists()) {
-    throw new Error("The organization doens't exists.")
+    throw new Error("The organization doens't exists.");
   }
 
   const data = orgDoc.data();
@@ -269,7 +277,7 @@ export const getOrgDetails = async (org_id: string) => {
       last_name,
     },
   };
-  
+
   return extractedData;
 };
 
@@ -328,7 +336,7 @@ export const updateMemberInOrg = async (
     for (let member of orgData.joined_members) {
       if (member.user_ref?.id === user_id) {
         existingMemberData = member;
-        console.log(member)
+        console.log(member);
         break;
       }
     }
@@ -337,7 +345,6 @@ export const updateMemberInOrg = async (
   if (!existingMemberData) {
     throw new Error("User is not a member of this organization.");
   }
-  
 
   //* Update the organization document to update the member's role
   await updateDoc(orgDocRef, {

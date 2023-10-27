@@ -29,6 +29,9 @@ import { ROLES } from "../types/constants";
 import { Textarea } from "@/components/ui/textarea";
 import { createOrganization } from "../services/org.service";
 import { ShowToast } from "@/components/show-toast";
+import axios from "axios";
+import { useUserDataAtom } from "@/hooks/user_data_atom";
+import { createNotif } from "@/services/notifications.service";
 
 interface OrgSwitcherDialogProps {
   setShowNewOrgDialog: Dispatch<SetStateAction<boolean>>;
@@ -49,6 +52,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   const [toastParams, setToastParams] = useState<any>();
   const [showToast, setShowToast] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [userData, setUserData] = useUserDataAtom();
 
   useEffect(() => {
     if (hasSubmitted) {
@@ -77,9 +81,27 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   //* Function to handle form submission
   const handleSubmit = async () => {
     setIsSave(true);
+    
     const result = await createOrganization(orgData, uid);
-
+    
     if (result.success) {
+      
+      // console.log("mausfasfasas")
+      
+      const { full_name, user_id, photo_url } = userData
+      const { org_id = "", org_name = "" } = result.data
+      
+      const params = {
+        user_id,
+        org_id,
+        photo_url,
+        title: "Create Organization",
+        description: `${full_name} created ${org_name} organization`,
+        type: "organization",
+      };
+      
+      createNotif(params)
+      
       setHasSubmitted(true);
       setToastParams({
         title: "Creating Organization",

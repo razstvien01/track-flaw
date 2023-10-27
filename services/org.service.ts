@@ -9,6 +9,7 @@ export const createOrganization = async (orgData: any, uid: string) => {
       creator_id: uid,
       query: ORG_QUERY.ADD_ORG,
     });
+    
     return { success: true, data: response.data };
   } catch (error: any) {
     return { success: false, error: error.response.data };
