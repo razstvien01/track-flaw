@@ -84,9 +84,6 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
     const result = await createOrganization(orgData, uid);
     
     if (result.success) {
-      
-      // console.log("mausfasfasas")
-      
       const { full_name, user_id, photo_url } = userData
       const { org_id = "", org_name = "" } = result.data
       
@@ -99,7 +96,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
         type: "organization",
       };
       
-      createNotif(params)
+      await createNotif(params)
       
       setHasSubmitted(true);
       setToastParams({

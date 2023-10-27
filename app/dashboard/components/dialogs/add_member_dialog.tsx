@@ -1,4 +1,3 @@
-import { OrgDataProps } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -27,6 +26,8 @@ import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 import { ShowToast } from "@/components/show-toast";
 import { addMemberInOrg, getMembersInOrgs } from "@/services/org.service";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
+import { createNotif } from "@/services/notifications.service";
+import { useUserDataAtom } from "@/hooks/user_data_atom";
 
 interface AddMemberSubmitProps {
   user_id: string;
@@ -60,6 +61,7 @@ export function AddMemberDialog() {
   });
   const [showToast, setShowToast] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [userData, setUserData] = useUserDataAtom();
 
   useEffect(() => {
     if (hasSubmitted) {
@@ -106,6 +108,20 @@ export function AddMemberDialog() {
     const result = await addMemberInOrg({ memberData: addMember, org_id });
 
     if (result.success) {
+      
+      const { full_name, user_id, photo_url } = userData
+      
+      const params = {
+        user_id,
+        org_id,
+        photo_url,
+        title: "Member Added",
+        description: `${full_name} added ${addMember.user_id} with the role of ${addMember.role} in the organization`,
+        type: "organization",
+      };
+      
+      await createNotif(params)
+      
       setHasSubmitted(true)
       setToastParams({
         title: "Add Member",

@@ -26,6 +26,8 @@ import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 import { ShowToast } from "@/components/show-toast";
 import { addMemberInOrg, getMembersInOrgs, updateMemberInOrg } from "@/services/org.service";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
+import { createNotif } from "@/services/notifications.service";
+import { useUserDataAtom } from "@/hooks/user_data_atom";
 
 interface UpdateMemberSubmitProps {
   role: string;
@@ -35,14 +37,16 @@ interface UpdateMemberDialogProps {
   showDialog: boolean;
   setShowDialog: Dispatch<SetStateAction<boolean>>;
   currentRole: string;
-  user_id: string
+  member_id: string
+  name: string
 }
 
 export function UpdateMemberDialog({
   showDialog,
   setShowDialog,
   currentRole,
-  user_id
+  member_id,
+  name
 }: UpdateMemberDialogProps) {
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom();
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
@@ -66,6 +70,7 @@ export function UpdateMemberDialog({
   });
   const [showToast, setShowToast] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [userData, setUserData] = useUserDataAtom();
 
   useEffect(() => {
     if (hasSubmitted) {
@@ -107,9 +112,23 @@ export function UpdateMemberDialog({
   //* Function to handle form submission
   const handleSubmit = async () => {
     setIsSave(true);
-    const result = await updateMemberInOrg({ memberData: updateMember, org_id, user_id });
+    const result = await updateMemberInOrg({ memberData: updateMember, org_id, user_id: member_id });
 
     if (result.success) {
+      
+      const { full_name, user_id, photo_url } = userData
+      
+      const params = {
+        user_id,
+        org_id,
+        photo_url,
+        title: "Member Updated",
+        description: `${full_name} updated ${name}'s role into ${updateMember.role}`,
+        type: "organization",
+      };
+      
+      await createNotif(params)
+      
       setHasSubmitted(true);
       setToastParams({
         title: "Update Member",

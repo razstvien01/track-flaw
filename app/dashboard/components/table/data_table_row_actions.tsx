@@ -40,7 +40,7 @@ export function DataTableRowActions<TData>({
   const [toastParams, setToastParams] = useState<any>();
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom();
 
-  const { user_id = "", role = "" } = member || {};
+  const { user_id = "", role = "", full_name = "" } = member || {};
   const { org_id = "" } = currOrgData || {};
 
   const fetchMembers = useCallback(async () => {
@@ -111,7 +111,8 @@ export function DataTableRowActions<TData>({
         showDialog={openEditDialog}
         setShowDialog={setOpenEditDialog}
         currentRole={role}
-        user_id={user_id}
+        member_id={user_id}
+        name={full_name}
       />
       <ViewMemberDialog
         showDialog={openViewDialog}

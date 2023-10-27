@@ -6,7 +6,6 @@ import ModeToggle from "./mode-toggle";
 //* Components
 import { Logo } from "./logo";
 import { MainNav } from "./main-nav";
-import { Search } from "./search";
 import { UserAuth } from "../context/auth_context";
 import AuthenticationPage from "../app/authentication/page";
 import UserNav from "./user-nav";
@@ -40,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
         <Logo />
         <MainNav />
         <div className="ml-auto flex items-center space-x-4">
-          <Search />
+          {/* <Search /> */}
           <OrgSwitcher
             org_refs={org_refs}
             showNewOrgDialog={showNewOrgDialog}

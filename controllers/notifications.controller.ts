@@ -52,7 +52,7 @@ export const getNotifs = async (data: NotifIds) => {
   }
   
   conditions.push(orderBy("time", "desc"));
-  conditions.push(limit(50));
+  conditions.push(limit(25));
   
   const querySnapshot =
     conditions.length > 0

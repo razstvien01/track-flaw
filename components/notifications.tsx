@@ -31,10 +31,12 @@ const Notifications = () => {
   const [notifs, setNotifs] = useState<NotifData[]>([]);
 
   const fetchNotifs = useCallback(async () => {
+    // if (userData.user_id !== "") {
     const result = await getNotifs(userData);
     if (result.success) {
       setNotifs(result.data);
     }
+    // }
   }, [userData]);
 
   useEffect(() => {
@@ -51,8 +53,8 @@ const Notifications = () => {
             <BellIcon className="h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           )}
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-80 h-[40rem]" align="end" forceMount>
-          <ScrollArea className="h-100 rounded-md">
+        <DropdownMenuContent align="end" forceMount>
+          <ScrollArea className="w-80 h-[40rem] rounded-md">
             <DropdownMenuGroup className="p-4">
               <DropdownMenuLabel className="mb-4 text-lg leading-none font-bold">
                 Notifications
