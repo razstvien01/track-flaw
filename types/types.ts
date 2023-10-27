@@ -31,3 +31,18 @@ export interface OrgMembersType {
   phone_number: string;
   role: string;
 }
+
+export interface NotifIds {
+  bug_id?: string;
+  user_id?: string;
+  project_id?: string;
+  org_id?: string;
+}
+
+export interface NotifData extends NotifIds {
+  title: string;
+  description: string;
+  type: string;
+  author: string;
+  date: string;
+}

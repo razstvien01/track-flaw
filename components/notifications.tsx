@@ -14,6 +14,10 @@ import { Separator } from "@/components/ui/separator";
 import { BellIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
+import { useUserDataAtom } from "@/hooks/user_data_atom";
+import { useCallback, useEffect, useState } from "react";
+import { getNotifs } from "@/services/notifications.service";
+import { NotifData } from "@/types/types";
 
 const tags = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`
@@ -21,6 +25,21 @@ const tags = Array.from({ length: 50 }).map(
 
 const Notifications = () => {
   const { theme, setTheme } = useTheme();
+  const [userData, setUserData] = useUserDataAtom();
+  const [notifs, setNotifs] = useState<NotifData>();
+  
+  const fetchNotifs = useCallback(async() =>{
+    const result = await getNotifs(userData)
+    if(result.success){
+      setNotifs(result.data)
+    }
+    
+    console.log(result.data)
+  }, [])
+  
+  useEffect(() => {
+    fetchNotifs()
+  }, [fetchNotifs])
 
   return (
     <DropdownMenu>

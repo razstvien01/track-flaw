@@ -1,3 +1,4 @@
+import { NotifData, NotifIds } from "@/types/types";
 import { db } from "../app/firebase";
 import {
   arrayRemove,
@@ -15,19 +16,6 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 
-interface NotifIds {
-  bug_id?: string;
-  user_id?: string;
-  project_id?: string;
-  org_id?: string;
-}
-interface NotifData extends NotifIds {
-  title: string;
-  description: string;
-  type: string;
-  author: string;
-  date: string;
-}
 
 export const createNotif = async (data: NotifData) => {
   //* Create the notification object
