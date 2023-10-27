@@ -1,19 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { createNotif } from "@/controllers/notifications.controller";
+import { createNotif, getNotifs } from "@/controllers/notifications.controller";
 
 export const GET = async (request: NextRequest) => {
   try {
     const url = new URL(request.url);
-    const query = url.searchParams.get("query");
+    const user_id = url.searchParams.get("user_id") || undefined
+    const org_id = url.searchParams.get("org_id") || undefined;
     
+    const notifications = await getNotifs({
+      user_id: user_id,
+      org_id: org_id
+    })
     
-    
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "Notification fetched successfully",
+        notifications
+      })
+    );
+      
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: "Failure in Fetching the Organizations",
+        message: "Failure in Fetching a Notification",
       },
       {
         status: 404,
@@ -25,7 +37,6 @@ export const GET = async (request: NextRequest) => {
 export const POST = async (request: NextRequest) => {
   try {
     const data = await request.json();
-    // const { query = "", ...restData } = data || {};
     
     await createNotif(data)
     
@@ -40,7 +51,7 @@ export const POST = async (request: NextRequest) => {
     return NextResponse.json(
       {
         success: false,
-        message: "Failure in Fetching the Organizations",
+        message: "Failure in Creating a Notification",
       },
       {
         status: 404,

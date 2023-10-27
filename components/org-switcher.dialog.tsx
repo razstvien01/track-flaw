@@ -29,7 +29,6 @@ import { ROLES } from "../types/constants";
 import { Textarea } from "@/components/ui/textarea";
 import { createOrganization } from "../services/org.service";
 import { ShowToast } from "@/components/show-toast";
-import axios from "axios";
 import { useUserDataAtom } from "@/hooks/user_data_atom";
 import { createNotif } from "@/services/notifications.service";
 
