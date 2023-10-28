@@ -50,7 +50,7 @@ export function UpdateMemberDialog({
 }: UpdateMemberDialogProps) {
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom();
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
-  const { org_id = "" } = currOrgData || {};
+  const { org_id = "", org_name = "" } = currOrgData || {};
   
   const [updateMember, setUpdateMember] = useState<UpdateMemberSubmitProps>({
     role: currentRole.toLowerCase().charAt(0).toUpperCase() + currentRole.slice(1).toLowerCase(),
@@ -123,7 +123,7 @@ export function UpdateMemberDialog({
         org_id,
         photo_url,
         title: "Member Updated",
-        description: `${full_name} updated ${name}'s role into ${updateMember.role}`,
+        description: `${full_name} updated ${name}'s role into ${updateMember.role} in the ${org_name} organization`,
         type: "organization",
       };
       

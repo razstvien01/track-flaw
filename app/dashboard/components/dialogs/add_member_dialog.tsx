@@ -42,7 +42,7 @@ const AddMemberSubmitInit: AddMemberSubmitProps = {
 export function AddMemberDialog() {
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom()
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
-  const { org_id = "" } = currOrgData || {};
+  const { org_id = "", org_name = "" } = currOrgData || {};
 
   const [addMember, setAddMember] =
     useState<AddMemberSubmitProps>(AddMemberSubmitInit);
@@ -116,7 +116,7 @@ export function AddMemberDialog() {
         org_id,
         photo_url,
         title: "Member Added",
-        description: `${full_name} added ${addMember.user_id} with the role of ${addMember.role} in the organization`,
+        description: `${full_name} added ${addMember.user_id} with the role of ${addMember.role} in the ${org_name} organization`,
         type: "organization",
       };
       

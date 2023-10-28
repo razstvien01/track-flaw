@@ -22,6 +22,8 @@ import { ShowToast } from "@/components/show-toast";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 import { UpdateMemberDialog } from "../dialogs/update_member_dialog";
 import { ViewMemberDialog } from "../dialogs/view_member_dialog";
+import { createNotif } from "@/services/notifications.service";
+import { useUserDataAtom } from "@/hooks/user_data_atom";
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
@@ -34,6 +36,8 @@ export function DataTableRowActions<TData>({
   const [openEditDialog, setOpenEditDialog] = useState<boolean>(false);
   const [openViewDialog, setOpenViewDialog] = useState<boolean>(false);
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
+  const { org_name = "" } = currOrgData || {}
+  
   const [isSave, setIsSave] = useState<boolean>(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -42,6 +46,9 @@ export function DataTableRowActions<TData>({
 
   const { user_id = "", role = "", full_name = "" } = member || {};
   const { org_id = "" } = currOrgData || {};
+  
+  const [userData, setUserData] = useUserDataAtom();
+  
 
   const fetchMembers = useCallback(async () => {
     if (org_id !== "") {
@@ -75,10 +82,23 @@ export function DataTableRowActions<TData>({
 
   const handleContinue = async () => {
     setIsSave(true);
-
+    const memberName = full_name
     const result = await removeMember(org_id, user_id, role);
-
+    
     if (result.success) {
+      const { full_name, user_id, photo_url } = userData
+      
+      const params = {
+        user_id,
+        org_id,
+        photo_url,
+        title: "Member Removed",
+        description: `${full_name} removed ${memberName} in the ${org_name} organization`,
+        type: "organization",
+      };
+      
+      await createNotif(params)
+      
       setHasSubmitted(true);
       setToastParams({
         title: "Remove Member",
