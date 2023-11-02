@@ -29,6 +29,30 @@ export const listenNowAlbums: Album[] = [
     cover:
       "https://images.unsplash.com/photo-1490300472339-79e4adc6be4a?w=300&dpr=2&q=80",
   },
+  {
+    name: "React Rendezvous",
+    artist: "Ethan Byte",
+    cover:
+      "https://images.unsplash.com/photo-1611348586804-61bf6c080437?w=300&dpr=2&q=80",
+  },
+  {
+    name: "Stateful Symphony",
+    artist: "Beth Binary",
+    cover:
+      "https://images.unsplash.com/photo-1490300472339-79e4adc6be4a?w=300&dpr=2&q=80",
+  },
+  {
+    name: "React Rendezvous",
+    artist: "Ethan Byte",
+    cover:
+      "https://images.unsplash.com/photo-1611348586804-61bf6c080437?w=300&dpr=2&q=80",
+  },
+  {
+    name: "Stateful Symphony",
+    artist: "Beth Binary",
+    cover:
+      "https://images.unsplash.com/photo-1490300472339-79e4adc6be4a?w=300&dpr=2&q=80",
+  },
 ]
 
 export const madeForYouAlbums: Album[] = [

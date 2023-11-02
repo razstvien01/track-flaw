@@ -32,7 +32,6 @@ export function AlbumArtwork({
   ...props
 }: AlbumArtworkProps) {
   
-  console.log('src:', album.cover);
   return (
     <div className={cn("space-y-3", className)} {...props}>
       <ContextMenu>
@@ -45,7 +44,7 @@ export function AlbumArtwork({
               height={height}
               className={cn(
                 "h-auto w-auto object-cover transition-all hover:scale-105",
-                aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
+                aspectRatio === "portrait" ? "aspect-[1/2]" : "aspect-square"
               )}
             />
           </div>

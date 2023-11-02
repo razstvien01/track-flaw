@@ -61,9 +61,12 @@ export default function RootLayout({
                 {isLoading ? (
                   <LoadingComponent />
                 ) : (
+                  <>
                   <Header setIsLoading={setIsLoading} />
+                  {children}
+                  </>
                 )}
-                {children}
+                
               </ThemeProvider>
             </Provider>
           </AuthContextProvider>
