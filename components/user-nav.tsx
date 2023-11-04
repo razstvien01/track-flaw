@@ -31,7 +31,7 @@ const UserNav: React.FC<UserNavProps> = ({ userData, logOut, isUpdate, setIsUpda
     try {
       setIsLoading(true)
       logOut();
-      window.location.href = "http://localhost:3000";
+      window.location.href = "/";
     } catch (error) {
       console.log(error);
     }

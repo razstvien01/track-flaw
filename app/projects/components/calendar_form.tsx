@@ -43,20 +43,7 @@ export function CalendarForm({ label, handleCalendarData }: CalendarFormProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
-
-  // function onSubmit(data: z.infer<typeof FormSchema>) {
-  //   console.log(JSON.stringify(data, null, 2))
-  //   console.log(data.dob)
-  //   toast({
-  //     title: "You submitted the following values:",
-  //     description: (
-  //       <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-  //         <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-  //       </pre>
-  //     ),
-  //   })
-  // }
-
+  
   return (
     <Form {...form}>
       <FormField
@@ -88,11 +75,9 @@ export function CalendarForm({ label, handleCalendarData }: CalendarFormProps) {
                 <Calendar
                   mode="single"
                   selected={field.value}
-                  // onSelect={handleCalendarData}
                   onSelect={(date) => {
                     field.onChange(date);
-                    // console.log('Selected Date:', date);
-                    handleCalendarData(date)
+                    handleCalendarData(date, field)
                     toast({
                       title: "You selected the date:",
                       description: (

@@ -22,17 +22,16 @@ import { Loader } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import AlertSuccess from "@/components/success_alert";
 import AlertDestructive from "@/components/alert_destructive";
-import { UserAuth } from "@/context/auth_context";
-// import { OrgDataProps } from "../types/types";
-// import { OrgDataInit } from "../types/init";
-// import { ROLES } from "../types/constants";
 import { Textarea } from "@/components/ui/textarea";
-// import { createOrganization } from "../services/org.service";
 import { ShowToast } from "@/components/show-toast";
 import { useUserDataAtom } from "@/hooks/user_data_atom";
 import { createNotif } from "@/services/notifications.service";
 import { Dialog } from "@radix-ui/react-dialog";
 import { CalendarForm } from "./calendar_form";
+import { ProjectDataProps } from "@/types/types";
+import { ProjectDataInit } from "@/types/init";
+import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
+import { createProject } from "@/services/projects.service";
 
 interface AddProjectDialogProps {
   showDialog: boolean;
@@ -43,9 +42,10 @@ const AddProjectDialog = ({
   showDialog,
   setShowDialog,
 }: AddProjectDialogProps) => {
-  const { user } = UserAuth();
-  const { uid } = user;
-  // const [orgData, setOrgData] = useState<OrgDataProps>(OrgDataInit);
+  const [projData, setProjData] = useState<ProjectDataProps>(ProjectDataInit);
+  const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
+  const [userData, setUserData] = useUserDataAtom();
+  const { org_id = "", org_name = "" } = currOrgData || {};
   const [isSave, setIsSave] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState({
     success: false,
@@ -56,78 +56,81 @@ const AddProjectDialog = ({
   const [toastParams, setToastParams] = useState<any>();
   const [showToast, setShowToast] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [userData, setUserData] = useUserDataAtom();
 
-  // useEffect(() => {
-  //   if (hasSubmitted) {
-  //     const timer = setTimeout(() => {
-  //       setIsVisible({
-  //         error: false,
-  //         success: false,
-  //       });
-  //       setShowNewOrgDialog(false);
-  //       setShowToast(true);
-  //       setIsSave(false)
-  //     }, 2000);
+  useEffect(() => {
+    if (hasSubmitted) {
+      const timer = setTimeout(() => {
+        setIsVisible({
+          error: false,
+          success: false,
+        });
+        setShowDialog(false);
+        setShowToast(true);
+        setIsSave(false)
+      }, 2000);
 
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [isVisible.success, toastParams, hasSubmitted, setShowNewOrgDialog]);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible.success, toastParams, hasSubmitted, setShowDialog]);
 
-  // useEffect(() => {
-  //   if (showToast) {
-  //     ShowToast(toastParams);
-  //     setShowToast(false);
-  //     setHasSubmitted(false);
-  //   }
-  // }, [showToast, toastParams]);
+  useEffect(() => {
+    if (showToast) {
+      ShowToast(toastParams);
+      setShowToast(false);
+      setHasSubmitted(false);
+    }
+  }, [showToast, toastParams]);
 
   //* Function to handle form submission
   const handleSubmit = async () => {
     setIsSave(true);
+    
+    setProjData((prev: ProjectDataProps) => ({ ...prev, org_id}))
+    
+    const { user_id = "", photo_url = "", full_name = "" } = userData
 
-    // const result = await createOrganization(orgData, uid);
+    const result = await createProject(projData, user_id);
 
-    // if (result.success) {
-    //   const { full_name, user_id, photo_url } = userData
-    //   const { org_id = "", org_name = "" } = result.data
+    
+    if (result.success) {
+      const project_name = result.data
 
-    //   const params = {
-    //     user_id,
-    //     org_id,
-    //     photo_url,
-    //     title: "Organization Created",
-    //     description: `${full_name} created ${org_name} organization`,
-    //     type: "organization",
-    //   };
+      const params = {
+        user_id,
+        org_id,
+        photo_url,
+        title: "Project Created",
+        description: `${full_name} created ${project_name} project in a ${org_name} organization`,
+        type: "project",
+      };
 
-    //   await createNotif(params)
+      await createNotif(params)
 
-    //   setHasSubmitted(true);
-    //   setToastParams({
-    //     title: "Creating Organization",
-    //     description: "You have successfully created an organization.",
-    //     variant: "default",
-    //   });
-    //   setMessage(result.data.message);
-    //   setIsVisible({
-    //     error: false,
-    //     success: true,
-    //   });
-    // } else {
-    //   setMessage(result.error.message);
-    //   setIsVisible((prev) => ({
-    //     ...prev,
-    //     error: true,
-    //   }));
-    // }
+      setHasSubmitted(true);
+      setToastParams({
+        title: "Creating Project",
+        description: "You have successfully created a project.",
+        variant: "default",
+      });
+      setMessage(result.data.message);
+      setIsVisible({
+        error: false,
+        success: true,
+      });
+    } else {
+      setMessage(result.error.message);
+      setIsVisible((prev) => ({
+        ...prev,
+        error: true,
+      }));
+    }
 
     setIsSave(false);
   };
 
   const handleOnchangeData = (e: any) => {
     const { id, value } = e.target;
-    // setOrgData((prev: OrgDataProps) => ({ ...prev, [id]: value }));
+    setProjData((prev: ProjectDataProps) => ({ ...prev, [id]: value }));
   };
 
   const handleSelectOnchangeData = (value: string) => {
@@ -137,21 +140,18 @@ const AddProjectDialog = ({
     // }));
   };
 
-  const handleCalendarData = (date?: Date, field?: any) => {
-    // field.onChange(date);
-    if (!date) return; // Exit early if date is undefined
-    if (!field) return;
+  const handleCalendarStartData = (date?: Date, field?: any) => {
+    if (!date || !field) return; 
     
     field.onChange(date);
-    console.log("Selected Date:", date);
-    // toast({
-    //   title: "You selected the date:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(date, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // })
+    setProjData((prev: ProjectDataProps) => ({ ...prev, date_start: date}))
+  };
+  
+  const handleCalendarEndData = (date?: Date, field?: any) => {
+    if (!date || !field) return; 
+    
+    field.onChange(date);
+    setProjData((prev: ProjectDataProps) => ({ ...prev, date_end: date}))
   };
 
   return (
@@ -203,16 +203,16 @@ const AddProjectDialog = ({
             </div>
             <CalendarForm
               label="Starting Date"
-              handleCalendarData={handleCalendarData}
+              handleCalendarData={handleCalendarStartData}
             />
             <CalendarForm
               label="End Date"
-              handleCalendarData={handleCalendarData}
+              handleCalendarData={handleCalendarEndData}
             />
             <div className="space-y-2">
               <Label>Project details</Label>
               <Textarea
-                id="project_details"
+                id="project_description"
                 onChange={(e) => handleOnchangeData(e)}
                 placeholder="Type your project details here."
               />

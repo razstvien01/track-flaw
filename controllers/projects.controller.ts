@@ -9,11 +9,12 @@ interface ProjectDetails {
   team_id: string;
 }
 
-export const checkIfExistsProj = async (project_name: string) => {
+export const checkIfExistsProj = async (project_name: string, org_id: string) => {
   //* Check if the organization already exists
   const userQuery = query(
     collection(db, "projects"),
-    where("project_name", "==", project_name)
+    where("project_name", "==", project_name),
+    where("org_id", "==", org_id)
   );
 
   const querySnapshot = await getDocs(userQuery);
@@ -21,14 +22,13 @@ export const checkIfExistsProj = async (project_name: string) => {
   return !querySnapshot.empty ? true : false;
 };
 
-export const addProject = async (orgData: ProjectDetails) => {
-  const { org_id, ...restOrgData } = orgData;
-
-  const orgRef = doc(db, "organizations", org_id);
-
-  const orgWithRefs = { ...restOrgData, org_ref: orgRef, created_at: serverTimestamp(), };
-
+export const addProject = async (projectData: ProjectDetails) => {
+  
+  console.log(projectData)
+  const orgWithRefs = { ...projectData, created_at: serverTimestamp(), };
+  
   await addDoc(collection(db, "projects"), orgWithRefs);
+  
 };
 
 export const getProjects = async () => {

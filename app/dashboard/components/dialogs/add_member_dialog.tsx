@@ -42,6 +42,7 @@ const AddMemberSubmitInit: AddMemberSubmitProps = {
 export function AddMemberDialog() {
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom()
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
+  const [userData, setUserData] = useUserDataAtom();
   const { org_id = "", org_name = "" } = currOrgData || {};
 
   const [addMember, setAddMember] =
@@ -60,8 +61,7 @@ export function AddMemberDialog() {
     variant: "default",
   });
   const [showToast, setShowToast] = useState(false);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [userData, setUserData] = useUserDataAtom();
+  const [hasSubmitted, setHasSubmitted] = useState(false);  
 
   useEffect(() => {
     if (hasSubmitted) {

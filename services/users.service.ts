@@ -56,7 +56,7 @@ export const updateUser = async (newUserData: any, user_id: string) => {
 export const addUser = async (user: any) => {
   const { displayName, email, uid, phoneNumber, photoURL } = user;
 
-  await axios.post("http://localhost:3000/api/users", {
+  await axios.post("/api/users", {
     user_id: uid,
     full_name: displayName,
     email_address: email,

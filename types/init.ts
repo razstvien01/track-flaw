@@ -1,4 +1,4 @@
-import { OrgDataProps, UserDataProps } from "./types";
+import { OrgDataProps, ProjectDataProps, UserDataProps } from "./types";
 
 export const UserDataInit: UserDataProps = {
   full_name: "",
@@ -19,3 +19,12 @@ export const OrgDataInit: OrgDataProps = {
   org_address: '',
   phone_number: ''
 };
+
+export const ProjectDataInit: ProjectDataProps = {
+  org_id: "",
+  project_description: "",
+  project_name: "",
+  team_refs: [],
+  date_start: new Date(),
+  date_end: new Date(),
+}

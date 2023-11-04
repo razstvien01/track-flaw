@@ -17,6 +17,16 @@ export interface OrgDataProps {
   org_address: string
   phone_number: string
 }
+
+export interface ProjectDataProps{
+  project_name: string
+  project_description: string
+  date_start: Date
+  date_end: Date
+  team_refs: []
+  org_id: string
+}
+
 export interface NavItem {
   title: string
   href?: string

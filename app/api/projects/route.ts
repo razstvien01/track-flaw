@@ -43,15 +43,15 @@ export const GET = async (request: NextRequest) => {
 export const POST = async (request: NextRequest) => {
   try {
     const projectData = await request.json();
-
-    const { project_name } = projectData;
     
-    if (await checkIfExistsProj(project_name)) {
+    const { project_name, org_id } = projectData;
+    
+    if (await checkIfExistsProj(project_name, org_id)) {
       return NextResponse.json(
         {
           success: false,
           message:
-            "This Project is Already Exists. Please Try Another Project Nmae",
+            "This Project is Already Exists in the Organization. Please Try Another Project Name",
         },
         {
           status: 500,
@@ -65,6 +65,7 @@ export const POST = async (request: NextRequest) => {
       JSON.stringify({
         success: true,
         message: "Project Created Successfully",
+        project_name
       })
     );
   } catch (error) {
