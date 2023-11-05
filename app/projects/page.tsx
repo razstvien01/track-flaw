@@ -9,14 +9,36 @@ import { AlbumArtwork } from "./components/album_artwork";
 import { listenNowAlbums, madeForYouAlbums } from "./data/albums";
 import { useState } from "react";
 import AddProjectDialog from "./components/add_project_dialog";
+import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
+import {
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading,
+} from "@/components/page-header";
 
 const Projects = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
+  const { org_id = "" } = currOrgData || {};
+
+  if (org_id === "") {
+    return (
+      <>
+        <PageHeader>
+          <PageHeaderHeading>No Organization Selected</PageHeaderHeading>
+          <PageHeaderDescription>
+            View and start a new project to fill up this space by selecting or
+            creating an organizaiton
+          </PageHeaderDescription>
+        </PageHeader>
+      </>
+    );
+  }
 
   return (
     <>
       {/* {openAddProj ? <AddProjectDialog /> : null} */}
-      <AddProjectDialog showDialog={showDialog} setShowDialog={setShowDialog}/>
+      <AddProjectDialog showDialog={showDialog} setShowDialog={setShowDialog} />
       <div className="h-full px-4 py-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="space-y-1">

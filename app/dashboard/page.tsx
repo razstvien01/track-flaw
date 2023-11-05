@@ -4,8 +4,6 @@ import {
   PageHeaderHeading,
 } from "@/components/page-header";
 import React from "react";
-import { DataTable } from "./components/table/data_table";
-import { columns } from "./components/table/columns";
 
 const Dashboard = () => {
   return (
