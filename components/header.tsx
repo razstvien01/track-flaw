@@ -7,7 +7,7 @@ import ModeToggle from "./mode-toggle";
 import { Logo } from "./logo";
 import { MainNav } from "./main-nav";
 import { UserAuth } from "../context/auth_context";
-import AuthenticationPage from "../app/authentication/page";
+import AuthenticationPage from "./page";
 import UserNav from "./user-nav";
 import { useGetUser } from "../services/users.service";
 import { Dispatch, useState, SetStateAction } from "react";

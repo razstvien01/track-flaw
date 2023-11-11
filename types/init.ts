@@ -27,4 +27,5 @@ export const ProjectDataInit: ProjectDataProps = {
   team_refs: [],
   date_start: new Date(),
   date_end: new Date(),
+  photo_url: ""
 }
