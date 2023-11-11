@@ -37,16 +37,20 @@ import axios from "axios";
 interface AddProjectDialogProps {
   showDialog: boolean;
   setShowDialog: Dispatch<SetStateAction<boolean>>;
+  setSuccessAdd: Dispatch<SetStateAction<boolean>>;
+  org_id: string
+  org_name: string
 }
 
 const AddProjectDialog = ({
   showDialog,
   setShowDialog,
+  setSuccessAdd,
+  org_id,
+  org_name
 }: AddProjectDialogProps) => {
   const [projData, setProjData] = useState<ProjectDataProps>(ProjectDataInit);
-  const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const [userData, setUserData] = useUserDataAtom();
-  const { org_id = "", org_name = "" } = currOrgData || {};
   const [isSave, setIsSave] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState({
     success: false,
@@ -57,6 +61,13 @@ const AddProjectDialog = ({
   const [toastParams, setToastParams] = useState<any>();
   const [showToast, setShowToast] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  
+  useEffect(() => {
+    setProjData((prev: ProjectDataProps) => ({
+      ...prev,
+      org_id,
+    }));
+  }, [org_id])
 
   useEffect(() => {
     if (hasSubmitted) {
@@ -68,11 +79,12 @@ const AddProjectDialog = ({
         setShowDialog(false);
         setShowToast(true);
         setIsSave(false);
+        setSuccessAdd((prev) => !prev);
       }, 2000);
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible.success, toastParams, hasSubmitted, setShowDialog]);
+  }, [isVisible.success, toastParams, hasSubmitted, setShowDialog, setSuccessAdd]);
 
   useEffect(() => {
     if (showToast) {
@@ -97,32 +109,37 @@ const AddProjectDialog = ({
       return ""; // Return an empty string or handle the error as appropriate
     }
   };
+  
+  
 
   //* Function to handle form submission
   const handleSubmit = async () => {
+    console.log(org_id)
     setIsSave(true);
 
     const actualImage = (await getActualImageUrl()) as string;
 
     setProjData((prev: ProjectDataProps) => ({
       ...prev,
-      org_id,
       photo_url: actualImage,
     }));
-
+    
     const { user_id = "", photo_url = "", full_name = "" } = userData;
-
+    
+    console.log(projData)
     const result = await createProject(projData, user_id);
+    
+    
 
     if (result.success) {
-      const project_name = result.data;
+      // const project_name = result.data;
 
       const params = {
         user_id,
         org_id,
         photo_url,
         title: "Project Created",
-        description: `${full_name} created ${project_name} project in a ${org_name} organization`,
+        description: `${full_name} created ${projData.project_name} project in a ${org_name} organization`,
         type: "project",
       };
 
@@ -139,6 +156,8 @@ const AddProjectDialog = ({
         error: false,
         success: true,
       });
+      
+      
     } else {
       setMessage(result.error.message);
       setIsVisible((prev) => ({

@@ -1,18 +1,44 @@
-import { ProjectDataProps } from '@/types/types'
-import axios from 'axios'
+import { PROJECT_QUERY } from "@/types/constants";
+import { ProjectDataProps } from "@/types/types";
+import axios from "axios";
 
-export const createProject = async (projectData: ProjectDataProps, uid: string) => {
+export const createProject = async (
+  projectData: ProjectDataProps,
+  uid: string
+) => {
   try {
-    const response = await axios.post('api/projects', {
+    const response = await axios.post("api/projects", {
       ...projectData,
-      creator_id: uid
-    })
-    
+      creator_id: uid,
+    });
+
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } catch (error: any) {
-    return { success: false, error: error.response.data }
+    return { success: false, error: error.response.data };
   }
-}
+};
+
+export const getProjectsInOrgs = async (org_id: string) => {
+  try {
+    const params = {
+      org_id,
+      query: PROJECT_QUERY.GET_PROJS_BY_ID,
+    };
+    const response = await axios.get("/api/projects", {
+      params,
+    });
+
+    return {
+      success: true,
+      data: response.data?.projects,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.response?.data,
+    };
+  }
+};

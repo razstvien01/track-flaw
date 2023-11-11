@@ -20,24 +20,18 @@ export const GET = async (request: NextRequest) => {
     switch (query) {
       case PROJECT_QUERY.GET_PROJS_BY_ID:
         projects = await getProjectsByOrgId(org_id as string);
+        
         return new Response(
           JSON.stringify({
             success: true,
             message: "Fetch Projects Successfully",
-            organization: [
-              {
-                label: "Personal",
-                orgs: [],
-              },
-              {
-                label: "Projects",
-                projects,
-              },
-            ],
+            projects
           })
         );
     
       case PROJECT_QUERY.GET_PROJ:
+        
+        
         projects = await getProjects();
         return new Response(
           JSON.stringify({
@@ -107,7 +101,6 @@ export const POST = async (request: NextRequest) => {
 
     await addProject(projectData);
     
-    console.log(projectData)
     return new Response(
       JSON.stringify({
         success: true,
