@@ -15,6 +15,7 @@ interface ProjectDetails {
   project_name: string;
   org_id: string;
   team_id: string;
+  photo_url: string;
 }
 
 export const checkIfExistsProj = async (

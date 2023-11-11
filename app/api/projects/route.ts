@@ -106,7 +106,8 @@ export const POST = async (request: NextRequest) => {
     }
 
     await addProject(projectData);
-
+    
+    console.log(projectData)
     return new Response(
       JSON.stringify({
         success: true,

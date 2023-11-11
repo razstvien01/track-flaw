@@ -32,6 +32,7 @@ import { ProjectDataProps } from "@/types/types";
 import { ProjectDataInit } from "@/types/init";
 import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 import { createProject } from "@/services/projects.service";
+import axios from "axios";
 
 interface AddProjectDialogProps {
   showDialog: boolean;
@@ -66,7 +67,7 @@ const AddProjectDialog = ({
         });
         setShowDialog(false);
         setShowToast(true);
-        setIsSave(false)
+        setIsSave(false);
       }, 2000);
 
       return () => clearTimeout(timer);
@@ -81,19 +82,40 @@ const AddProjectDialog = ({
     }
   }, [showToast, toastParams]);
 
+  const getActualImageUrl = async () => {
+    try {
+      // Axios follows redirects by default, so the resolved URL will be the final one after redirection.
+      const response = await axios({
+        method: "GET",
+        url: "https://source.unsplash.com/random/?space,night,star,moon",
+        maxRedirects: 5, // The default is 5, but it's set explicitly here for clarity
+      });
+
+      return response.request.responseURL; // This should give the final redirected URL
+    } catch (error) {
+      console.error("Error fetching the actual image URL:", error);
+      return ""; // Return an empty string or handle the error as appropriate
+    }
+  };
+
   //* Function to handle form submission
   const handleSubmit = async () => {
     setIsSave(true);
-    
-    setProjData((prev: ProjectDataProps) => ({ ...prev, org_id}))
-    
-    const { user_id = "", photo_url = "", full_name = "" } = userData
+
+    const actualImage = (await getActualImageUrl()) as string;
+
+    setProjData((prev: ProjectDataProps) => ({
+      ...prev,
+      org_id,
+      photo_url: actualImage,
+    }));
+
+    const { user_id = "", photo_url = "", full_name = "" } = userData;
 
     const result = await createProject(projData, user_id);
 
-    
     if (result.success) {
-      const project_name = result.data
+      const project_name = result.data;
 
       const params = {
         user_id,
@@ -104,7 +126,7 @@ const AddProjectDialog = ({
         type: "project",
       };
 
-      await createNotif(params)
+      await createNotif(params);
 
       setHasSubmitted(true);
       setToastParams({
@@ -141,17 +163,17 @@ const AddProjectDialog = ({
   };
 
   const handleCalendarStartData = (date?: Date, field?: any) => {
-    if (!date || !field) return; 
-    
+    if (!date || !field) return;
+
     field.onChange(date);
-    setProjData((prev: ProjectDataProps) => ({ ...prev, date_start: date}))
+    setProjData((prev: ProjectDataProps) => ({ ...prev, date_start: date }));
   };
-  
+
   const handleCalendarEndData = (date?: Date, field?: any) => {
-    if (!date || !field) return; 
-    
+    if (!date || !field) return;
+
     field.onChange(date);
-    setProjData((prev: ProjectDataProps) => ({ ...prev, date_end: date}))
+    setProjData((prev: ProjectDataProps) => ({ ...prev, date_end: date }));
   };
 
   return (
