@@ -47,6 +47,7 @@ export interface NotifIds {
   user_id?: string;
   project_id?: string;
   org_id?: string;
+  org_ids?: string[]
 }
 
 export interface NotifData extends NotifIds {
