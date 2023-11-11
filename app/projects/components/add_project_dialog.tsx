@@ -38,8 +38,8 @@ interface AddProjectDialogProps {
   showDialog: boolean;
   setShowDialog: Dispatch<SetStateAction<boolean>>;
   setSuccessAdd: Dispatch<SetStateAction<boolean>>;
-  org_id: string
-  org_name: string
+  org_id: string;
+  org_name: string;
 }
 
 const AddProjectDialog = ({
@@ -47,7 +47,7 @@ const AddProjectDialog = ({
   setShowDialog,
   setSuccessAdd,
   org_id,
-  org_name
+  org_name,
 }: AddProjectDialogProps) => {
   const [projData, setProjData] = useState<ProjectDataProps>(ProjectDataInit);
   const [userData, setUserData] = useUserDataAtom();
@@ -61,13 +61,13 @@ const AddProjectDialog = ({
   const [toastParams, setToastParams] = useState<any>();
   const [showToast, setShowToast] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  
+
   useEffect(() => {
     setProjData((prev: ProjectDataProps) => ({
       ...prev,
       org_id,
     }));
-  }, [org_id])
+  }, [org_id]);
 
   useEffect(() => {
     if (hasSubmitted) {
@@ -84,7 +84,13 @@ const AddProjectDialog = ({
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible.success, toastParams, hasSubmitted, setShowDialog, setSuccessAdd]);
+  }, [
+    isVisible.success,
+    toastParams,
+    hasSubmitted,
+    setShowDialog,
+    setSuccessAdd,
+  ]);
 
   useEffect(() => {
     if (showToast) {
@@ -109,56 +115,49 @@ const AddProjectDialog = ({
       return ""; // Return an empty string or handle the error as appropriate
     }
   };
-  
-  
 
   //* Function to handle form submission
-  const handleSubmit = async () => {
-    console.log(org_id)
-    setIsSave(true);
+  // A function that calls createProject and then createNotif with updated projData.
+  const createProjectAndNotify = async (imageURL: string, userData: any, orgData: any) => {
+    setIsSave(true); // Indicate that saving is in progress.
 
-    const actualImage = (await getActualImageUrl()) as string;
+    // Set the project data with the new image URL before creating the project.
+    const projectDataWithImage = {
+      ...projData,
+      photo_url: imageURL,
+    };
 
-    setProjData((prev: ProjectDataProps) => ({
-      ...prev,
-      photo_url: actualImage,
-    }));
-    
-    const { user_id = "", photo_url = "", full_name = "" } = userData;
-    
-    console.log(projData)
-    const result = await createProject(projData, user_id);
-    
-    
+    // Attempt to create the project using the project data with the actual image URL.
+    const result = await createProject(projectDataWithImage, userData.user_id);
 
     if (result.success) {
-      // const project_name = result.data;
-
+      // Construct parameters for the notification.
       const params = {
-        user_id,
-        org_id,
-        photo_url,
+        user_id: userData.user_id,
+        org_id: orgData.org_id,
+        photo_url: projectDataWithImage.photo_url,
         title: "Project Created",
-        description: `${full_name} created ${projData.project_name} project in a ${org_name} organization`,
+        description: `${userData.full_name} created ${projectDataWithImage.project_name} project in a ${org_name} organization`,
         type: "project",
       };
 
+      // Create a notification for the new project.
       await createNotif(params);
 
+      // Handle success by setting the success state, toast parameters, and message.
       setHasSubmitted(true);
       setToastParams({
         title: "Creating Project",
         description: "You have successfully created a project.",
         variant: "default",
       });
-      setMessage(result.data.message);
+      setMessage(result.data.message); // Adjust this if 'result' structure is different.
       setIsVisible({
         error: false,
         success: true,
       });
-      
-      
     } else {
+      // Handle errors by setting the error message and visibility.
       setMessage(result.error.message);
       setIsVisible((prev) => ({
         ...prev,
@@ -166,8 +165,23 @@ const AddProjectDialog = ({
       }));
     }
 
-    setIsSave(false);
+    setIsSave(false); // Save operation is finished.
   };
+
+  // Function to handle form submission with async image URL fetching.
+  const handleSubmit = async () => {
+    // Fetch the actual image URL first.
+    const actualImage = await getActualImageUrl();
+    if (actualImage) {
+      await createProjectAndNotify(actualImage, userData, { org_id, org_name });
+    } else {
+      // Handle the error when the image URL could not be fetched.
+      setMessage('Error fetching the image URL.');
+      setIsVisible({ success: false, error: true });
+    }
+  };
+
+  
 
   const handleOnchangeData = (e: any) => {
     const { id, value } = e.target;
