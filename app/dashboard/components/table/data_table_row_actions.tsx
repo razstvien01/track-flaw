@@ -24,6 +24,7 @@ import { UpdateMemberDialog } from "../dialogs/update_member_dialog";
 import { ViewMemberDialog } from "../dialogs/view_member_dialog";
 import { createNotif } from "@/services/notifications.service";
 import { useUserDataAtom } from "@/hooks/user_data_atom";
+import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
@@ -48,6 +49,7 @@ export function DataTableRowActions<TData>({
   const { org_id = "" } = currOrgData || {};
   
   const [userData, setUserData] = useUserDataAtom();
+  const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
   
 
   const fetchMembers = useCallback(async () => {
@@ -66,11 +68,12 @@ export function DataTableRowActions<TData>({
         setIsSave(false);
         setOpenDeleteDialog(false);
         fetchMembers();
+        setIsToggleNotif(prev => !prev)
       }, 2000);
 
       return () => clearTimeout(timer);
     }
-  }, [hasSubmitted, fetchMembers]);
+  }, [hasSubmitted, fetchMembers, setIsToggleNotif]);
 
   useEffect(() => {
     if (showToast) {
