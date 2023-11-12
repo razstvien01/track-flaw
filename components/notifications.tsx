@@ -91,12 +91,7 @@ const Notifications = () => {
 
                 return (
                   <React.Fragment key={index}>
-                    <DropdownMenuItem
-                      className="text-sm"
-                      onClick={() => {
-                        console.log("Pressed", notif);
-                      }}
-                    >
+                    <DropdownMenuItem className="text-sm" onClick={() => {}}>
                       <div className="flex items-center">
                         <Avatar className="h-10 w-10 mr-4">
                           <AvatarImage src={photo_url} alt="@shadcn" />

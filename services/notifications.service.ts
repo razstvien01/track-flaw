@@ -23,8 +23,8 @@ export const getNotifs = async (userData: UserDataProps) => {
     const params = new URLSearchParams();
 
     //* Explicitly add user_id to the params
-    params.append('user_id', user_id.toString());
-    
+    params.append("user_id", user_id.toString());
+
     //* Append each org_id to the params
     org_refs.forEach((ref) => {
       //* Fallback to "no id" if ref is null/undefined or org_id is not provided
@@ -32,12 +32,9 @@ export const getNotifs = async (userData: UserDataProps) => {
       params.append("org_ids", org_id);
     });
 
-    //* Log the complete query string to verify
-    console.log(params.toString());
-
     //* Make the GET request with axios
     const response = await axios.get("/api/notifications", {
-      params: params
+      params: params,
     });
 
     return {

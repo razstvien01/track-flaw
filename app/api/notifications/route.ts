@@ -8,9 +8,6 @@ export const GET = async (request: NextRequest) => {
     const user_id = url.searchParams.get("user_id") || undefined
     const org_ids = url.searchParams.getAll("org_ids") || undefined;
     
-    console.log(org_ids)
-    console.log(url)
-    
     const notifications = await getNotifs({
       user_id: user_id,
       org_ids: org_ids
