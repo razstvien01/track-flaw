@@ -52,8 +52,6 @@ export default function OrgSwitcher({
 
   const [selectedOrg, setSelectedOrg] = useCurrOrgDataAtom();
   
-  const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
-  
   return (
     <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>
       <Popover open={open} onOpenChange={setOpen}>

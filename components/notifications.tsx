@@ -20,12 +20,10 @@ import { NotifData } from "@/types/types";
 import React from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-const tags = Array.from({ length: 50 }).map(
-  (_, i, a) => `v1.2.0-beta.${a.length - i}`
-);
+import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
 
 const Notifications = () => {
+  const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
   const { theme, setTheme } = useTheme();
   const [userData, setUserData] = useUserDataAtom();
   const [notifs, setNotifs] = useState<NotifData[]>([]);
@@ -41,7 +39,7 @@ const Notifications = () => {
 
   useEffect(() => {
     fetchNotifs();
-  }, [fetchNotifs]);
+  }, [fetchNotifs, isToggleNotif]);
 
   return (
     <>
