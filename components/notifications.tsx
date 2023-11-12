@@ -31,12 +31,12 @@ const Notifications = () => {
   const [notifs, setNotifs] = useState<NotifData[]>([]);
 
   const fetchNotifs = useCallback(async () => {
-    // if (userData.user_id !== "") {
-    const result = await getNotifs(userData);
-    if (result.success) {
-      setNotifs(result.data);
+    if (userData?.user_id) {
+      const result = await getNotifs(userData);
+      if (result.success) {
+        setNotifs(result?.data);
+      }
     }
-    // }
   }, [userData]);
 
   useEffect(() => {

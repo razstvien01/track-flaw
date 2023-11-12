@@ -11,7 +11,7 @@ export const createNotif = async (notif_data: any) => {
 
     return { success: true };
   } catch (error: any) {
-    return { success: false, error: error.response.data };
+    return { success: false, error: error.response?.data };
   }
 };
 
