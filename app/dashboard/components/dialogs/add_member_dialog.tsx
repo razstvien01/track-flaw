@@ -28,6 +28,7 @@ import { addMemberInOrg, getMembersInOrgs } from "@/services/org.service";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 import { createNotif } from "@/services/notifications.service";
 import { useUserDataAtom } from "@/hooks/user_data_atom";
+import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
 
 interface AddMemberSubmitProps {
   user_id: string;
@@ -44,6 +45,7 @@ export function AddMemberDialog() {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const [userData, setUserData] = useUserDataAtom();
   const { org_id = "", org_name = "" } = currOrgData || {};
+  const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
 
   const [addMember, setAddMember] =
     useState<AddMemberSubmitProps>(AddMemberSubmitInit);
@@ -73,11 +75,12 @@ export function AddMemberDialog() {
         setIsSave(false);
         setShowDialog(false);
         setShowToast(true);
+        setIsToggleNotif(prev => !prev)
       }, 2000);
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible.success, toastParams, hasSubmitted]);
+  }, [isVisible.success, toastParams, hasSubmitted, setIsToggleNotif]);
   
   useEffect(() => {
     if (showToast) {
