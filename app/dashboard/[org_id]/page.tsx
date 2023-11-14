@@ -11,7 +11,6 @@ import { DataTable } from "../components/table/data_table";
 import { columns } from "../components/table/columns";
 import { getMembersInOrgs, getOrgDetails } from "@/services/org.service";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
-import { notFound } from "next/navigation";
 import NotFound from "./not-found";
 
 const Organization = ({ params }: any) => {

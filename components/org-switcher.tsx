@@ -30,6 +30,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { OrgDataProps } from "../types/types";
 import { useCurrOrgDataAtom } from "../hooks/curr_org_data_atom";
 import { useRouter } from "next/navigation";
+import { useLoadingAtom } from "@/hooks/loading.atom";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -51,7 +52,8 @@ export default function OrgSwitcher({
   const [open, setOpen] = useState(false);
 
   const [selectedOrg, setSelectedOrg] = useCurrOrgDataAtom();
-  
+  const [isLoading, setIsLoading] = useLoadingAtom();
+
   return (
     <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -87,9 +89,7 @@ export default function OrgSwitcher({
                     onSelect={() => {
                       setSelectedOrg(org);
                       setOpen(false);
-
                       router.refresh();
-                      
                     }}
                   >
                     <Avatar className="mr-2 h-5 w-5">
