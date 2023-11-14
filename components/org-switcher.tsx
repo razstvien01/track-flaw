@@ -89,7 +89,7 @@ export default function OrgSwitcher({
                       setOpen(false);
 
                       router.refresh();
-                      router.push(`/dashboard/${org_id}`);
+                      
                     }}
                   >
                     <Avatar className="mr-2 h-5 w-5">
