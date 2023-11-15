@@ -80,19 +80,22 @@ export const getProjectsByOrgId = async (org_id: string) => {
     queries.push(query(dbQuery, orderBy("created_at", "desc"), limit(25)));
   }
 
-  // Execute the queries
+  //* Execute the queries
   const querySnapshot = await getDocs(queries[0]);
 
-  // Convert the query snapshot to an array of project objects
+  //* Convert the query snapshot to an array of project objects
   const projects: any[] = [];
   querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+    const data = doc.data();
     const project = {
       project_id: doc.id,
-      ...doc.data(),
+      photo_url: data.photo_url,
+      project_name: data.project_name,
+      project_description: data.project_description,
     };
     projects.push(project);
   });
-
+  
   return projects;
 };
 
