@@ -21,6 +21,7 @@ export const OrgDataInit: OrgDataProps = {
 };
 
 export const ProjectDataInit: ProjectDataProps = {
+  project_id: "",
   org_id: "",
   project_description: "",
   project_name: "",
