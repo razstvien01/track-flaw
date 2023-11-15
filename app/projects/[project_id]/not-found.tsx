@@ -20,7 +20,7 @@ const NotFound = () => {
         There was a problem.
       </h1>
       <p className="max-w-[1000px] text-lg text-muted-foreground sm:text-xl">
-        We could not find the page you were looking for.
+        We could not find the selected project page you were looking for.
       </p>
       <p>
         Go back to the{" "}
@@ -31,7 +31,7 @@ const NotFound = () => {
             router.push("/projects");
           }}
         >
-          Dashboard
+          Projects
         </Button>
       </p>
     </main>

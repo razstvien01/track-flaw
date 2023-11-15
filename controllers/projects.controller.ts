@@ -95,22 +95,27 @@ export const getProjectsByOrgId = async (org_id: string) => {
     };
     projects.push(project);
   });
-  
+
   return projects;
 };
 
 export const getProjectById = async (project_id: string) => {
   //* get ref
-  const projDocRef = doc(db, "projects", project_id)
-  
+  const projDocRef = doc(db, "projects", project_id);
+
   //* fetch doc
-  const projDoc = await getDoc(projDocRef)
-  
-  const projects = projDoc.data()
-  
-  
-  return projects
-}
+  const projDoc = await getDoc(projDocRef);
+
+  //* Check if the document exists
+  if (!projDoc.exists()) {
+    //* Throw an error or reject the promise if the document does not exist
+    throw new Error("The project doesn't exists.");
+  }
+
+  //* If the document exists, return its data
+  const project = projDoc.data();
+  return project;
+};
 
 export const deleteProject = async (project_id: string) => {
   await deleteDoc(doc(db, "projects", project_id));

@@ -42,3 +42,25 @@ export const getProjectsInOrgs = async (org_id: string) => {
     };
   }
 };
+
+export const getProjectById= async (project_id: string) => {
+  try {
+    const params = {
+      project_id,
+      query: PROJECT_QUERY.GET_PROJ_BY_ID,
+    };
+    const response = await axios.get("/api/projects", {
+      params,
+    });
+
+    return {
+      success: true,
+      data: response.data?.projects,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.response?.data,
+    };
+  }
+};
