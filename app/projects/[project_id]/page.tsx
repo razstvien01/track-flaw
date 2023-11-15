@@ -48,7 +48,8 @@ const Projects = ({ params }: any) => {
     date_end = "",
     project_description = "",
   } = project || {};
-
+  
+  // TODO add a page for project details, and view teams and bugs as well
   return (
     <div>
       <PageHeader>
@@ -59,12 +60,12 @@ const Projects = ({ params }: any) => {
             backgroundPosition: "center",
             transition: "all 0.3s ease-in-out",
             width: "100%",
-            paddingTop: "10%",
+            paddingTop: "12%",
           }}
         >
           {project_name}
         </PageHeaderHeading>
-        <PageHeaderDescription>{project_description}</PageHeaderDescription>
+        <PageHeaderDescription className="w-2000">{project_description}</PageHeaderDescription>
       </PageHeader>
     </div>
   );
