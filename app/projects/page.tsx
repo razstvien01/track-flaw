@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-import { AlbumArtwork } from "./components/album_artwork";
-import { listenNowAlbums, madeForYouAlbums } from "./data/albums";
+import { ProjectCard } from "./components/project_card";
 import { useCallback, useEffect, useState } from "react";
 import AddProjectDialog from "./components/add_project_dialog";
 import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
@@ -77,9 +76,10 @@ const Projects = () => {
             <div className="flex space-x-4 pb-4">
               {projects
                 ? projects.map((project: any, index: number) => {
+                  // console.log(project)
                   
                   return (
-                    <AlbumArtwork
+                    <ProjectCard
                       key={index}
                       project={project}
                       className="w-[350px]"

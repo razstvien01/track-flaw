@@ -61,10 +61,10 @@ export const getProjects = async () => {
 export const getProjectsByOrgId = async (org_id: string) => {
   const dbQuery = collection(db, "projects");
 
-  // Create an array to store queries
+  //* Create an array to store queries
   let queries = [];
 
-  // Check if 'org_id' is provided
+  //* Check if 'org_id' is provided
   if (org_id) {
     queries.push(
       query(
@@ -75,7 +75,7 @@ export const getProjectsByOrgId = async (org_id: string) => {
     );
   }
 
-  // If 'org_id' is not provided, retrieve the last 25 projects by their 'created_at' field
+  //* If 'org_id' is not provided, retrieve the last 25 projects by their 'created_at' field
   if (queries.length === 0) {
     queries.push(query(dbQuery, orderBy("created_at", "desc"), limit(25)));
   }
@@ -87,7 +87,7 @@ export const getProjectsByOrgId = async (org_id: string) => {
   const projects: any[] = [];
   querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
     const project = {
-      id: doc.id,
+      project_id: doc.id,
       ...doc.data(),
     };
     projects.push(project);

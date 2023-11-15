@@ -26,6 +26,7 @@ export interface ProjectDataProps{
   team_refs: []
   org_id: string
   photo_url: string
+  project_id: string
 }
 
 export interface NavItem {
