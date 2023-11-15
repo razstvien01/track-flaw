@@ -99,6 +99,19 @@ export const getProjectsByOrgId = async (org_id: string) => {
   return projects;
 };
 
+export const getProjectById = async (project_id: string) => {
+  //* get ref
+  const projDocRef = doc(db, "projects", project_id)
+  
+  //* fetch doc
+  const projDoc = await getDoc(projDocRef)
+  
+  const projects = projDoc.data()
+  
+  
+  return projects
+}
+
 export const deleteProject = async (project_id: string) => {
   await deleteDoc(doc(db, "projects", project_id));
 };

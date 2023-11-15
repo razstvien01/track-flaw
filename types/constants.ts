@@ -26,5 +26,6 @@ export enum ORG_QUERY {
 
 export enum PROJECT_QUERY {
   GET_PROJS_BY_ID = "GET_PROJS_BY_ID",
-  GET_PROJ = "GET_PROJ"
+  GET_PROJ = "GET_PROJ",
+  GET_PROJ_BY_ID = "GET_PROJ_BY_ID"
 }
