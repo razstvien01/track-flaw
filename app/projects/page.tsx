@@ -48,10 +48,16 @@ const Projects = () => {
       </>
     );
   }
-
+  
   return (
     <>
-      <AddProjectDialog showDialog={showDialog} setShowDialog={setShowDialog} setSuccessAdd={setSuccessAdd} org_id={org_id} org_name={org_name}/>
+      <AddProjectDialog
+        showDialog={showDialog}
+        setShowDialog={setShowDialog}
+        setSuccessAdd={setSuccessAdd}
+        org_id={org_id}
+        org_name={org_name}
+      />
       <div className="h-full px-4 py-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
@@ -71,23 +77,25 @@ const Projects = () => {
           </div>
         </div>
         <Separator className="my-4" />
+        
         <div className="relative">
           <ScrollArea>
             <div className="flex space-x-4 pb-4">
               {projects
                 ? projects.map((project: any, index: number) => {
-                  // console.log(project)
-                  
-                  return (
-                    <ProjectCard
-                      key={index}
-                      project={project}
-                      className="w-[350px]"
-                      aspectRatio="portrait"
-                      width={400}
-                      height={200}
-                    />
-                  )})
+                    // console.log(project)
+
+                    return (
+                      <ProjectCard
+                        key={index}
+                        project={project}
+                        className="w-[350px]"
+                        aspectRatio="portrait"
+                        width={400}
+                        height={200}
+                      />
+                    );
+                  })
                 : null}
             </div>
             <ScrollBar orientation="horizontal" />

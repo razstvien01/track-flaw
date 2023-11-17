@@ -11,6 +11,7 @@ import {
   PageHeaderHeading,
 } from "@/components/page-header";
 import Image from "next/image";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Projects = ({ params }: any) => {
   const [error, setError] = useState<any>(null);
@@ -39,35 +40,81 @@ const Projects = ({ params }: any) => {
     return <NotFound />;
   }
 
-  console.log(project);
+  const formatDate = (dateInput: Date | string) => {
+    let date = dateInput;
+
+    // If dateInput is a string, convert it to a Date object
+    if (typeof dateInput === "string") {
+      date = new Date(dateInput);
+    }
+
+    // Check if date is a valid Date object
+    if (!(date instanceof Date) || isNaN(date.getTime())) {
+      return "Invalid date";
+    }
+
+    const options: Intl.DateTimeFormatOptions = {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
 
   const {
     photo_url = "",
     project_name = "",
-    date_start = "",
-    date_end = "",
+    date_start = new Date(),
+    date_end = new Date(),
     project_description = "",
   } = project || {};
-  
+
   // TODO add a page for project details, and view teams and bugs as well
   return (
-    <div>
-      <PageHeader>
-        <PageHeaderHeading
-          style={{
-            backgroundImage: `url(${photo_url})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            transition: "all 0.3s ease-in-out",
-            width: "100%",
-            paddingTop: "12%",
-          }}
-        >
-          {project_name}
-        </PageHeaderHeading>
-        <PageHeaderDescription className="w-2000">{project_description}</PageHeaderDescription>
-      </PageHeader>
-    </div>
+    <Tabs defaultValue="project" className="h-full space-y-6">
+      <div className="space-between flex items-center">
+        <TabsList>
+          <TabsTrigger value="project">Project Details</TabsTrigger>
+          {/* <TabsTrigger value="team">Team</TabsTrigger> */}
+          <TabsTrigger value="bugs">Bugs</TabsTrigger>
+        </TabsList>
+      </div>
+      <TabsContent value="project" className="border-none p-0 outline-none">
+        <div className="flex">
+          <div className="flex-1">
+            <PageHeader>
+              <PageHeaderHeading
+                style={{
+                  backgroundImage: `url(${photo_url})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  transition: "all 0.3s ease-in-out",
+                  width: "100%",
+                  paddingTop: "12%",
+                }}
+              >
+                {project_name}
+              </PageHeaderHeading>
+              <PageHeaderDescription className="w-2000">
+                {project_description}
+              </PageHeaderDescription>
+              <h1>
+                Date Started - End: {formatDate(date_start)} -{" "}
+                {formatDate(date_end)}
+              </h1>
+              <h2>Project ID: {project_id}</h2>
+            </PageHeader>
+          </div>
+          <div className="flex-2">TEAMS</div>
+        </div>
+      </TabsContent>
+      {/* <TabsContent value="team" className="border-none p-0 outline-none">
+        <div>TEAM</div>
+      </TabsContent> */}
+      <TabsContent value="bugs" className="border-none p-0 outline-none">
+        <div>Bugs</div>
+      </TabsContent>
+    </Tabs>
   );
 };
 
