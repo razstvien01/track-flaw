@@ -118,7 +118,7 @@ const Projects = ({ params }: any) => {
           </div>
           <div className="flex-1 flex justify-center">
             <div className="pt-10">
-              <TeamMembers project_id={project_id} />
+              <TeamMembers project_id={project_id} project_name={project.project_name}/>
             </div>
           </div>
         </div>

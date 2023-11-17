@@ -41,8 +41,9 @@ import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
 
 interface TeamMembersProps {
   project_id: string;
+  project_name: string
 }
-export function TeamMembers({ project_id }: TeamMembersProps) {
+export function TeamMembers({ project_id, project_name }: TeamMembersProps) {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const { org_id = "" } = currOrgData;
   const [orgMembers, setOrgMembers] = useState<OrgMembersType[]>([]);
@@ -53,12 +54,9 @@ export function TeamMembers({ project_id }: TeamMembersProps) {
   const [isSave, setIsSave] = useState<boolean>(false);
   const [userData, setUserData] = useUserDataAtom();
   const { org_name = "" } = currOrgData || {};
-  const [toastParams, setToastParams] = useState<any>();
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [showToast, setShowToast] = useState(false);
   const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
   const [toRemove, setToRemove] = useState<any>();
-  // const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const fetchMembers = useCallback(async () => {
     if (org_id !== "") {
@@ -90,10 +88,26 @@ export function TeamMembers({ project_id }: TeamMembersProps) {
     fetchTeamMembers();
   }, [fetchTeamMembers]);
 
-  const addTeamMember = async (user_id: string, role: string) => {
+  const addTeamMember = async (user_id: string, role: string, full_name: string) => {
     const response = await updateTeamMember(project_id, user_id, role);
-
+    
+    console.log(response)
     if (response.success) {
+      // const { full_name, user_id, photo_url } = userData;
+      const params = {
+        user_id: userData.user_id,
+        org_id,
+        photo_url: userData.photo_url,
+        project_id,
+        title: "Team Member Added",
+        description: `${userData.full_name} added ${full_name} in the project ${project_name} in the ${org_name} organization`,
+        type: "project",
+      };
+      
+      await createNotif(params);  
+      
+      setIsToggleNotif((prev) => !prev);
+
       setRefresh(!refresh);
       ShowToast({
         title: "Team Member Added",
@@ -115,50 +129,52 @@ export function TeamMembers({ project_id }: TeamMembersProps) {
     const { user_id = "", role = "", full_name = "" } = toRemove || {};
 
     const memberName = full_name;
-    
+
     const result = await removeTeamMember(project_id, user_id, role);
-    
+
     if (result.success) {
       const { full_name, user_id, photo_url } = userData;
-      
+
       const params = {
         user_id,
         org_id,
         photo_url,
+        project_id,
         title: "Team Member Removed",
-        description: `${full_name} removed ${memberName} in the project in the ${org_name} organization`,
+        description: `${full_name} removed ${memberName} in the project ${project_name}`,
         type: "project",
       };
+      
       
       await createNotif(params);
 
       setHasSubmitted(true);
-      
+
       setIsToggleNotif((prev) => !prev);
-      
+
       setRefresh(!refresh);
-      
+
       ShowToast({
         title: "Remove a Team Member",
         description:
           "You have successfully remove a team member in the team project.",
         variant: "default",
       });
-      
-      setOpenDeleteDialog(false)
+
+      setOpenDeleteDialog(false);
     } else {
       setHasSubmitted(true);
-      
+
       ShowToast({
         title: "Remove a Team Member",
         description: "Failed in removing a team member in the team project.",
         variant: "destructive",
       });
     }
-    
+
     setIsSave(false);
   };
-  
+
   return (
     <>
       <AlertDialogPop
@@ -200,7 +216,7 @@ export function TeamMembers({ project_id }: TeamMembersProps) {
                               className="teamaspace-y-1 flex flex-col items-start px-4 py-2"
                               key={index}
                               onSelect={() => {
-                                addTeamMember(user_id, role);
+                                addTeamMember(user_id, role, full_name);
                                 setOpen(!open);
                               }}
                             >
@@ -264,7 +280,7 @@ export function TeamMembers({ project_id }: TeamMembersProps) {
                 <Button
                   variant={"default"}
                   onClick={() => {
-                    setToRemove(member)
+                    setToRemove(member);
                     setOpenDeleteDialog(true);
                   }}
                 >

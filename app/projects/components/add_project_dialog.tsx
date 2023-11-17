@@ -189,14 +189,7 @@ const AddProjectDialog = ({
     const { id, value } = e.target;
     setProjData((prev: ProjectDataProps) => ({ ...prev, [id]: value }));
   };
-
-  const handleSelectOnchangeData = (value: string) => {
-    // setOrgData((prev: OrgDataProps) => ({
-    //   ...prev,
-    //   role: value,
-    // }));
-  };
-
+  
   const handleCalendarStartData = (date?: Date, field?: any) => {
     if (!date || !field) return;
 
