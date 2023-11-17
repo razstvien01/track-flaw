@@ -62,3 +62,13 @@ export interface NotifData extends NotifIds {
   photo_url: string;
   time: any
 }
+
+export interface BugDataProps{
+  bug_name: string
+  bug_description: string
+  due_date: Date
+  priority: string
+  org_id: string
+  project_id: string
+  status: string
+}

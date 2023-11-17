@@ -12,6 +12,28 @@ export enum ROLES {
   DEVELOPER = 'Developer'
 }
 
+export enum PRIORITY {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH"
+}
+
+export enum SEVERITY_LVLS {
+  CRITICAL = "CRITICAL",
+  HIGH = "HIGH",
+  MEDIUM = "MEDIUM",
+  LOW = "LOW",
+  TRIVIAL = "TRIVIAL"
+}
+
+export enum BUG_STATUS {
+  BACKLOG = "BACKLOG",
+  TODO = "TODO",
+  IN_PROGRESS = "IN_PROGRESS",
+  DONE = "DONE",
+  CANCELLED = "CANCELLED"
+}
+
 export enum ORG_QUERY {
   GET_ORGS = "GET_ORGS",
   GET_ORG_DETAILS = 'GET_ORG_DETAILS',

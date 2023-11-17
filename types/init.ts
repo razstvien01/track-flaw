@@ -1,4 +1,4 @@
-import { OrgDataProps, ProjectDataProps, UserDataProps } from "./types";
+import { BugDataProps, OrgDataProps, ProjectDataProps, UserDataProps } from "./types";
 
 export const UserDataInit: UserDataProps = {
   full_name: "",
@@ -29,4 +29,13 @@ export const ProjectDataInit: ProjectDataProps = {
   date_start: new Date(),
   date_end: new Date(),
   photo_url: ""
+}
+export const BugDataInit: BugDataProps = {
+  bug_description: "",
+  bug_name: "",
+  due_date: new Date(),
+  org_id: "",
+  priority: "",
+  project_id: "",
+  status: ""
 }

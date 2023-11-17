@@ -28,11 +28,12 @@ import { useUserDataAtom } from "@/hooks/user_data_atom";
 import { createNotif } from "@/services/notifications.service";
 import { Dialog } from "@radix-ui/react-dialog";
 import { CalendarForm } from "./calendar_form";
-import { ProjectDataProps } from "@/types/types";
-import { ProjectDataInit } from "@/types/init";
+import { BugDataProps, ProjectDataProps } from "@/types/types";
+import { BugDataInit, ProjectDataInit } from "@/types/init";
 import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 import { createProject } from "@/services/projects.service";
 import axios from "axios";
+import { BUG_STATUS, PRIORITY, SEVERITY_LVLS } from "@/types/constants";
 
 interface AddProjectDialogProps {
   showDialog: boolean;
@@ -42,14 +43,14 @@ interface AddProjectDialogProps {
   org_name: string;
 }
 
-const AddProjectDialog = ({
+const AddBugDialog = ({
   showDialog,
   setShowDialog,
   setSuccessAdd,
   org_id,
   org_name,
 }: AddProjectDialogProps) => {
-  const [projData, setProjData] = useState<ProjectDataProps>(ProjectDataInit);
+  const [bugData, setBugData] = useState<BugDataProps>(BugDataInit);
   const [userData, setUserData] = useUserDataAtom();
   const [isSave, setIsSave] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState({
@@ -62,8 +63,23 @@ const AddProjectDialog = ({
   const [showToast, setShowToast] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
+  const [selectedPriority, setSelectedPriority] = useState("");
+  const [selectedSeverity, setSelectedSeverity] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+
+  const handleSelectPrioOnchangeData = (value: string) => {
+    setSelectedPriority(value);
+  };
+  const handleSelectSeverityOnchangeData = (value: string) => {
+    setSelectedSeverity(value);
+  };
+  
+  const handleSelectStatusOnchangeData = (value: string) => {
+    setSelectedStatus(value);
+  };
+
   useEffect(() => {
-    setProjData((prev: ProjectDataProps) => ({
+    setBugData((prev: BugDataProps) => ({
       ...prev,
       org_id,
     }));
@@ -126,50 +142,50 @@ const AddProjectDialog = ({
     setIsSave(true); // Indicate that saving is in progress.
 
     // Set the project data with the new image URL before creating the project.
-    const projectDataWithImage = {
-      ...projData,
-      photo_url: imageURL,
-    };
+    // const projectDataWithImage = {
+    //   ...bugData,
+    //   photo_url: imageURL,
+    // };
 
     // Attempt to create the project using the project data with the actual image URL.
-    const result = await createProject(projectDataWithImage, userData.user_id);
+    // const result = await createProject(projectDataWithImage, userData.user_id);
 
-    if (result.success) {
-      // Construct parameters for the notification.
-      const params = {
-        user_id: userData.user_id,
-        org_id: orgData.org_id,
-        photo_url: projectDataWithImage.photo_url,
-        title: "Project Created",
-        description: `${userData.full_name} created ${projectDataWithImage.project_name} project in a ${org_name} organization`,
-        type: "project",
-      };
+    // if (result.success) {
+    //   // Construct parameters for the notification.
+    //   const params = {
+    //     user_id: userData.user_id,
+    //     org_id: orgData.org_id,
+    //     photo_url: projectDataWithImage.photo_url,
+    //     title: "Project Created",
+    //     description: `${userData.full_name} created ${projectDataWithImage.project_name} project in a ${org_name} organization`,
+    //     type: "project",
+    //   };
 
-      // Create a notification for the new project.
-      await createNotif(params);
+    //   // Create a notification for the new project.
+    //   await createNotif(params);
 
-      // Handle success by setting the success state, toast parameters, and message.
-      setHasSubmitted(true);
-      setToastParams({
-        title: "Creating Project",
-        description: "You have successfully created a project.",
-        variant: "default",
-      });
-      setMessage(result.data.message); // Adjust this if 'result' structure is different.
-      setIsVisible({
-        error: false,
-        success: true,
-      });
-    } else {
-      // Handle errors by setting the error message and visibility.
-      setMessage(result.error.message);
-      setIsVisible((prev) => ({
-        ...prev,
-        error: true,
-      }));
-    }
+    //   // Handle success by setting the success state, toast parameters, and message.
+    //   setHasSubmitted(true);
+    //   setToastParams({
+    //     title: "Creating Project",
+    //     description: "You have successfully created a project.",
+    //     variant: "default",
+    //   });
+    //   setMessage(result.data.message); // Adjust this if 'result' structure is different.
+    //   setIsVisible({
+    //     error: false,
+    //     success: true,
+    //   });
+    // } else {
+    //   // Handle errors by setting the error message and visibility.
+    //   setMessage(result.error.message);
+    //   setIsVisible((prev) => ({
+    //     ...prev,
+    //     error: true,
+    //   }));
+    // }
 
-    setIsSave(false); // Save operation is finished.
+    // setIsSave(false); // Save operation is finished.
   };
 
   // Function to handle form submission with async image URL fetching.
@@ -187,66 +203,107 @@ const AddProjectDialog = ({
 
   const handleOnchangeData = (e: any) => {
     const { id, value } = e.target;
-    setProjData((prev: ProjectDataProps) => ({ ...prev, [id]: value }));
+    setBugData((prev: BugDataProps) => ({ ...prev, [id]: value }));
   };
 
-  const handleSelectOnchangeData = (value: string) => {
-    // setOrgData((prev: OrgDataProps) => ({
-    //   ...prev,
-    //   role: value,
-    // }));
-  };
-
-  const handleCalendarStartData = (date?: Date, field?: any) => {
-    if (!date || !field) return;
-
-    field.onChange(date);
-    setProjData((prev: ProjectDataProps) => ({ ...prev, date_start: date }));
-  };
 
   const handleCalendarEndData = (date?: Date, field?: any) => {
     if (!date || !field) return;
 
     field.onChange(date);
-    setProjData((prev: ProjectDataProps) => ({ ...prev, date_end: date }));
+    setBugData((prev: BugDataProps) => ({ ...prev, due_date: date }));
   };
 
   return (
     <Dialog open={showDialog} onOpenChange={setShowDialog}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create project</DialogTitle>
+          {" "}
+          <DialogTitle>Report Bug</DialogTitle>{" "}
           <DialogDescription>
+            {" "}
             {
-              "Add a new project to track bugs and issues for your organization's ongoing initiatives."
-            }
-          </DialogDescription>
+              "Report a bug you have found in your projects's ongoing initiatives."
+            }{" "}
+          </DialogDescription>{" "}
         </DialogHeader>
         <div>
           <div className="space-y-4 py-2 pb-4">
             <div className="space-y-2">
-              <Label>Project name</Label>
+              <Label>Bug name</Label>
               <Input
-                id="project_name"
-                placeholder="Enter project name"
+                id="bug_name"
+                placeholder="Enter bug name"
                 onChange={(e) => handleOnchangeData(e)}
               />
             </div>
             <CalendarForm
-              label="Starting Date"
-              handleCalendarData={handleCalendarStartData}
-            />
-            <CalendarForm
-              label="End Date"
+              label="Due Date"
               handleCalendarData={handleCalendarEndData}
             />
             <div className="space-y-2">
-              <Label>Project details</Label>
+              <Label>Bug details</Label>
               <Textarea
-                id="project_description"
+                id="bug_description"
                 onChange={(e) => handleOnchangeData(e)}
-                placeholder="Type your project details here."
+                placeholder="Type your bug details here."
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="role">Select Priority</Label>
+              <Select
+                onValueChange={(e) => handleSelectPrioOnchangeData(e)}
+                defaultValue={selectedPriority}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.values(PRIORITY).map((priority) => (
+                    <SelectItem key={priority} value={priority}>
+                      <span className="font-medium">{priority}</span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="role">Select Severity Level</Label>
+              <Select
+                onValueChange={(e) => handleSelectSeverityOnchangeData(e)}
+                defaultValue={selectedSeverity}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Priority" />
+                </SelectTrigger>
+                
+                <SelectContent>
+                  {Object.values(SEVERITY_LVLS).map((severity) => (
+                    <SelectItem key={severity} value={severity}>
+                      <span className="font-medium">{severity}</span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="role">Select Severity Level</Label>
+              <Select
+                onValueChange={(e) => handleSelectStatusOnchangeData(e)}
+                defaultValue={selectedStatus}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Priority" />
+                </SelectTrigger>
+                
+                <SelectContent>
+                  {Object.values(BUG_STATUS).map((status) => (
+                    <SelectItem key={status} value={status}>
+                      <span className="font-medium">{status}</span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
@@ -273,4 +330,4 @@ const AddProjectDialog = ({
   );
 };
 
-export default AddProjectDialog;
+export default AddBugDialog;

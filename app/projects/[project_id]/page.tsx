@@ -13,11 +13,16 @@ import {
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TeamMembers } from "./components/team-members";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "lucide-react";
+import { Separator } from "@radix-ui/react-select";
+import AddBugDialog from "../components/add_bug_dialog";
 
 const Projects = ({ params }: any) => {
   const [error, setError] = useState<any>(null);
   const [project, setProject] = useState<ProjectDataProps>(ProjectDataInit);
   const project_id = params.project_id;
+  const [showDialog, setShowDialog] = useState<boolean>(false);
 
   const fetchProject = useCallback(async () => {
     const result = await getProjectById(project_id);
@@ -68,8 +73,16 @@ const Projects = ({ params }: any) => {
     project_description = "",
   } = project || {};
 
-  // TODO add a page for project details, and view teams and bugs as well
   return (
+    <>
+    <AddBugDialog
+      org_id=""
+      org_name=""
+      setShowDialog={setShowDialog}
+      setSuccessAdd={() => {}}
+      showDialog={showDialog}
+      
+    />
     <Tabs defaultValue="project" className="h-full space-y-6">
       <div className="space-between flex items-center">
         <TabsList>
@@ -111,9 +124,30 @@ const Projects = ({ params }: any) => {
         </div>
       </TabsContent>
       <TabsContent value="bugs" className="border-none p-0 outline-none ">
-        <div>Bugs</div>
+        <div className="h-full px-4 py-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-semibold tracking-tight">
+                Project Bugs
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                For viewing, adding,
+                deleting, and updating bug cards and to facilitate communication and collaboration among
+                team members involved in software development and maintenance.
+              </p>
+            </div>
+            <div className="ml-auto mr-4">
+              <Button onClick={() => setShowDialog(!showDialog)}>
+                <PlusIcon className="mr-2 h-4 w-4" />
+                Add Bug
+              </Button>
+            </div>
+          </div>
+          <Separator className="my-4" />
+        </div>
       </TabsContent>
     </Tabs>
+    </>
   );
 };
 
