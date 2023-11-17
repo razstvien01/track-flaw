@@ -159,6 +159,13 @@ export const updateTeamMember = async (
       user_ref: userDocRef,
     }),
   });
+  
+  await updateDoc(userDocRef, {
+    joined_teams: arrayUnion({
+      role: role.toUpperCase(),
+      team_ref: projDocRef,
+    }),
+  });
 };
 
 
@@ -176,7 +183,7 @@ export const getTeamMembers = async (project_id: string) => {
 
   const data = projDoc.data();
   
-  //* Handle joined_members
+  //* Handle team_members
   let membersData: {
     role: string;
     full_name: string;
@@ -201,6 +208,7 @@ export const getTeamMembers = async (project_id: string) => {
         photo_url: getValueOrDefault(memberData?.photo_url),
         user_id: getValueOrDefault(memberData?.user_id),
         created_at: getValueOrDefault(memberData?.created_at),
+        email_address: getValueOrDefault(memberData?.email_address)
       };
     });
 
@@ -208,4 +216,39 @@ export const getTeamMembers = async (project_id: string) => {
   }
 
   return membersData;
+};
+
+export const removeTeamMember = async (
+  project_id: string,
+  user_id: string,
+  role: string
+) => {
+  const projDocRef = doc(db, "projects", project_id);
+  const projDoc = await getDoc(projDocRef);
+  const projData = projDoc.data();
+
+  const userDocRef = doc(db, "users", user_id);
+  const userDoc = await getDoc(userDocRef);
+  const userData = userDoc.data();
+
+  //* Remove the member from the organization's team_members array
+  if (projData && projData.team_members) {
+    const updatedMembers = projData.team_members.filter(
+      (member: any) =>
+        member.user_ref.id !== userDocRef.id &&
+        member.role !== role.toUpperCase()
+    );
+    
+    await updateDoc(projDocRef, { team_members: updatedMembers });
+  }
+
+  //* Remove the organization from the user's team_orgs array
+  if (userData && userData.joined_teams) {
+    const updatedProj = userData.joined_teams.filter(
+      (team: any) =>
+        team.team_ref.id !== projDocRef.id && team.role !== role.toUpperCase()
+    );
+    
+    await updateDoc(userDocRef, { joined_teams: updatedProj });
+  }
 };

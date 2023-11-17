@@ -42,6 +42,7 @@ export interface OrgMembersType {
   photo_url: string;
   phone_number: string;
   role: string;
+  email_address: string
 }
 
 export interface NotifIds {

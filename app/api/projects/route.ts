@@ -8,6 +8,7 @@ import {
   getProjectById,
   updateTeamMember,
   getTeamMembers,
+  removeTeamMember,
 } from "@/controllers/projects.controller";
 import { ORG_QUERY, PROJECT_QUERY } from "@/types/constants";
 import { query } from "firebase/firestore";
@@ -34,13 +35,13 @@ export const GET = async (request: NextRequest) => {
         break;
       case PROJECT_QUERY.GET_PROJ_BY_ID:
         projects = await getProjectById(project_id as string);
-        
+
         message = "Fetch Project Successfully";
         break;
-      
+
       case PROJECT_QUERY.GET_TEAM_MEMBERS:
-        const team_members = await getTeamMembers(project_id as string)
-        
+        const team_members = await getTeamMembers(project_id as string);
+
         return new Response(
           JSON.stringify({
             success: true,
@@ -48,7 +49,6 @@ export const GET = async (request: NextRequest) => {
             team_members,
           })
         );
-      
     }
 
     return new Response(
@@ -114,15 +114,34 @@ export const POST = async (request: NextRequest) => {
 
 export const DELETE = async (request: NextRequest) => {
   try {
-    const projectData = await request.json();
-    const { project_id } = projectData;
+    const url = new URL(request.url);
+    const query = url.searchParams.get("query");
+    const project_id = url.searchParams.get("project_id") as string;
+    const user_id = url.searchParams.get("user_id") as string;
+    const role = url.searchParams.get("role") as string;
 
-    await deleteProject(project_id);
+    let message = "";
+    let success = false;
+
+    // await deleteProject(project_id);
+    switch (query) {
+      case PROJECT_QUERY.REMOVE_TEAM_MEMBER:
+        message = "Removed Team Member Successfully";
+        success = true;
+        await removeTeamMember(project_id, user_id, role);
+        break;
+
+      // case ORG_QUERY.REMOVE_ORG_MEMBER:
+      //   message = "Removed Member Successfully";
+      //   success = true;
+      //   org_id && user_id && role ? await removeMember(org_id, user_id, role): null
+      //   break;
+    }
 
     return new Response(
       JSON.stringify({
-        success: true,
-        message: "Project Deleted Successfully",
+        success,
+        message,
       })
     );
   } catch (error) {
@@ -141,20 +160,17 @@ export const DELETE = async (request: NextRequest) => {
 export const PUT = async (request: NextRequest) => {
   try {
     const data = await request.json();
-    const { query = "", project_id = "", user_id = "", role = ""} = data || {};
-    let message
-    
-    console.log(data)
-    console.log(query)
-    switch(query) {
+    const { query = "", project_id = "", user_id = "", role = "" } = data || {};
+    let message;
+
+    switch (query) {
       case PROJECT_QUERY.UPDATE_TEAM_MEMBERS:
-        
-        console.log('MIAGII??')
-        await updateTeamMember(project_id, user_id, role)
-        message = "Successfully added a team member"
-        break
+        console.log("MIAGII??");
+        await updateTeamMember(project_id, user_id, role);
+        message = "Successfully added a team member";
+        break;
     }
-    
+
     return new Response(
       JSON.stringify({
         success: true,

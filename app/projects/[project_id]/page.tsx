@@ -18,7 +18,7 @@ const Projects = ({ params }: any) => {
   const [error, setError] = useState<any>(null);
   const [project, setProject] = useState<ProjectDataProps>(ProjectDataInit);
   const project_id = params.project_id;
-  
+
   const fetchProject = useCallback(async () => {
     const result = await getProjectById(project_id);
 
@@ -42,12 +42,12 @@ const Projects = ({ params }: any) => {
   const formatDate = (dateInput: Date | string) => {
     let date = dateInput;
 
-    // If dateInput is a string, convert it to a Date object
+    //* If dateInput is a string, convert it to a Date object
     if (typeof dateInput === "string") {
       date = new Date(dateInput);
     }
 
-    // Check if date is a valid Date object
+    //* Check if date is a valid Date object
     if (!(date instanceof Date) || isNaN(date.getTime())) {
       return "Invalid date";
     }
@@ -79,7 +79,7 @@ const Projects = ({ params }: any) => {
       </div>
       <TabsContent value="project" className="border-none p-0 outline-none">
         <div className="flex">
-          <div className="flex-2 flex justify-start">
+          <div className="flex-3 flex justify-start">
             <PageHeader>
               <PageHeaderHeading
                 style={{
@@ -93,23 +93,23 @@ const Projects = ({ params }: any) => {
               >
                 {project_name}
               </PageHeaderHeading>
-              <PageHeaderDescription className="w-2000">
-                {project_description}
-              </PageHeaderDescription>
               <h1>
                 Date Started - End: {formatDate(date_start)} -{" "}
                 {formatDate(date_end)}
               </h1>
               <h2>Project ID: {project_id}</h2>
+              <PageHeaderDescription className="w-2000">
+                {project_description}
+              </PageHeaderDescription>
             </PageHeader>
           </div>
           <div className="flex-1 flex justify-center">
             <div className="pt-10">
-              <TeamMembers project_id={project_id}/>
+              <TeamMembers project_id={project_id} />
             </div>
           </div>
         </div>
-      </TabsContent>  
+      </TabsContent>
       <TabsContent value="bugs" className="border-none p-0 outline-none ">
         <div>Bugs</div>
       </TabsContent>

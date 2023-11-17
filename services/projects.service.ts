@@ -84,3 +84,26 @@ export const updateTeamMember = async (project_id: string, user_id: string, role
     };
   }
 };
+
+
+export const getTeamMembers = async (project_id: string) => {
+  try {
+    const params = {
+      project_id,
+      query: PROJECT_QUERY.GET_TEAM_MEMBERS,
+    };
+    const response = await axios.get("/api/projects", {
+      params,
+    });
+
+    return {
+      success: true,
+      data: response.data.team_members,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.response.data,
+    };
+  }
+};

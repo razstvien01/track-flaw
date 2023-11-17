@@ -83,8 +83,6 @@ const Projects = () => {
             <div className="flex space-x-4 pb-4">
               {projects
                 ? projects.map((project: any, index: number) => {
-                    // console.log(project)
-
                     return (
                       <ProjectCard
                         key={index}
