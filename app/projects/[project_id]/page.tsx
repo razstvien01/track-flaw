@@ -106,7 +106,7 @@ const Projects = ({ params }: any) => {
             </PageHeader>
           </div>
           <div className="flex-1 flex justify-center">
-            <div>
+            <div className="pt-10">
               <TeamMembers />
             </div>
           </div>

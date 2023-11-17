@@ -1,18 +1,14 @@
-import { ChevronDownIcon } from "@radix-ui/react-icons"
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Command,
   CommandEmpty,
@@ -20,18 +16,48 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
+
+import {
+  PlusIcon,
+} from "@radix-ui/react-icons";
 
 export function TeamMembers() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Team Members</CardTitle>
+        <CardTitle>
+          Team Members
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button className="ml-5">
+                <PlusIcon />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="p-0" align="end">
+              <Command>
+                <CommandInput placeholder="Search a member..." />
+                <CommandList>
+                  <CommandEmpty>No roles found.</CommandEmpty>
+                  <CommandGroup className="p-1.5">
+                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
+                      <p>Viewer</p>
+                      <p className="text-sm text-muted-foreground">
+                        Can view and comment.
+                      </p>
+                    </CommandItem>
+                    
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </CardTitle>
         <CardDescription>
           Invite your team members to collaborate.
         </CardDescription>
@@ -41,7 +67,7 @@ export function TeamMembers() {
           <div className="flex items-center space-x-4">
             <Avatar>
               <AvatarImage src="/avatars/01.png" />
-              <AvatarFallback>OM</AvatarFallback>
+              <AvatarFallback>SD</AvatarFallback>
             </Avatar>
             <div>
               <p className="text-sm font-medium leading-none">Sofia Davis</p>
@@ -147,5 +173,5 @@ export function TeamMembers() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

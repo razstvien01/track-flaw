@@ -33,7 +33,6 @@ export const GET = async (request: NextRequest) => {
       case PROJECT_QUERY.GET_PROJ_BY_ID:
         projects = await getProjectById(project_id as string);
         
-        console.log(projects)
         message = "Fetch Project Successfully";
         break;
     }
