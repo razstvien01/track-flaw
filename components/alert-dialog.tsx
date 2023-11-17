@@ -18,7 +18,7 @@ interface AlertDialogPopProps {
   description: string;
   openDeleteDialog: boolean;
   setOpenDeleteDialog: Dispatch<SetStateAction<boolean>>;
-  handleContinue: () => void;
+  handleContinue: (data?: any) => void;
   isSave: boolean;
 }
 

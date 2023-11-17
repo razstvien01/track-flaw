@@ -65,7 +65,11 @@ export const getProjectById = async (project_id: string) => {
   }
 };
 
-export const updateTeamMember = async (project_id: string, user_id: string, role: string) => {
+export const updateTeamMember = async (
+  project_id: string,
+  user_id: string,
+  role: string
+) => {
   try {
     const response = await axios.put("/api/projects", {
       project_id,
@@ -85,7 +89,6 @@ export const updateTeamMember = async (project_id: string, user_id: string, role
   }
 };
 
-
 export const getTeamMembers = async (project_id: string) => {
   try {
     const params = {
@@ -104,6 +107,35 @@ export const getTeamMembers = async (project_id: string) => {
     return {
       success: false,
       error: error.response.data,
+    };
+  }
+};
+
+export const removeTeamMember = async (
+  project_id: string,
+  user_id: string,
+  role: string
+) => {
+  try {
+    const params = {
+      project_id,
+      user_id,
+      role,
+      query: PROJECT_QUERY.REMOVE_TEAM_MEMBER,
+    };
+    
+    console.log(params)
+
+    const response = await axios.delete("/api/projects", {
+      params,
+    });
+
+    return {
+      success: true,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
     };
   }
 };
