@@ -6,6 +6,8 @@ import {
   getProjectsByOrgId,
   updateProject,
   getProjectById,
+  updateTeamMember,
+  getTeamMembers,
 } from "@/controllers/projects.controller";
 import { ORG_QUERY, PROJECT_QUERY } from "@/types/constants";
 import { query } from "firebase/firestore";
@@ -35,6 +37,17 @@ export const GET = async (request: NextRequest) => {
         
         message = "Fetch Project Successfully";
         break;
+      
+      case PROJECT_QUERY.GET_TEAM_MEMBERS:
+        const team_members = await getTeamMembers(project_id as string)
+        
+        return new Response(
+          JSON.stringify({
+            success: true,
+            message,
+            team_members,
+          })
+        );
       
     }
 
@@ -128,30 +141,31 @@ export const DELETE = async (request: NextRequest) => {
 export const PUT = async (request: NextRequest) => {
   try {
     const data = await request.json();
-    const { query = "", ...restData } = data || {};
+    const { query = "", project_id = "", user_id = "", role = ""} = data || {};
     let message
-    let success
     
     console.log(data)
-    // await updateProject(projectData);
-    
+    console.log(query)
     switch(query) {
       case PROJECT_QUERY.UPDATE_TEAM_MEMBERS:
+        
+        console.log('MIAGII??')
+        await updateTeamMember(project_id, user_id, role)
+        message = "Successfully added a team member"
         break
     }
     
-
     return new Response(
       JSON.stringify({
-        success,
+        success: true,
         message,
       })
     );
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json(
       {
         success: false,
-        message: "Updating the Project Failed",
+        message: error.response?.message,
       },
       {
         status: 500,

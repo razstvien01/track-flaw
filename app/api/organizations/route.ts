@@ -65,7 +65,6 @@ export const GET = async (request: NextRequest) => {
 };
 
 export const POST = async (request: NextRequest) => {
-  // try {
   const data = await request.json();
   const { query = "", ...restData } = data || {};
 

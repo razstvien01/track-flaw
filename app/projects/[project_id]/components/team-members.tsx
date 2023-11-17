@@ -29,12 +29,17 @@ import { useCallback, useEffect, useState } from "react";
 import { getMembersInOrgs } from "@/services/org.service";
 import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 import { OrgMembersType } from "@/types/types";
+import { updateTeamMember } from "@/services/projects.service";
+import { ShowToast } from "@/components/show-toast";
 
-export function TeamMembers() {
+interface TeamMembersProps {
+  project_id: string;
+}
+export function TeamMembers({ project_id }: TeamMembersProps) {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const { org_id = "" } = currOrgData;
   const [orgMembers, setOrgMembers] = useState<OrgMembersType[]>([]);
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false);
 
   const fetchMembers = useCallback(async () => {
     if (org_id !== "") {
@@ -48,10 +53,24 @@ export function TeamMembers() {
   useEffect(() => {
     fetchMembers();
   }, [fetchMembers]);
-  
-  const addTeamMember = (user_id: string) => {
-    console.log(user_id)
-  }
+
+  const addTeamMember = async (user_id: string, role: string) => {
+    const response = await updateTeamMember(project_id, user_id, role);
+
+    if (response.success) {
+      ShowToast({
+        title: "Team Member Added",
+        description: "A member is added to the team successfully.",
+        variant: "default",
+      });
+    } else {
+      ShowToast({
+        title: "Fail to Add a Member",
+        description: "Adding a team member failed.",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <Card>
@@ -78,8 +97,8 @@ export function TeamMembers() {
                           className="teamaspace-y-1 flex flex-col items-start px-4 py-2"
                           key={index}
                           onSelect={() => {
-                            addTeamMember(user_id)
-                            setOpen(!open)
+                            addTeamMember(user_id, role);
+                            setOpen(!open);
                           }}
                         >
                           <p>{full_name}</p>

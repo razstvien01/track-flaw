@@ -18,9 +18,7 @@ const Projects = ({ params }: any) => {
   const [error, setError] = useState<any>(null);
   const [project, setProject] = useState<ProjectDataProps>(ProjectDataInit);
   const project_id = params.project_id;
-
-  console.log("Project_id:", project_id);
-
+  
   const fetchProject = useCallback(async () => {
     const result = await getProjectById(project_id);
 
@@ -81,7 +79,7 @@ const Projects = ({ params }: any) => {
       </div>
       <TabsContent value="project" className="border-none p-0 outline-none">
         <div className="flex">
-          <div className="flex-1 flex justify-start">
+          <div className="flex-2 flex justify-start">
             <PageHeader>
               <PageHeaderHeading
                 style={{
@@ -107,7 +105,7 @@ const Projects = ({ params }: any) => {
           </div>
           <div className="flex-1 flex justify-center">
             <div className="pt-10">
-              <TeamMembers />
+              <TeamMembers project_id={project_id}/>
             </div>
           </div>
         </div>

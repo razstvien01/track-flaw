@@ -23,7 +23,7 @@ export interface ProjectDataProps{
   project_description: string
   date_start: Date
   date_end: Date
-  team_refs: []
+  team_members: []
   org_id: string
   photo_url: string
   project_id: string

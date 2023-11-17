@@ -64,3 +64,23 @@ export const getProjectById = async (project_id: string) => {
     };
   }
 };
+
+export const updateTeamMember = async (project_id: string, user_id: string, role: string) => {
+  try {
+    const response = await axios.put("/api/projects", {
+      project_id,
+      user_id,
+      role,
+      query: PROJECT_QUERY.UPDATE_TEAM_MEMBERS,
+    });
+
+    return {
+      success: true,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.response?.data,
+    };
+  }
+};

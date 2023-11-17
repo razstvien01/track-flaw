@@ -2,6 +2,7 @@ import { db } from "../app/firebase";
 import {
   DocumentData,
   QueryDocumentSnapshot,
+  arrayUnion,
   collection,
   getDoc,
   getDocs,
@@ -9,6 +10,7 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { addDoc, where, doc, deleteDoc, setDoc } from "firebase/firestore";
 
@@ -126,4 +128,84 @@ export const updateProject = async (projectData: ProjectDetails) => {
 
   const userDocRef = doc(db, "projects", project_id);
   await setDoc(userDocRef, projectData, { merge: true });
+};
+
+export const updateTeamMember = async (
+  project_id: string,
+  user_id: string,
+  role: string
+) => {
+  const projDocRef = doc(db, "projects", project_id);
+
+  //* Get the project document
+  const projDoc = await getDoc(projDocRef);
+  const projData = projDoc.data();
+
+  //* Reference to the user document
+  const userDocRef = doc(db, "users", user_id);
+
+  if (projData?.team_members) {
+    for (let member of projData.team_members) {
+      if (member.user_ref?.id === user_id) {
+        console.log("A");
+        throw new Error("User is already a member of this team.");
+      }
+    }
+  }
+
+  await updateDoc(projDocRef, {
+    team_members: arrayUnion({
+      role: role.toUpperCase(),
+      user_ref: userDocRef,
+    }),
+  });
+};
+
+
+export const getTeamMembers = async (project_id: string) => {
+  //* Create a reference to the specific organization document
+  const projRef = doc(db, "projects", project_id);
+
+  //* Fetch the document
+  const projDoc = await getDoc(projRef);
+
+  //* If document doesn't exist, return null or handle error
+  if (!projDoc.exists()) {
+    return null;
+  }
+
+  const data = projDoc.data();
+  
+  //* Handle joined_members
+  let membersData: {
+    role: string;
+    full_name: string;
+    phone_number: string;
+    user_id: string;
+  }[] = [];
+  
+  if (data?.team_members && Array.isArray(data.team_members)) {
+    const memberPromises = data.team_members.map(async (memberRef: any) => {
+      const { role = "", user_ref = "" } = memberRef || {};
+
+      const getValueOrDefault = (value: any, defaultValue: any = "") =>
+        value ?? defaultValue;
+
+      const memberDoc = await getDoc(user_ref);
+      const memberData = memberDoc.data() as any;
+
+      return {
+        role,
+        full_name: getValueOrDefault(memberData?.full_name),
+        phone_number: getValueOrDefault(memberData?.phone_number),
+        photo_url: getValueOrDefault(memberData?.photo_url),
+        user_id: getValueOrDefault(memberData?.user_id),
+        created_at: getValueOrDefault(memberData?.created_at),
+      };
+    });
+
+    membersData = await Promise.all(memberPromises);
+  }
+
+  return membersData;
 };

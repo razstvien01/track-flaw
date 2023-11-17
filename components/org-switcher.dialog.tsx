@@ -62,7 +62,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
         });
         setShowNewOrgDialog(false);
         setShowToast(true);
-        setIsSave(false)
+        setIsSave(false);
       }, 2000);
 
       return () => clearTimeout(timer);
@@ -80,13 +80,13 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   //* Function to handle form submission
   const handleSubmit = async () => {
     setIsSave(true);
-    
+
     const result = await createOrganization(orgData, uid);
-    
+
     if (result.success) {
-      const { full_name, user_id, photo_url } = userData
-      const { org_id = "", org_name = "" } = result.data
-      
+      const { full_name, user_id, photo_url } = userData;
+      const { org_id = "", org_name = "" } = result.data;
+
       const params = {
         user_id,
         org_id,
@@ -95,9 +95,9 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
         description: `${full_name} created ${org_name} organization`,
         type: "organization",
       };
-      
-      await createNotif(params)
-      
+
+      await createNotif(params);
+
       setHasSubmitted(true);
       setToastParams({
         title: "Creating Organization",
@@ -133,7 +133,7 @@ const OrgSwitcherDialog: React.FC<OrgSwitcherDialogProps> = ({
   };
 
   return (
-    <DialogContent >
+    <DialogContent>
       <DialogHeader>
         <DialogTitle>Create organization</DialogTitle>
         <DialogDescription>

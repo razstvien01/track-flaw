@@ -25,7 +25,7 @@ export const ProjectDataInit: ProjectDataProps = {
   org_id: "",
   project_description: "",
   project_name: "",
-  team_refs: [],
+  team_members: [],
   date_start: new Date(),
   date_end: new Date(),
   photo_url: ""
