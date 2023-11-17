@@ -43,7 +43,7 @@ export const getProjectsInOrgs = async (org_id: string) => {
   }
 };
 
-export const getProjectById= async (project_id: string) => {
+export const getProjectById = async (project_id: string) => {
   try {
     const params = {
       project_id,

@@ -7,7 +7,7 @@ import {
   updateProject,
   getProjectById,
 } from "@/controllers/projects.controller";
-import { PROJECT_QUERY } from "@/types/constants";
+import { ORG_QUERY, PROJECT_QUERY } from "@/types/constants";
 import { query } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -35,6 +35,7 @@ export const GET = async (request: NextRequest) => {
         
         message = "Fetch Project Successfully";
         break;
+      
     }
 
     return new Response(
@@ -126,14 +127,24 @@ export const DELETE = async (request: NextRequest) => {
 
 export const PUT = async (request: NextRequest) => {
   try {
-    const projectData = await request.json();
-
-    await updateProject(projectData);
+    const data = await request.json();
+    const { query = "", ...restData } = data || {};
+    let message
+    let success
+    
+    console.log(data)
+    // await updateProject(projectData);
+    
+    switch(query) {
+      case PROJECT_QUERY.UPDATE_TEAM_MEMBERS:
+        break
+    }
+    
 
     return new Response(
       JSON.stringify({
-        success: true,
-        message: "Project Details Updated Successfully",
+        success,
+        message,
       })
     );
   } catch (error) {

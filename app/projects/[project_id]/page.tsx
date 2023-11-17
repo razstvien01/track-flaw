@@ -81,7 +81,7 @@ const Projects = ({ params }: any) => {
       </div>
       <TabsContent value="project" className="border-none p-0 outline-none">
         <div className="flex">
-          <div className="flex-1 flex justify-center">
+          <div className="flex-1 flex justify-start">
             <PageHeader>
               <PageHeaderHeading
                 style={{

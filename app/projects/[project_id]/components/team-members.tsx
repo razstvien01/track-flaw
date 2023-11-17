@@ -23,17 +23,42 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import {
-  PlusIcon,
-} from "@radix-ui/react-icons";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
+import { useCallback, useEffect, useState } from "react";
+import { getMembersInOrgs } from "@/services/org.service";
+import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
+import { OrgMembersType } from "@/types/types";
 
 export function TeamMembers() {
+  const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
+  const { org_id = "" } = currOrgData;
+  const [orgMembers, setOrgMembers] = useState<OrgMembersType[]>([]);
+  const [open, setOpen] = useState<boolean>(false)
+
+  const fetchMembers = useCallback(async () => {
+    if (org_id !== "") {
+      const result = await getMembersInOrgs(org_id);
+      if (result.success) {
+        setOrgMembers(result.data);
+      }
+    }
+  }, [org_id, setOrgMembers]);
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
+  
+  const addTeamMember = (user_id: string) => {
+    console.log(user_id)
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>
           Team Members
-          <Popover>
+          <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <Button className="ml-5">
                 <PlusIcon />
@@ -45,13 +70,25 @@ export function TeamMembers() {
                 <CommandList>
                   <CommandEmpty>No roles found.</CommandEmpty>
                   <CommandGroup className="p-1.5">
-                    <CommandItem className="teamaspace-y-1 flex flex-col items-start px-4 py-2">
-                      <p>Viewer</p>
-                      <p className="text-sm text-muted-foreground">
-                        Can view and comment.
-                      </p>
-                    </CommandItem>
-                    
+                    {orgMembers.map((member, index) => {
+                      const { full_name, role, user_id } = member;
+
+                      return (
+                        <CommandItem
+                          className="teamaspace-y-1 flex flex-col items-start px-4 py-2"
+                          key={index}
+                          onSelect={() => {
+                            addTeamMember(user_id)
+                            setOpen(!open)
+                          }}
+                        >
+                          <p>{full_name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {role}
+                          </p>
+                        </CommandItem>
+                      );
+                    })}
                   </CommandGroup>
                 </CommandList>
               </Command>
