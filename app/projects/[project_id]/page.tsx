@@ -12,6 +12,7 @@ import {
 } from "@/components/page-header";
 import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TeamMembers } from "./components/team-members";
 
 const Projects = ({ params }: any) => {
   const [error, setError] = useState<any>(null);
@@ -75,13 +76,12 @@ const Projects = ({ params }: any) => {
       <div className="space-between flex items-center">
         <TabsList>
           <TabsTrigger value="project">Project Details</TabsTrigger>
-          {/* <TabsTrigger value="team">Team</TabsTrigger> */}
           <TabsTrigger value="bugs">Bugs</TabsTrigger>
         </TabsList>
       </div>
       <TabsContent value="project" className="border-none p-0 outline-none">
         <div className="flex">
-          <div className="flex-1">
+          <div className="flex-1 flex justify-center">
             <PageHeader>
               <PageHeaderHeading
                 style={{
@@ -105,13 +105,14 @@ const Projects = ({ params }: any) => {
               <h2>Project ID: {project_id}</h2>
             </PageHeader>
           </div>
-          <div className="flex-2">TEAMS</div>
+          <div className="flex-1 flex justify-center">
+            <div>
+              <TeamMembers />
+            </div>
+          </div>
         </div>
-      </TabsContent>
-      {/* <TabsContent value="team" className="border-none p-0 outline-none">
-        <div>TEAM</div>
-      </TabsContent> */}
-      <TabsContent value="bugs" className="border-none p-0 outline-none">
+      </TabsContent>  
+      <TabsContent value="bugs" className="border-none p-0 outline-none ">
         <div>Bugs</div>
       </TabsContent>
     </Tabs>
