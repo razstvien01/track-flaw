@@ -249,19 +249,21 @@ const AddBugDialog = ({
                 placeholder="Type your bug details here."
               />
             </div>
+            
             <div className="space-y-2">
-              <Label htmlFor="role">Select Priority</Label>
+              <Label htmlFor="role">Select Status</Label>
               <Select
-                onValueChange={(e) => handleSelectPrioOnchangeData(e)}
-                defaultValue={selectedPriority}
+                onValueChange={(e) => handleSelectStatusOnchangeData(e)}
+                defaultValue={selectedStatus}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Priority" />
                 </SelectTrigger>
+                
                 <SelectContent>
-                  {Object.values(PRIORITY).map((priority) => (
-                    <SelectItem key={priority} value={priority}>
-                      <span className="font-medium">{priority}</span>
+                  {Object.values(BUG_STATUS).map((status) => (
+                    <SelectItem key={status} value={status}>
+                      <span className="font-medium">{status}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -287,19 +289,18 @@ const AddBugDialog = ({
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="role">Select Severity Level</Label>
+              <Label htmlFor="role">Select Priority</Label>
               <Select
-                onValueChange={(e) => handleSelectStatusOnchangeData(e)}
-                defaultValue={selectedStatus}
+                onValueChange={(e) => handleSelectPrioOnchangeData(e)}
+                defaultValue={selectedPriority}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select Priority" />
                 </SelectTrigger>
-                
                 <SelectContent>
-                  {Object.values(BUG_STATUS).map((status) => (
-                    <SelectItem key={status} value={status}>
-                      <span className="font-medium">{status}</span>
+                  {Object.values(PRIORITY).map((priority) => (
+                    <SelectItem key={priority} value={priority}>
+                      <span className="font-medium">{priority}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>

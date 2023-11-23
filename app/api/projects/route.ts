@@ -10,8 +10,7 @@ import {
   getTeamMembers,
   removeTeamMember,
 } from "@/controllers/projects.controller";
-import { ORG_QUERY, PROJECT_QUERY } from "@/types/constants";
-import { query } from "firebase/firestore";
+import { PROJECT_QUERY } from "@/types/constants";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
