@@ -7,6 +7,10 @@ import {
   CrossCircledIcon,
   QuestionMarkCircledIcon,
   StopwatchIcon,
+  Crosshair1Icon,
+  Crosshair2Icon,
+  TargetIcon,
+  DiscIcon
 } from "@radix-ui/react-icons"
 
 export const labels = [
@@ -67,5 +71,33 @@ export const priorities = [
     label: "High",
     value: "high",
     icon: ArrowUpIcon,
+  },
+]
+
+export const severities = [
+  {
+    label: "Critical",
+    value: "critical",
+    icon: Crosshair1Icon,
+  },
+  {
+    label: "High",
+    value: "high",
+    icon: Crosshair2Icon,
+  },
+  {
+    label: "Medium",
+    value: "medium",
+    icon: TargetIcon,
+  },
+  {
+    label: "Low",
+    value: "low",
+    icon: DiscIcon
+  },
+  {
+    label: "Trivial",
+    value: "trivial",
+    icon: DiscIcon
   },
 ]
