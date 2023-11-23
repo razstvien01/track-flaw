@@ -34,6 +34,7 @@ import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 import { createProject } from "@/services/projects.service";
 import axios from "axios";
 import { BUG_STATUS, PRIORITY, SEVERITY_LVLS } from "@/types/constants";
+import { createBug } from "@/services/bugs.service";
 
 interface AddProjectDialogProps {
   showDialog: boolean;
@@ -41,6 +42,8 @@ interface AddProjectDialogProps {
   setSuccessAdd: Dispatch<SetStateAction<boolean>>;
   org_id: string;
   org_name: string;
+  project_id: string
+  project_name: string
 }
 
 const AddBugDialog = ({
@@ -49,6 +52,8 @@ const AddBugDialog = ({
   setSuccessAdd,
   org_id,
   org_name,
+  project_name,
+  project_id
 }: AddProjectDialogProps) => {
   const [bugData, setBugData] = useState<BugDataProps>(BugDataInit);
   const [userData, setUserData] = useUserDataAtom();
@@ -63,9 +68,9 @@ const AddBugDialog = ({
   const [showToast, setShowToast] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  const [selectedPriority, setSelectedPriority] = useState("");
-  const [selectedSeverity, setSelectedSeverity] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedPriority, setSelectedPriority] = useState(PRIORITY.LOW as string);
+  const [selectedSeverity, setSelectedSeverity] = useState(SEVERITY_LVLS.TRIVIAL as string);
+  const [selectedStatus, setSelectedStatus] = useState(BUG_STATUS.TODO as string);
 
   const handleSelectPrioOnchangeData = (value: string) => {
     setSelectedPriority(value);
@@ -116,97 +121,65 @@ const AddBugDialog = ({
     }
   }, [showToast, toastParams]);
 
-  const getActualImageUrl = async () => {
-    try {
-      // Axios follows redirects by default, so the resolved URL will be the final one after redirection.
-      const response = await axios({
-        method: "GET",
-        url: "https://source.unsplash.com/random/?space,night,star,moon",
-        maxRedirects: 5, // The default is 5, but it's set explicitly here for clarity
-      });
-
-      return response.request.responseURL; // This should give the final redirected URL
-    } catch (error) {
-      console.error("Error fetching the actual image URL:", error);
-      return ""; // Return an empty string or handle the error as appropriate
-    }
-  };
-
   //* Function to handle form submission
-  // A function that calls createProject and then createNotif with updated projData.
-  const createProjectAndNotify = async (
-    imageURL: string,
-    userData: any,
-    orgData: any
-  ) => {
-    setIsSave(true); // Indicate that saving is in progress.
-
-    // Set the project data with the new image URL before creating the project.
-    // const projectDataWithImage = {
-    //   ...bugData,
-    //   photo_url: imageURL,
-    // };
-
-    // Attempt to create the project using the project data with the actual image URL.
-    // const result = await createProject(projectDataWithImage, userData.user_id);
-
-    // if (result.success) {
-    //   // Construct parameters for the notification.
-    //   const params = {
-    //     user_id: userData.user_id,
-    //     org_id: orgData.org_id,
-    //     photo_url: projectDataWithImage.photo_url,
-    //     title: "Project Created",
-    //     description: `${userData.full_name} created ${projectDataWithImage.project_name} project in a ${org_name} organization`,
-    //     type: "project",
-    //   };
-
-    //   // Create a notification for the new project.
-    //   await createNotif(params);
-
-    //   // Handle success by setting the success state, toast parameters, and message.
-    //   setHasSubmitted(true);
-    //   setToastParams({
-    //     title: "Creating Project",
-    //     description: "You have successfully created a project.",
-    //     variant: "default",
-    //   });
-    //   setMessage(result.data.message); // Adjust this if 'result' structure is different.
-    //   setIsVisible({
-    //     error: false,
-    //     success: true,
-    //   });
-    // } else {
-    //   // Handle errors by setting the error message and visibility.
-    //   setMessage(result.error.message);
-    //   setIsVisible((prev) => ({
-    //     ...prev,
-    //     error: true,
-    //   }));
-    // }
-
-    // setIsSave(false); // Save operation is finished.
-  };
-
-  // Function to handle form submission with async image URL fetching.
   const handleSubmit = async () => {
-    // Fetch the actual image URL first.
-    const actualImage = await getActualImageUrl();
-    if (actualImage) {
-      await createProjectAndNotify(actualImage, userData, { org_id, org_name });
+    setIsSave(true)
+    
+    setBugData((prev) => ({
+      ...prev,
+      status: selectedStatus,
+      severity: selectedSeverity,
+      priority: selectedPriority,
+      org_id: org_id
+    }))
+    const result = await createBug(bugData, userData.user_id)
+    
+    if(result.success){
+      setMessage(result.data.message);
+      setIsVisible((prev) => ({
+        ...prev,
+        error: false,
+        success: true
+      }))
+      
+      const params = {
+        user_id: userData.user_id,
+        org_id: org_id,
+        photo_url: userData.photo_url,
+        title: "Bug Created",
+        description: `${userData.full_name} created ${bugData.bug_name} bug in a ${project_name} project`,
+        type: "bug",
+      };
+      
+      await createNotif(params)
+      
+      setHasSubmitted(true)
+      setToastParams({
+        title: "Creating Bug Card",
+        description: "You have successfully created a bug card.",
+        variant: "default",
+      })
+      
+      
+      
     } else {
-      // Handle the error when the image URL could not be fetched.
-      setMessage("Error fetching the image URL.");
-      setIsVisible({ success: false, error: true });
+      setMessage(result.error.message)
+      setIsVisible((prev) => ({
+        ...prev,
+        error: true,
+        success: false
+      }))
+      setIsSave(false)
     }
+    
+    
   };
 
   const handleOnchangeData = (e: any) => {
     const { id, value } = e.target;
     setBugData((prev: BugDataProps) => ({ ...prev, [id]: value }));
   };
-
-
+  
   const handleCalendarEndData = (date?: Date, field?: any) => {
     if (!date || !field) return;
 
@@ -313,7 +286,8 @@ const AddBugDialog = ({
         <DialogFooter>
           <Button
             variant="outline"
-            // onClick={() => setShowNewOrgDialog(false)}
+            onClick={() => setShowDialog(false)}
+            disabled={isSave || isVisible.success}
           >
             Cancel
           </Button>

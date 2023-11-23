@@ -17,12 +17,14 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { Separator } from "@radix-ui/react-select";
 import AddBugDialog from "../components/add_bug_dialog";
+import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 
 const Projects = ({ params }: any) => {
   const [error, setError] = useState<any>(null);
   const [project, setProject] = useState<ProjectDataProps>(ProjectDataInit);
   const project_id = params.project_id;
   const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
 
   const fetchProject = useCallback(async () => {
     const result = await getProjectById(project_id);
@@ -76,8 +78,10 @@ const Projects = ({ params }: any) => {
   return (
     <>
     <AddBugDialog
-      org_id=""
-      org_name=""
+      org_id={currOrgData.org_id}
+      org_name={currOrgData.org_name}
+      project_name={project_name}
+      project_id={project_id}
       setShowDialog={setShowDialog}
       setSuccessAdd={() => {}}
       showDialog={showDialog}

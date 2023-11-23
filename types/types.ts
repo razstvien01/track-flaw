@@ -71,4 +71,5 @@ export interface BugDataProps{
   org_id: string
   project_id: string
   status: string
+  severity: string
 }

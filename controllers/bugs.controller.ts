@@ -7,17 +7,7 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 import { db } from "../app/firebase";
-
-interface BugDetails {
-  bug_name: string;
-  org_id: string;
-  project_id: string;
-  due_date: string;
-  bug_details: string;
-  priority: string;
-  severity: string;
-  status: string;
-}
+import { BugDataProps } from "@/types/types";
 
 export const checkIfExistsBug = async (
   bug_name: string,
@@ -37,7 +27,7 @@ export const checkIfExistsBug = async (
   return !querySnapshot.empty ? true : false;
 };
 
-export const addBug = async (data: BugDetails) => {
+export const addBug = async (data: BugDataProps) => {
   const orgWithRefs = { ...data, created_at: serverTimestamp() };
 
   await addDoc(collection(db, "bugs"), orgWithRefs);
