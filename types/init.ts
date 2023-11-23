@@ -37,5 +37,7 @@ export const BugDataInit: BugDataProps = {
   org_id: "",
   priority: "",
   project_id: "",
-  status: ""
+  status: "",
+  label: "bug",
+  severity: "",
 }
