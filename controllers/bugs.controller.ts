@@ -28,7 +28,7 @@ export const checkIfExistsBug = async (
 };
 
 export const addBug = async (data: BugDataProps) => {
-  const orgWithRefs = { ...data, created_at: serverTimestamp() };
+  const bugWithRefs = { ...data, created_at: serverTimestamp() };
 
-  await addDoc(collection(db, "bugs"), orgWithRefs);
+  await addDoc(collection(db, "bugs"), bugWithRefs);
 };

@@ -74,21 +74,34 @@ const AddBugDialog = ({
 
   const handleSelectPrioOnchangeData = (value: string) => {
     setSelectedPriority(value);
+    
+    setBugData((prev) => ({
+      ...prev,
+      priority: value,
+    }))
+    
   };
   const handleSelectSeverityOnchangeData = (value: string) => {
-    setSelectedSeverity(value);
+    setBugData((prev) => ({
+      ...prev,
+      severity: value,
+    }))
   };
   
   const handleSelectStatusOnchangeData = (value: string) => {
-    setSelectedStatus(value);
+    setBugData((prev) => ({
+      ...prev,
+      status: value,
+    }))
   };
 
   useEffect(() => {
     setBugData((prev: BugDataProps) => ({
       ...prev,
       org_id,
+      project_id
     }));
-  }, [org_id]);
+  }, [org_id, project_id]);
 
   useEffect(() => {
     if (hasSubmitted) {
@@ -120,18 +133,11 @@ const AddBugDialog = ({
       setHasSubmitted(false);
     }
   }, [showToast, toastParams]);
-
+  
   //* Function to handle form submission
   const handleSubmit = async () => {
     setIsSave(true)
     
-    setBugData((prev) => ({
-      ...prev,
-      status: selectedStatus,
-      severity: selectedSeverity,
-      priority: selectedPriority,
-      org_id: org_id
-    }))
     const result = await createBug(bugData, userData.user_id)
     
     if(result.success){
