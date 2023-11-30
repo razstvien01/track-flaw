@@ -23,6 +23,7 @@ const Organization = ({ params }: any) => {
   
   useEffect(() => {
     router.push(`/dashboard/${currOrgData.org_id}`);
+  
     return () => {
       
     }
@@ -58,15 +59,6 @@ const Organization = ({ params }: any) => {
     fetchOrgDetails();
   }, [fetchOrgDetails]);
   
-  // useEffect(() => {
-    
-  //   const loadingTimeout = setTimeout(() => {
-      
-  //     router.push(`/dashboard/${org_id}`);
-  //   }, 1000);
-
-  //   return () => clearTimeout(loadingTimeout);
-  // }, [org_id, router]);
   
   if (error) {
     return (<NotFound/>);
