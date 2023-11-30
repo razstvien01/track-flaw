@@ -6,7 +6,7 @@ import {
   addDoc,
   serverTimestamp,
   QueryDocumentSnapshot,
-  DocumentData
+  DocumentData,
 } from "firebase/firestore";
 import { db } from "../app/firebase";
 import { BugDataProps } from "@/types/types";
@@ -35,11 +35,25 @@ export const addBug = async (data: BugDataProps) => {
   await addDoc(collection(db, "bugs"), bugWithRefs);
 };
 
+export const getBugs = async (project_id: string) => {
+  const q = query(collection(db, 'bugs'), where('project_id', '==', project_id));
+  const querySnapshot = await getDocs(q);
 
-export const getBugs = async(project_id: string) => {
-  const q = query(collection(db, 'bugs'), where('project_id', '==', project_id))
-  const querySnapshot = await getDocs(q)
+  const bugsData = querySnapshot.docs.map(doc => {
+    const { bug_description, bug_name, created_at, creator_id, due_date, org_id, priority, project_id, status } = doc.data();
+
+      return {
+        bug_description: bug_description || '',
+        bug_name: bug_name || '',
+        created_at: created_at || null,
+        creator_id: creator_id || '',
+        due_date: due_date || null,
+        org_id: org_id || '',
+        priority: priority || '',
+        project_id: project_id || '',
+        status: status || '',
+      };
+  });
   
-  
-  return querySnapshot.docs
-}
+  return bugsData;
+};

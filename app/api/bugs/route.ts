@@ -6,7 +6,7 @@ export const GET = async (request: NextRequest) => {
   const project_id = url.searchParams.get('project_id') as string
   try {
     
-    const bugs = getBugs(project_id)
+    const bugs = await getBugs(project_id)
     return new Response(
       JSON.stringify({
         success: true,
