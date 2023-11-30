@@ -4,7 +4,9 @@ import {
   where,
   getDocs,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  QueryDocumentSnapshot,
+  DocumentData
 } from "firebase/firestore";
 import { db } from "../app/firebase";
 import { BugDataProps } from "@/types/types";
@@ -32,3 +34,12 @@ export const addBug = async (data: BugDataProps) => {
 
   await addDoc(collection(db, "bugs"), bugWithRefs);
 };
+
+
+export const getBugs = async(project_id: string) => {
+  const q = query(collection(db, 'bugs'), where('project_id', '==', project_id))
+  const querySnapshot = await getDocs(q)
+  
+  
+  return querySnapshot.docs
+}

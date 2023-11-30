@@ -1,11 +1,16 @@
-import { addBug, checkIfExistsBug } from "@/controllers/bugs.controller";
+import { addBug, checkIfExistsBug, getBugs } from "@/controllers/bugs.controller";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (request: NextRequest) => {
+  const url = new URL(request.url)
+  const project_id = url.searchParams.get('project_id') as string
   try {
+    
+    const bugs = getBugs(project_id)
     return new Response(
       JSON.stringify({
         success: true,
+        bugs
       })
     );
   } catch (error) {

@@ -48,6 +48,7 @@ export default function OrgSwitcher({
   showNewOrgDialog,
   setShowNewOrgDialog,
 }: OrgSwitcherProps) {
+  const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
@@ -87,7 +88,10 @@ export default function OrgSwitcher({
                   <CommandItem
                     key={index}
                     onSelect={() => {
+                      
                       setSelectedOrg(org);
+                      setCurrOrgData(org)
+                      
                       setOpen(false);
                       router.refresh();
                     }}

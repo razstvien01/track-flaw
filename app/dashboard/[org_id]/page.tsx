@@ -12,13 +12,23 @@ import { columns } from "../components/table/columns";
 import { getMembersInOrgs, getOrgDetails } from "@/services/org.service";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 import NotFound from "./not-found";
+import { useRouter } from "next/navigation";
 
 const Organization = ({ params }: any) => {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const org_id = params.org_id;
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom();
   const [error, setError] = useState<any>(null);
-
+  const router = useRouter();
+  
+  useEffect(() => {
+    router.push(`/dashboard/${currOrgData.org_id}`);
+    return () => {
+      
+    }
+  }, [currOrgData, org_id, router])
+  
+  
   const fetchMembers = useCallback(async () => {
     if (org_id !== "") {
       const result = await getMembersInOrgs(org_id);
@@ -40,12 +50,23 @@ const Organization = ({ params }: any) => {
   }, [org_id, setCurrOrgData]);
 
   useEffect(() => {
+    
     fetchMembers();
   }, [fetchMembers]);
 
   useEffect(() => {
     fetchOrgDetails();
   }, [fetchOrgDetails]);
+  
+  // useEffect(() => {
+    
+  //   const loadingTimeout = setTimeout(() => {
+      
+  //     router.push(`/dashboard/${org_id}`);
+  //   }, 1000);
+
+  //   return () => clearTimeout(loadingTimeout);
+  // }, [org_id, router]);
   
   if (error) {
     return (<NotFound/>);
