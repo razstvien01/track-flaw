@@ -134,6 +134,7 @@ const Projects = ({ params }: any) => {
         </TabsContent>
         <TabsContent value="bugs" className="border-none p-0 outline-none ">
           <BugDisplayProj
+            project_id={project_id}
             showDialog={showDialog}
             setShowDialog={setShowDialog}
           />

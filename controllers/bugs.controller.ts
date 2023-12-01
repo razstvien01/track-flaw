@@ -40,9 +40,10 @@ export const getBugs = async (project_id: string) => {
   const querySnapshot = await getDocs(q);
 
   const bugsData = querySnapshot.docs.map(doc => {
-    const { bug_description, bug_name, created_at, creator_id, due_date, org_id, priority, project_id, status } = doc.data();
-
+    const { bug_description, bug_name, created_at, creator_id, due_date, org_id, priority, project_id, status, severity = '' } = doc.data();
+    
       return {
+        id: doc.id,
         bug_description: bug_description || '',
         bug_name: bug_name || '',
         created_at: created_at || null,
@@ -52,6 +53,7 @@ export const getBugs = async (project_id: string) => {
         priority: priority || '',
         project_id: project_id || '',
         status: status || '',
+        severity
       };
   });
   

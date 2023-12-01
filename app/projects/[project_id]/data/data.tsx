@@ -13,45 +13,30 @@ import {
   DiscIcon
 } from "@radix-ui/react-icons"
 
-export const labels = [
-  {
-    value: "bug",
-    label: "Bug",
-  },
-  {
-    value: "feature",
-    label: "Feature",
-  },
-  {
-    value: "documentation",
-    label: "Documentation",
-  },
-]
-
 export const statuses = [
   {
-    value: "backlog",
+    value: "BACKLOG",
     label: "Backlog",
     icon: QuestionMarkCircledIcon,
   },
   {
-    value: "todo",
+    value: "TODO",
     label: "Todo",
     icon: CircleIcon,
   },
   {
-    value: "in progress",
+    value: "IN PROGRESS",
     label: "In Progress",
     icon: StopwatchIcon,
   },
   {
-    value: "done",
+    value: "DONE",
     label: "Done",
     icon: CheckCircledIcon,
   },
   {
-    value: "canceled",
-    label: "Canceled",
+    value: "CANCELLED",
+    label: "Cancelled",
     icon: CrossCircledIcon,
   },
 ]
@@ -59,17 +44,17 @@ export const statuses = [
 export const priorities = [
   {
     label: "Low",
-    value: "low",
+    value: "LOW",
     icon: ArrowDownIcon,
   },
   {
     label: "Medium",
-    value: "medium",
+    value: "MEDIUM",
     icon: ArrowRightIcon,
   },
   {
     label: "High",
-    value: "high",
+    value: "HIGH",
     icon: ArrowUpIcon,
   },
 ]
@@ -77,27 +62,27 @@ export const priorities = [
 export const severities = [
   {
     label: "Critical",
-    value: "critical",
+    value: "CRITICAL",
     icon: Crosshair1Icon,
   },
   {
     label: "High",
-    value: "high",
+    value: "HIGH",
     icon: Crosshair2Icon,
   },
   {
     label: "Medium",
-    value: "medium",
+    value: "MEDIUM",
     icon: TargetIcon,
   },
   {
     label: "Low",
-    value: "low",
+    value: "LOW",
     icon: DiscIcon
   },
   {
     label: "Trivial",
-    value: "trivial",
+    value: "TRIVIAL",
     icon: DiscIcon
   },
 ]

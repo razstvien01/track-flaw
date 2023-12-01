@@ -1,16 +1,11 @@
 'use client'
 
-import { useToast } from '@/components/ui/use-toast'
 import React, { useCallback } from 'react'
-import { Button } from '@/components/ui/button'
 import { columns } from './components/columns'
 import { DataTable } from './components/data_table'
 
 const Bugs = () => {
   
-  const fetchBugs = useCallback(async () => {
-    
-  }, [])
   
   return (
     <DataTable data={BUGs} columns={columns} />

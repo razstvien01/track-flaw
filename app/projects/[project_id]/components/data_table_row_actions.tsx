@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-import { labels } from "../data/data"
+import { statuses } from "../data/data"
 import { taskSchema } from "../data/schema"
 
 interface DataTableRowActionsProps<TData> {
@@ -49,10 +49,10 @@ export function DataTableRowActions<TData>({
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={task.label}>
-              {labels.map((label) => (
-                <DropdownMenuRadioItem key={label.value} value={label.value}>
-                  {label.label}
+            <DropdownMenuRadioGroup value={task.id}>
+              {statuses.map((status) => (
+                <DropdownMenuRadioItem key={status.value} value={status.value}>
+                  {status.label}
                 </DropdownMenuRadioItem>
               ))}
             </DropdownMenuRadioGroup>
