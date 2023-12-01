@@ -1,12 +1,21 @@
 import { addBug, checkIfExistsBug, getBugs } from "@/controllers/bugs.controller";
 import { NextRequest, NextResponse } from "next/server";
+import { BUG_QUERY } from "@/types/constants";
 
 export const GET = async (request: NextRequest) => {
   const url = new URL(request.url)
   const project_id = url.searchParams.get('project_id') as string
+  const query = url.searchParams.get('query');
+  
+  let bugs = null
   try {
     
-    const bugs = await getBugs(project_id)
+    switch (query) {
+      case BUG_QUERY.GET_BUGS_PROJ:
+        bugs = await getBugs(project_id)
+        break;
+    }
+    
     return new Response(
       JSON.stringify({
         success: true,

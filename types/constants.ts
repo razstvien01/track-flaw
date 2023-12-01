@@ -57,5 +57,5 @@ export enum PROJECT_QUERY {
 
 
 export enum BUG_QUERY {
-  
+  GET_BUGS_PROJ = "GET_BUGS_PROJ"
 }
