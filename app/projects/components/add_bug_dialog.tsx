@@ -35,6 +35,7 @@ import { createProject } from "@/services/projects.service";
 import axios from "axios";
 import { BUG_STATUS, PRIORITY, SEVERITY_LVLS } from "@/types/constants";
 import { createBug } from "@/services/bugs.service";
+import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
 
 interface AddProjectDialogProps {
   showDialog: boolean;
@@ -42,8 +43,8 @@ interface AddProjectDialogProps {
   setSuccessAdd: Dispatch<SetStateAction<boolean>>;
   org_id: string;
   org_name: string;
-  project_id: string
-  project_name: string
+  project_id: string;
+  project_name: string;
 }
 
 const AddBugDialog = ({
@@ -53,7 +54,7 @@ const AddBugDialog = ({
   org_id,
   org_name,
   project_name,
-  project_id
+  project_id,
 }: AddProjectDialogProps) => {
   const [bugData, setBugData] = useState<BugDataProps>(BugDataInit);
   const [userData, setUserData] = useUserDataAtom();
@@ -67,39 +68,45 @@ const AddBugDialog = ({
   const [toastParams, setToastParams] = useState<any>();
   const [showToast, setShowToast] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
 
-  const [selectedPriority, setSelectedPriority] = useState(PRIORITY.LOW as string);
-  const [selectedSeverity, setSelectedSeverity] = useState(SEVERITY_LVLS.TRIVIAL as string);
-  const [selectedStatus, setSelectedStatus] = useState(BUG_STATUS.TODO as string);
+  const [selectedPriority, setSelectedPriority] = useState(
+    PRIORITY.LOW as string
+  );
+  const [selectedSeverity, setSelectedSeverity] = useState(
+    SEVERITY_LVLS.TRIVIAL as string
+  );
+  const [selectedStatus, setSelectedStatus] = useState(
+    BUG_STATUS.TODO as string
+  );
 
   const handleSelectPrioOnchangeData = (value: string) => {
     setSelectedPriority(value);
-    
+
     setBugData((prev) => ({
       ...prev,
       priority: value,
-    }))
-    
+    }));
   };
   const handleSelectSeverityOnchangeData = (value: string) => {
     setBugData((prev) => ({
       ...prev,
       severity: value,
-    }))
+    }));
   };
-  
+
   const handleSelectStatusOnchangeData = (value: string) => {
     setBugData((prev) => ({
       ...prev,
       status: value,
-    }))
+    }));
   };
 
   useEffect(() => {
     setBugData((prev: BugDataProps) => ({
       ...prev,
       org_id,
-      project_id
+      project_id,
     }));
   }, [org_id, project_id]);
 
@@ -114,6 +121,7 @@ const AddBugDialog = ({
         setShowToast(true);
         setIsSave(false);
         setSuccessAdd((prev) => !prev);
+        setIsToggleNotif((prev) => !prev);
       }, 2000);
 
       return () => clearTimeout(timer);
@@ -124,6 +132,7 @@ const AddBugDialog = ({
     hasSubmitted,
     setShowDialog,
     setSuccessAdd,
+    setIsToggleNotif,
   ]);
 
   useEffect(() => {
@@ -133,21 +142,21 @@ const AddBugDialog = ({
       setHasSubmitted(false);
     }
   }, [showToast, toastParams]);
-  
+
   //* Function to handle form submission
   const handleSubmit = async () => {
-    setIsSave(true)
-    
-    const result = await createBug(bugData, userData.user_id)
-    
-    if(result.success){
+    setIsSave(true);
+
+    const result = await createBug(bugData, userData.user_id);
+
+    if (result.success) {
       setMessage(result.data.message);
       setIsVisible((prev) => ({
         ...prev,
         error: false,
-        success: true
-      }))
-      
+        success: true,
+      }));
+
       const params = {
         user_id: userData.user_id,
         org_id: org_id,
@@ -156,36 +165,31 @@ const AddBugDialog = ({
         description: `${userData.full_name} created ${bugData.bug_name} bug in a ${project_name} project`,
         type: "bug",
       };
-      
-      await createNotif(params)
-      
-      setHasSubmitted(true)
+
+      await createNotif(params);
+
+      setHasSubmitted(true);
       setToastParams({
         title: "Creating Bug Card",
         description: "You have successfully created a bug card.",
         variant: "default",
-      })
-      
-      
-      
+      });
     } else {
-      setMessage(result.error.message)
+      setMessage(result.error.message);
       setIsVisible((prev) => ({
         ...prev,
         error: true,
-        success: false
-      }))
-      setIsSave(false)
+        success: false,
+      }));
+      setIsSave(false);
     }
-    
-    
   };
 
   const handleOnchangeData = (e: any) => {
     const { id, value } = e.target;
     setBugData((prev: BugDataProps) => ({ ...prev, [id]: value }));
   };
-  
+
   const handleCalendarEndData = (date?: Date, field?: any) => {
     if (!date || !field) return;
 
@@ -228,7 +232,7 @@ const AddBugDialog = ({
                 placeholder="Type your bug details here."
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="role">Select Status</Label>
               <Select
@@ -238,7 +242,7 @@ const AddBugDialog = ({
                 <SelectTrigger>
                   <SelectValue placeholder="Select Priority" />
                 </SelectTrigger>
-                
+
                 <SelectContent>
                   {Object.values(BUG_STATUS).map((status) => (
                     <SelectItem key={status} value={status}>
@@ -257,7 +261,7 @@ const AddBugDialog = ({
                 <SelectTrigger>
                   <SelectValue placeholder="Select Priority" />
                 </SelectTrigger>
-                
+
                 <SelectContent>
                   {Object.values(SEVERITY_LVLS).map((severity) => (
                     <SelectItem key={severity} value={severity}>
