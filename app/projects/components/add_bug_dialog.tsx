@@ -82,24 +82,13 @@ const AddBugDialog = ({
 
   const handleSelectPrioOnchangeData = (value: string) => {
     setSelectedPriority(value);
-
-    setBugData((prev) => ({
-      ...prev,
-      priority: value,
-    }));
   };
   const handleSelectSeverityOnchangeData = (value: string) => {
-    setBugData((prev) => ({
-      ...prev,
-      severity: value,
-    }));
+    setSelectedSeverity(value)
   };
 
   const handleSelectStatusOnchangeData = (value: string) => {
-    setBugData((prev) => ({
-      ...prev,
-      status: value,
-    }));
+    setSelectedStatus(value)
   };
 
   useEffect(() => {
@@ -107,8 +96,11 @@ const AddBugDialog = ({
       ...prev,
       org_id,
       project_id,
+      priority: selectedPriority,
+      severity: selectedSeverity,
+      status: selectedStatus,
     }));
-  }, [org_id, project_id]);
+  }, [org_id, project_id, selectedPriority, selectedSeverity, selectedStatus]);
 
   useEffect(() => {
     if (hasSubmitted) {
