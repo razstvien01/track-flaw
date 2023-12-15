@@ -7,6 +7,7 @@ import { columns } from "./columns";
 import { getBugsInProj } from "@/services/bugs.service";
 import { BugDataProps } from "@/types/types";
 import { BugDataInit } from "@/types/init";
+import { useRefreshBugProj } from "@/hooks/refresh_bug_proj_atom";
 
 interface BugDisplayProjProps {
   project_id: string;
@@ -26,6 +27,7 @@ const BugDisplayProj = ({
 }: BugDisplayProjProps) => {
   const [bugs, setBugs] = useState<BugDataProps[]>([]);
   const [error, setError] = useState<any>(null);
+  const [refBugProj, setRefBugProj] = useRefreshBugProj();
 
   const fetchBugs = useCallback(async () => {
     const result = await getBugsInProj(project_id);
@@ -38,7 +40,8 @@ const BugDisplayProj = ({
   useEffect(() => {
     fetchBugs()
     setRefBugDisplay(false);
-  }, [fetchBugs, setRefBugDisplay, refBugDisplay])
+    // setRefBugProj(false)
+  }, [fetchBugs, setRefBugDisplay, refBugDisplay, refBugProj])
   
 
   return (

@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="flex-1 mt-20 pt-10">
+      <div className="flex-1 mt-20 pt-10 pl-5">
         <PageHeader>
           <PageHeaderHeading className="text-5xl">
             Welcome to the

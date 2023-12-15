@@ -29,6 +29,7 @@ import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 import { NotifData } from "@/types/types";
 import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
 import { ShowToast } from "@/components/show-toast";
+import { useRefreshBugProj } from "@/hooks/refresh_bug_proj_atom";
 
 // TODO should refresh the bugs after deleting
 interface DataTableRowActionsProps<TData> {
@@ -47,7 +48,8 @@ export function DataTableRowActions<TData>({
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const [showToast, setShowToast] = useState(false);
   const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
-
+  const [refBugProj, setRefBugProj] = useRefreshBugProj();
+  
   useEffect(() => {
     if (hasSubmitted) {
       const timer = setTimeout(() => {
@@ -55,13 +57,14 @@ export function DataTableRowActions<TData>({
         setIsSave(false);
         setOpenDeleteDialog(false);
         // fetchMembers();
+        setRefBugProj(prev => !prev)
         
         setIsToggleNotif((prev) => !prev);
       }, 2000);
 
       return () => clearTimeout(timer);
     }
-  }, [hasSubmitted, setIsToggleNotif]);
+  }, [hasSubmitted, setIsToggleNotif, setRefBugProj]);
   
   useEffect(() => {
     if (showToast) {
