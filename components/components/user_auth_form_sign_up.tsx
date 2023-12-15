@@ -14,7 +14,7 @@ interface UserAuthSignupFormProps {
   googleSignUp: () => void
 }
 
-export function UserAuthSignupForm({ isSignUp, googleSignIn, googleSignUp }: UserAuthSignupFormProps) {
+export function UserAuthSignupForm({ isSignUp, googleSignUp }: UserAuthSignupFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   async function onSubmit(event: React.SyntheticEvent) {

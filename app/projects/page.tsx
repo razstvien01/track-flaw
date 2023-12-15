@@ -39,7 +39,7 @@ const Projects = () => {
     return (
       <>
         <PageHeader>
-          <PageHeaderHeading>No Organization Selected</PageHeaderHeading>
+          <PageHeaderHeading className="text-5xl">No Organization Selected</PageHeaderHeading>
           <PageHeaderDescription>
             View and start a new project to fill up this space by selecting or
             creating an organizaiton

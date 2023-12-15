@@ -15,7 +15,7 @@ import { useUserDataAtom } from "../hooks/user_data_atom";
 import Notifications from "./notifications";
 
 interface HeaderProps {
-  setIsLoading: Dispatch<SetStateAction<boolean>>
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
@@ -26,11 +26,16 @@ const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
   const [showNewOrgDialog, setShowNewOrgDialog] = useState<boolean>(false);
   const { org_refs = [] } = userData || {};
-  
+
   useGetUser(uid, setUserData, isUpdate, showNewOrgDialog);
-  
+
   if (!user) {
-    return <AuthenticationPage googleSignIn={googleSignIn} googleSignUp={googleSignUp} />;
+    return (
+      <AuthenticationPage
+        googleSignIn={googleSignIn}
+        googleSignUp={googleSignUp}
+      />
+    );
   }
 
   return (
@@ -38,7 +43,9 @@ const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
       <div className="flex h-16 items-center px-4">
         <Logo />
         <MainNav />
+        
         <div className="ml-auto flex items-center space-x-4">
+          
           {/* <Search /> */}
           <OrgSwitcher
             org_refs={org_refs}
@@ -46,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
             setShowNewOrgDialog={setShowNewOrgDialog}
           />
           <ModeToggle />
-          <Notifications/>
+          <Notifications />
           <UserNav
             userData={userData}
             logOut={logOut}
@@ -57,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({ setIsLoading }) => {
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default Header;

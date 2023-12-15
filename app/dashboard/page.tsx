@@ -30,9 +30,9 @@ const Dashboard = () => {
     <div>
       <div>
         <PageHeader>
-          <PageHeaderHeading>Welcome to the Dashboard !!!</PageHeaderHeading>
+          <PageHeaderHeading className="text-5xl">Welcome to the Dashboard !!!</PageHeaderHeading>
           <PageHeaderDescription>
-            Please select an organization.
+            Please create or select an organization.
           </PageHeaderDescription>
         </PageHeader>
       </div>

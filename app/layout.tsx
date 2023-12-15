@@ -77,11 +77,11 @@ export default function RootLayout({
             </Provider>
           </AuthContextProvider>
           <Toaster />
-          <footer className="align-bottom">
+          {/* <footer className="align-bottom">
             <div className="container mx-auto text-right">
               &copy; {currentYear} Buggy Cat
             </div>
-          </footer>
+          </footer> */}
         </body>
       </html>
     </>
