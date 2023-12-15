@@ -3,7 +3,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AuthContextProvider, UserAuth } from "../context/auth_context";
 import Header from "../components/header";
 import { Toaster } from "@/components/ui/toaster";
@@ -36,6 +36,13 @@ export default function RootLayout({
   const { uid = "" } = user || {};
   const [userData, setUserData] = useUserDataAtom();
 
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [currentUser, setCurrentUser] = useUserDataAtom();
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
+
   useGetUser(uid, setUserData, isLoading);
 
   useEffect(() => {
@@ -62,15 +69,19 @@ export default function RootLayout({
                   <LoadingComponent />
                 ) : (
                   <>
-                  <Header setIsLoading={setIsLoading} />
-                  {children}
+                    <Header setIsLoading={setIsLoading} />
+                    {children}
                   </>
                 )}
-                
               </ThemeProvider>
             </Provider>
           </AuthContextProvider>
           <Toaster />
+          <footer className="align-bottom">
+            <div className="container mx-auto text-right">
+              &copy; {currentYear} Buggy Cat
+            </div>
+          </footer>
         </body>
       </html>
     </>

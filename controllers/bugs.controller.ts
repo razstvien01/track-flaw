@@ -38,29 +38,40 @@ export const addBug = async (data: BugDataProps) => {
 
 export const getBugs = async (project_id: string) => {
   const q = query(
-    collection(db, 'bugs'),
-    where('project_id', '==', project_id),
-    orderBy('created_at', 'desc') // Order by the 'created_at' field in ascending order
+    collection(db, "bugs"),
+    where("project_id", "==", project_id),
+    orderBy("created_at", "desc") // Order by the 'created_at' field in ascending order
   );
   const querySnapshot = await getDocs(q);
 
-  const bugsData = querySnapshot.docs.map(doc => {
-    const { bug_description, bug_name, created_at, creator_id, due_date, org_id, priority, project_id, status, severity = '' } = doc.data();
-    
-      return {
-        id: doc.id,
-        bug_description: bug_description || '',
-        bug_name: bug_name || '',
-        created_at: created_at || null,
-        creator_id: creator_id || '',
-        due_date: due_date || null,
-        org_id: org_id || '',
-        priority: priority || '',
-        project_id: project_id || '',
-        status: status || '',
-        severity
-      };
+  const bugsData = querySnapshot.docs.map((doc) => {
+    const {
+      bug_description,
+      bug_name,
+      created_at,
+      creator_id,
+      due_date,
+      org_id,
+      priority,
+      project_id,
+      status,
+      severity = "",
+    } = doc.data();
+
+    return {
+      id: doc.id,
+      bug_description: bug_description || "",
+      bug_name: bug_name || "",
+      created_at: created_at || null,
+      creator_id: creator_id || "",
+      due_date: due_date || null,
+      org_id: org_id || "",
+      priority: priority || "",
+      project_id: project_id || "",
+      status: status || "",
+      severity,
+    };
   });
-  
+
   return bugsData;
 };

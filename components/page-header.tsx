@@ -10,7 +10,7 @@ function PageHeader({
   return (
     <section
       className={cn(
-        "flex max-w-[980px] flex-col items-start gap-2 px-4 pt-8 md:pt-12",
+        "flex max-w-[auto] flex-col gap-2 px-4 pt-8 md:pt-12",
         className
       )}
       {...props}
@@ -27,7 +27,7 @@ function PageHeaderHeading({
   return (
     <h1
       className={cn(
-        "text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]",
+        "font-bold leading-tight tracking-tighter lg:leading-[1.1]",
         className
       )}
       {...props}
