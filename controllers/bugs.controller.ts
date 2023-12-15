@@ -10,6 +10,7 @@ import {
   orderBy,
   deleteDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../app/firebase";
 import { BugDataProps } from "@/types/types";
@@ -79,5 +80,23 @@ export const getBugs = async (project_id: string) => {
 };
 
 export const deleteBug = async (bug_id: string) => {
-  await deleteDoc(doc(db, "bugs", bug_id))
+  await deleteDoc(doc(db, "bugs", bug_id));
+};
+
+interface updateBugStatusProps {
+  bug_id: string;
+  status?: string;
+  priority?: string;
+  severity?: string
 }
+export const updateBugStatus = async (data: updateBugStatusProps) => {
+  const { bug_id, ...restData } = data || {}
+  
+  if (!bug_id) {
+    throw new Error('Bug ID is required');
+  }
+  
+  const bugDocRef = doc(db, 'bugs', bug_id);
+  
+  await updateDoc(bugDocRef, restData);
+};

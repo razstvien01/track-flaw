@@ -50,6 +50,8 @@ export function DataTableRowActions<TData>({
   const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
   const [refBugProj, setRefBugProj] = useRefreshBugProj();
 
+  const [statusData, setStatusData] = useState(bug.status);
+  
   useEffect(() => {
     if (hasSubmitted) {
       const timer = setTimeout(() => {
@@ -110,7 +112,8 @@ export function DataTableRowActions<TData>({
 
     setHasSubmitted(true);
   };
-
+  
+  
   return (
     <>
       <AlertDialogPop
@@ -139,14 +142,19 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup value={bug.status}>
+              <DropdownMenuRadioGroup
+                value={statusData}
+                onValueChange={setStatusData}
+                
+              >
                 {statuses.map((status) => (
                   <DropdownMenuRadioItem
                     key={status.value}
                     value={status.value}
                     onClick={() => {
-                      console.log("Clicked");
-                      console.log(bug.id);
+                      
+                      
+                      console.log(status.value);
                     }}
                   >
                     {status.label}

@@ -3,6 +3,7 @@ import {
   checkIfExistsBug,
   deleteBug,
   getBugs,
+  updateBugStatus,
 } from "@/controllers/bugs.controller";
 import { NextRequest, NextResponse } from "next/server";
 import { BUG_QUERY } from "@/types/constants";
@@ -96,7 +97,7 @@ export const DELETE = async (request: NextRequest) => {
     return new Response(
       JSON.stringify({
         success: true,
-        message: "Bug Deleted Successfully"
+        message: "Bug Deleted Successfully",
       })
     );
   } catch (error) {
@@ -114,6 +115,18 @@ export const DELETE = async (request: NextRequest) => {
 
 export const PUT = async (request: NextRequest) => {
   try {
+    const data = await request.json();
+    const { query = "", ...restData } = data || {};
+
+    switch (query) {
+      case BUG_QUERY.UPDATE_STATUS:
+        await updateBugStatus(restData);
+        break;
+
+      default:
+        break;
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
