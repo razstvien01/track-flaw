@@ -40,7 +40,6 @@ const BugDisplayProj = ({
     setRefBugDisplay(false);
   }, [fetchBugs, setRefBugDisplay, refBugDisplay])
   
-  console.log(bugs)
 
   return (
     <div className="h-full px-4 lg:px-8">

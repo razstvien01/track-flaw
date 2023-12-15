@@ -7,6 +7,7 @@ import {
   serverTimestamp,
   QueryDocumentSnapshot,
   DocumentData,
+  orderBy,
 } from "firebase/firestore";
 import { db } from "../app/firebase";
 import { BugDataProps } from "@/types/types";
@@ -36,7 +37,11 @@ export const addBug = async (data: BugDataProps) => {
 };
 
 export const getBugs = async (project_id: string) => {
-  const q = query(collection(db, 'bugs'), where('project_id', '==', project_id));
+  const q = query(
+    collection(db, 'bugs'),
+    where('project_id', '==', project_id),
+    orderBy('created_at', 'desc') // Order by the 'created_at' field in ascending order
+  );
   const querySnapshot = await getDocs(q);
 
   const bugsData = querySnapshot.docs.map(doc => {
