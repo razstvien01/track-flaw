@@ -31,11 +31,15 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
-  const task = taskSchema.parse(row.original);
+  const bug = taskSchema.parse(row.original);
   const [isSave, setIsSave] = useState<boolean>(false);
   
   const handleContinue = async() => {
-    console.log("dELETE HdsddsELLO")
+    setIsSave(true);
+    
+    const params = {
+      
+    }
   }
 
   return (
@@ -66,7 +70,7 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup value={task.id}>
+              <DropdownMenuRadioGroup value={bug.status}>
                 {statuses.map((status) => (
                   <DropdownMenuRadioItem
                     key={status.value}
@@ -79,7 +83,7 @@ export function DataTableRowActions<TData>({
             </DropdownMenuSubContent>
           </DropdownMenuSub>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setOpenDeleteDialog(true)}>
             Delete
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>

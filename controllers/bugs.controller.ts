@@ -8,6 +8,8 @@ import {
   QueryDocumentSnapshot,
   DocumentData,
   orderBy,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 import { db } from "../app/firebase";
 import { BugDataProps } from "@/types/types";
@@ -75,3 +77,7 @@ export const getBugs = async (project_id: string) => {
 
   return bugsData;
 };
+
+export const deleteBug = async (bug_id: string) => {
+  await deleteDoc(doc(db, "bugs", bug_id))
+}

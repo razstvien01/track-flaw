@@ -68,7 +68,7 @@ const Organization = ({ params }: any) => {
     <div>
       <div>
         <PageHeader>
-          <PageHeaderHeading>{currOrgData?.org_name}</PageHeaderHeading>
+          <PageHeaderHeading className="text-5xl">{currOrgData?.org_name}</PageHeaderHeading>
           <PageHeaderDescription>
             {currOrgData?.org_details}
           </PageHeaderDescription>

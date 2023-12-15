@@ -1,25 +1,29 @@
-import { addBug, checkIfExistsBug, getBugs } from "@/controllers/bugs.controller";
+import {
+  addBug,
+  checkIfExistsBug,
+  deleteBug,
+  getBugs,
+} from "@/controllers/bugs.controller";
 import { NextRequest, NextResponse } from "next/server";
 import { BUG_QUERY } from "@/types/constants";
 
 export const GET = async (request: NextRequest) => {
-  const url = new URL(request.url)
-  const project_id = url.searchParams.get('project_id') as string
-  const query = url.searchParams.get('query');
-  
-  let bugs = null
+  const url = new URL(request.url);
+  const project_id = url.searchParams.get("project_id") as string;
+  const query = url.searchParams.get("query");
+
+  let bugs = null;
   try {
-    
     switch (query) {
       case BUG_QUERY.GET_BUGS_PROJ:
-        bugs = await getBugs(project_id)
+        bugs = await getBugs(project_id);
         break;
     }
-    
+
     return new Response(
       JSON.stringify({
         success: true,
-        bugs
+        bugs,
       })
     );
   } catch (error) {
@@ -53,8 +57,8 @@ export const POST = async (request: NextRequest) => {
         }
       );
     }
-    
-    await addBug(data)
+
+    await addBug(data);
 
     return new Response(
       JSON.stringify({
@@ -77,16 +81,29 @@ export const POST = async (request: NextRequest) => {
 
 export const DELETE = async (request: NextRequest) => {
   try {
+    const url = new URL(request.url);
+    const query = url.searchParams.get("query");
+    const bug_id = url.searchParams.get("bug_id") as string;
+
+    switch (query) {
+      case BUG_QUERY.DELETE_BUG_PROJ:
+        await deleteBug(bug_id);
+        break;
+
+      default:
+        break;
+    }
     return new Response(
       JSON.stringify({
         success: true,
+        message: "Bug Deleted Successfully"
       })
     );
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message: "Deleting the Project Failed",
+        message: "Deleting the Bug Failed",
       },
       {
         status: 500,

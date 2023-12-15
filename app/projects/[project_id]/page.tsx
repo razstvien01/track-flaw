@@ -104,6 +104,7 @@ const Projects = ({ params }: any) => {
             <div className="flex-3 flex justify-start">
               <PageHeader>
                 <PageHeaderHeading
+                  className="text-5xl"
                   style={{
                     backgroundImage: `url(${photo_url})`,
                     backgroundSize: "cover",
