@@ -102,7 +102,7 @@ const Projects = ({ params }: any) => {
         <TabsContent value="project" className="border-none p-0 outline-none">
           <div className="flex">
             <div className="flex-3 flex justify-start">
-              <PageHeader>
+              <PageHeader className="w-[1000px]">
                 <PageHeaderHeading
                   className="text-5xl"
                   style={{

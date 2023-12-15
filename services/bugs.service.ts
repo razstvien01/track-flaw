@@ -28,11 +28,33 @@ export const getBugsInProj = async (project_id: string) => {
     const response = await axios.get("/api/bugs", {
       params,
     });
-    
+
     return {
       success: true,
-      data: response.data.bugs
-    }
+      data: response.data.bugs,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.response.data,
+    };
+  }
+};
+
+export const deleteBugInProj = async (bug_id: string) => {
+  try {
+    const params = {
+      bug_id,
+      query: BUG_QUERY.DELETE_BUG_PROJ,
+    };
+
+    await axios.delete("/api/bugs", {
+      params,
+    });
+
+    return {
+      success: true,
+    };
   } catch (error: any) {
     return {
       success: false,

@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import { ORG_QUERY } from "../types/constants";
 
@@ -9,7 +8,7 @@ export const createOrganization = async (orgData: any, uid: string) => {
       creator_id: uid,
       query: ORG_QUERY.ADD_ORG,
     });
-    
+
     return { success: true, data: response.data };
   } catch (error: any) {
     return { success: false, error: error.response.data };
@@ -65,7 +64,11 @@ export const getMembersInOrgs = async (org_id: string) => {
   }
 };
 
-export const removeMember = async (org_id: string, user_id: string, role: string) => {
+export const removeMember = async (
+  org_id: string,
+  user_id: string,
+  role: string
+) => {
   try {
     const params = {
       org_id,
@@ -73,14 +76,14 @@ export const removeMember = async (org_id: string, user_id: string, role: string
       role,
       query: ORG_QUERY.REMOVE_ORG_MEMBER,
     };
-    
-    
+
     const response = await axios.delete("/api/organizations", {
       params,
     });
 
     return {
-      success: true,    };
+      success: true,
+    };
   } catch (error: any) {
     return {
       success: false,
@@ -97,7 +100,7 @@ export const getOrgDetails = async (org_id: string) => {
     const response = await axios.get("/api/organizations", {
       params,
     });
-    
+
     return {
       success: true,
       data: response.data.org,
@@ -113,13 +116,13 @@ export const getOrgDetails = async (org_id: string) => {
 interface UpdateMemberParams {
   memberData: object;
   org_id: string;
-  user_id: string
+  user_id: string;
 }
 
 export const updateMemberInOrg = async ({
   memberData,
   org_id,
-  user_id
+  user_id,
 }: UpdateMemberParams) => {
   try {
     const response = await axios.put("/api/organizations", {

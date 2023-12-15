@@ -21,7 +21,14 @@ import {
 import { statuses } from "../data/data";
 import { taskSchema } from "../data/schema";
 import { AlertDialogPop } from "@/components/alert-dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { deleteBugInProj } from "@/services/bugs.service";
+import { createNotif } from "@/controllers/notifications.controller";
+import { useUserDataAtom } from "@/hooks/user_data_atom";
+import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
+import { NotifData } from "@/types/types";
+import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
+import { ShowToast } from "@/components/show-toast";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -33,14 +40,72 @@ export function DataTableRowActions<TData>({
   const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
   const bug = taskSchema.parse(row.original);
   const [isSave, setIsSave] = useState<boolean>(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [toastParams, setToastParams] = useState<any>();
+  const [userData, setUserData] = useUserDataAtom();
+  const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
+  const [showToast, setShowToast] = useState(false);
+  const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
+
+  useEffect(() => {
+    if (hasSubmitted) {
+      const timer = setTimeout(() => {
+        setShowToast(true);
+        setIsSave(false);
+        setOpenDeleteDialog(false);
+        // fetchMembers();
+        
+        setIsToggleNotif((prev) => !prev);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [hasSubmitted, setIsToggleNotif]);
   
-  const handleContinue = async() => {
+  useEffect(() => {
+    if (showToast) {
+      ShowToast(toastParams);
+      setShowToast(false);
+      setHasSubmitted(false);
+    }
+  }, [showToast, toastParams]);
+
+  const handleContinue = async () => {
     setIsSave(true);
     
-    const params = {
-      
+    const result = await deleteBugInProj(bug.id);
+    
+    if (result.success) {
+      const { full_name, user_id, photo_url } = userData;
+      const { org_id = "" } = currOrgData || {};
+
+      const params = {
+        user_id,
+        org_id,
+        photo_url,
+        bug_id: bug.id,
+        title: "Member Removed",
+        description: `${full_name} removed ${bug.bug_name} bug in the project`,
+        type: "project",
+      } as NotifData;
+
+      await createNotif(params);
+
+      setToastParams({
+        title: "Remove Bug",
+        description: "You have successfully remove a bug in the project.",
+        variant: "default",
+      });
+    } else {
+      setToastParams({
+        title: "Remove Bug",
+        description: "Failed in removing a bug in the project.",
+        variant: "destructive",
+      });
     }
-  }
+
+    setHasSubmitted(true);
+  };
 
   return (
     <>
