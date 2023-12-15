@@ -22,11 +22,11 @@ import { priorities, severities, statuses } from "../data/data";
 import { taskSchema } from "../data/schema";
 import { AlertDialogPop } from "@/components/alert-dialog";
 import { useEffect, useState } from "react";
-import { deleteBugInProj } from "@/services/bugs.service";
+import { deleteBugInProj, updateBugInProj } from "@/services/bugs.service";
 import { createNotif } from "@/controllers/notifications.controller";
 import { useUserDataAtom } from "@/hooks/user_data_atom";
 import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
-import { NotifData } from "@/types/types";
+import { BugDataProps, NotifData } from "@/types/types";
 import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
 import { ShowToast } from "@/components/show-toast";
 import { useRefreshBugProj } from "@/hooks/refresh_bug_proj_atom";
@@ -50,8 +50,11 @@ export function DataTableRowActions<TData>({
   const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
   const [refBugProj, setRefBugProj] = useRefreshBugProj();
 
-  const [statusData, setStatusData] = useState(bug.status);
-  
+  const { status = "", severity = "", priority = "" } = bug;
+  const [statusData, setStatusData] = useState(status);
+  const [severityData, setSeverityData] = useState(severity);
+  const [priorityData, setPriorityData] = useState(priority);
+
   useEffect(() => {
     if (hasSubmitted) {
       const timer = setTimeout(() => {
@@ -79,7 +82,7 @@ export function DataTableRowActions<TData>({
   const handleContinue = async () => {
     setIsSave(true);
 
-    const result = await deleteBugInProj(bug.id);
+    const result = await deleteBugInProj(bug.bug_id);
 
     if (result.success) {
       const { full_name, user_id, photo_url } = userData;
@@ -89,7 +92,7 @@ export function DataTableRowActions<TData>({
         user_id,
         org_id,
         photo_url,
-        bug_id: bug.id,
+        bug_id: bug.bug_id,
         title: "Bug Removed",
         description: `${full_name} removed ${bug.bug_name} bug in the project`,
         type: "project",
@@ -112,8 +115,7 @@ export function DataTableRowActions<TData>({
 
     setHasSubmitted(true);
   };
-  
-  
+
   return (
     <>
       <AlertDialogPop
@@ -145,16 +147,20 @@ export function DataTableRowActions<TData>({
               <DropdownMenuRadioGroup
                 value={statusData}
                 onValueChange={setStatusData}
-                
               >
                 {statuses.map((status) => (
                   <DropdownMenuRadioItem
                     key={status.value}
                     value={status.value}
-                    onClick={() => {
-                      
-                      
-                      console.log(status.value);
+                    onClick={async () => {
+                      const params = {
+                        bug_id: bug.bug_id,
+                        status: status.value,
+                      } as BugDataProps;
+
+                      await updateBugInProj(params);
+
+                      setRefBugProj((prev) => !prev);
                     }}
                   >
                     {status.label}
@@ -166,14 +172,23 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Severity</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup value={bug.status}>
+              <DropdownMenuRadioGroup
+                value={severityData}
+                onValueChange={setSeverityData}
+              >
                 {severities.map((severity) => (
                   <DropdownMenuRadioItem
                     key={severity.value}
                     value={severity.value}
-                    onClick={() => {
-                      console.log("Clicked");
-                      console.log(bug.id);
+                    onClick={async () => {
+                      const params = {
+                        bug_id: bug.bug_id,
+                        severity: severity.value,
+                      } as BugDataProps;
+
+                      await updateBugInProj(params);
+
+                      setRefBugProj((prev) => !prev);
                     }}
                   >
                     {severity.label}
@@ -185,14 +200,20 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Priority</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup value={bug.status}>
+              <DropdownMenuRadioGroup value={priorityData} onValueChange={setPriorityData}>
                 {priorities.map((priority) => (
                   <DropdownMenuRadioItem
                     key={priority.value}
                     value={priority.value}
-                    onClick={() => {
-                      console.log("Clicked");
-                      console.log(bug.id);
+                    onClick={async () => {
+                      const params = {
+                        bug_id: bug.bug_id,
+                        priority: priority.value,
+                      } as BugDataProps;
+
+                      await updateBugInProj(params);
+
+                      setRefBugProj((prev) => !prev);
                     }}
                   >
                     {priority.label}

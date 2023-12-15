@@ -115,6 +115,7 @@ export const DELETE = async (request: NextRequest) => {
 
 export const PUT = async (request: NextRequest) => {
   try {
+    console.log("Hello worldf")
     const data = await request.json();
     const { query = "", ...restData } = data || {};
 
@@ -130,6 +131,7 @@ export const PUT = async (request: NextRequest) => {
     return new Response(
       JSON.stringify({
         success: true,
+        message: "Updating Bug Successfully"
       })
     );
   } catch (error: any) {

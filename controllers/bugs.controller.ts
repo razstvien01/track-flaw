@@ -62,7 +62,7 @@ export const getBugs = async (project_id: string) => {
     } = doc.data();
 
     return {
-      id: doc.id,
+      bug_id: doc.id,
       bug_description: bug_description || "",
       bug_name: bug_name || "",
       created_at: created_at || null,

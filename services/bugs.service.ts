@@ -62,3 +62,23 @@ export const deleteBugInProj = async (bug_id: string) => {
     };
   }
 };
+
+export const updateBugInProj = async (bugData: BugDataProps) => {
+  try {
+    const params = {
+      ...bugData,
+      query: BUG_QUERY.UPDATE_STATUS,
+    };
+    
+    await axios.put("/api/bugs", params);
+    
+    return {
+      success: true,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.response.data,
+    };
+  }
+};

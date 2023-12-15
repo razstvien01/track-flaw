@@ -64,7 +64,7 @@ export interface NotifData extends NotifIds {
 }
 
 export interface BugDataProps{
-  id: string;
+  bug_id: string;
   bug_name: string
   bug_description: string
   due_date: Date
