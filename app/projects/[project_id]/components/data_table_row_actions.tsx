@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { statuses } from "../data/data";
+import { priorities, severities, statuses } from "../data/data";
 import { taskSchema } from "../data/schema";
 import { AlertDialogPop } from "@/components/alert-dialog";
 import { useEffect, useState } from "react";
@@ -49,7 +49,7 @@ export function DataTableRowActions<TData>({
   const [showToast, setShowToast] = useState(false);
   const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
   const [refBugProj, setRefBugProj] = useRefreshBugProj();
-  
+
   useEffect(() => {
     if (hasSubmitted) {
       const timer = setTimeout(() => {
@@ -57,15 +57,15 @@ export function DataTableRowActions<TData>({
         setIsSave(false);
         setOpenDeleteDialog(false);
         // fetchMembers();
-        setRefBugProj(prev => !prev)
-        
+        setRefBugProj((prev) => !prev);
+
         setIsToggleNotif((prev) => !prev);
       }, 2000);
 
       return () => clearTimeout(timer);
     }
   }, [hasSubmitted, setIsToggleNotif, setRefBugProj]);
-  
+
   useEffect(() => {
     if (showToast) {
       ShowToast(toastParams);
@@ -76,9 +76,9 @@ export function DataTableRowActions<TData>({
 
   const handleContinue = async () => {
     setIsSave(true);
-    
+
     const result = await deleteBugInProj(bug.id);
-    
+
     if (result.success) {
       const { full_name, user_id, photo_url } = userData;
       const { org_id = "" } = currOrgData || {};
@@ -132,20 +132,62 @@ export function DataTableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
-          <DropdownMenuSeparator />
+          {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
+          {/* <DropdownMenuItem>Make a copy</DropdownMenuItem> */}
+          {/* <DropdownMenuItem>Favorite</DropdownMenuItem> */}
+          {/* <DropdownMenuSeparator /> */}
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
+            <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <DropdownMenuRadioGroup value={bug.status}>
                 {statuses.map((status) => (
                   <DropdownMenuRadioItem
                     key={status.value}
                     value={status.value}
+                    onClick={() => {
+                      console.log("Clicked");
+                      console.log(bug.id);
+                    }}
                   >
                     {status.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Severity</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup value={bug.status}>
+                {severities.map((severity) => (
+                  <DropdownMenuRadioItem
+                    key={severity.value}
+                    value={severity.value}
+                    onClick={() => {
+                      console.log("Clicked");
+                      console.log(bug.id);
+                    }}
+                  >
+                    {severity.label}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Priority</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuRadioGroup value={bug.status}>
+                {priorities.map((priority) => (
+                  <DropdownMenuRadioItem
+                    key={priority.value}
+                    value={priority.value}
+                    onClick={() => {
+                      console.log("Clicked");
+                      console.log(bug.id);
+                    }}
+                  >
+                    {priority.label}
                   </DropdownMenuRadioItem>
                 ))}
               </DropdownMenuRadioGroup>
