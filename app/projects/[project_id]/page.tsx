@@ -28,6 +28,7 @@ const Projects = ({ params }: any) => {
   const project_id = params.project_id;
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
+  const [refBugDisplay, setRefBugDisplay] = useState<boolean>(false);
 
   const fetchProject = useCallback(async () => {
     const result = await getProjectById(project_id);
@@ -86,7 +87,9 @@ const Projects = ({ params }: any) => {
         project_name={project_name}
         project_id={project_id}
         setShowDialog={setShowDialog}
-        setSuccessAdd={() => {}}
+        setSuccessAdd={() => {
+          setRefBugDisplay(true);
+        }}
         showDialog={showDialog}
       />
       <Tabs defaultValue="project" className="h-full space-y-6">
@@ -137,6 +140,8 @@ const Projects = ({ params }: any) => {
             project_id={project_id}
             showDialog={showDialog}
             setShowDialog={setShowDialog}
+            refBugDisplay={refBugDisplay}
+            setRefBugDisplay={setRefBugDisplay}
           />
         </TabsContent>
       </Tabs>

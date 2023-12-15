@@ -23,7 +23,7 @@ import {
 
 import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
-import { useCallback, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 import { getMembersInOrgs } from "@/services/org.service";
 import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 import { OrgMembersType } from "@/types/types";
@@ -41,7 +41,7 @@ import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
 
 interface TeamMembersProps {
   project_id: string;
-  project_name: string
+  project_name: string;
 }
 export function TeamMembers({ project_id, project_name }: TeamMembersProps) {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();

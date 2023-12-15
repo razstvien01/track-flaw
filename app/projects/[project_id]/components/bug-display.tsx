@@ -12,12 +12,17 @@ interface BugDisplayProjProps {
   project_id: string;
   showDialog: boolean;
   setShowDialog: Dispatch<React.SetStateAction<boolean>>;
+  refBugDisplay: boolean
+  setRefBugDisplay: Dispatch<React.SetStateAction<boolean>>;
 }
 
 const BugDisplayProj = ({
   project_id,
   showDialog,
   setShowDialog,
+  refBugDisplay,
+  setRefBugDisplay
+  
 }: BugDisplayProjProps) => {
   const [bugs, setBugs] = useState<BugDataProps[]>([]);
   const [error, setError] = useState<any>(null);
@@ -32,7 +37,8 @@ const BugDisplayProj = ({
   
   useEffect(() => {
     fetchBugs()
-  }, [fetchBugs])
+    setRefBugDisplay(false);
+  }, [fetchBugs, setRefBugDisplay, refBugDisplay])
   
   console.log(bugs)
 
