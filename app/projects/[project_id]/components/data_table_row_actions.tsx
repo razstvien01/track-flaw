@@ -35,7 +35,7 @@ export function DataTableRowActions<TData>({
   const [isSave, setIsSave] = useState<boolean>(false);
   
   const handleContinue = async() => {
-    console.log("dELETE HELLO")
+    console.log("dELETE HdsddsELLO")
   }
 
   return (
