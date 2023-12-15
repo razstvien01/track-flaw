@@ -30,6 +30,7 @@ import { NotifData } from "@/types/types";
 import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
 import { ShowToast } from "@/components/show-toast";
 
+// TODO should refresh the bugs after deleting
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
@@ -84,7 +85,7 @@ export function DataTableRowActions<TData>({
         org_id,
         photo_url,
         bug_id: bug.id,
-        title: "Member Removed",
+        title: "Bug Removed",
         description: `${full_name} removed ${bug.bug_name} bug in the project`,
         type: "project",
       } as NotifData;
