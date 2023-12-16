@@ -91,9 +91,7 @@ export function TeamMembers({ project_id, project_name }: TeamMembersProps) {
   const addTeamMember = async (user_id: string, role: string, full_name: string) => {
     const response = await updateTeamMember(project_id, user_id, role);
     
-    console.log(response)
     if (response.success) {
-      // const { full_name, user_id, photo_url } = userData;
       const params = {
         user_id: userData.user_id,
         org_id,

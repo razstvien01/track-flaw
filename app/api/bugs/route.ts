@@ -115,7 +115,6 @@ export const DELETE = async (request: NextRequest) => {
 
 export const PUT = async (request: NextRequest) => {
   try {
-    console.log("Hello worldf")
     const data = await request.json();
     const { query = "", ...restData } = data || {};
 

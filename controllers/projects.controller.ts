@@ -147,7 +147,6 @@ export const updateTeamMember = async (
   if (projData?.team_members) {
     for (let member of projData.team_members) {
       if (member.user_ref?.id === user_id) {
-        console.log("A");
         throw new Error("User is already a member of this team.");
       }
     }

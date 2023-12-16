@@ -23,6 +23,7 @@ const Organization = ({ params }: any) => {
   const router = useRouter();
   const [currRole, selectCurrRole] = useCurrRoleAtom()
   
+  
   useEffect(() => {
     router.push(`/dashboard/${currOrgData.org_id}`);
   
@@ -37,6 +38,8 @@ const Organization = ({ params }: any) => {
       const result = await getMembersInOrgs(org_id);
       if (result.success) {
         setOrgMembers(result.data);
+      } else {
+        setError('Organization not found');
       }
     }
   }, [org_id, setOrgMembers]);
@@ -61,10 +64,10 @@ const Organization = ({ params }: any) => {
     fetchOrgDetails();
   }, [fetchOrgDetails]);
   
-  
   if (error) {
     return (<NotFound/>);
   }
+  
   
   return (
     <div>

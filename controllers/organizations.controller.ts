@@ -336,7 +336,6 @@ export const updateMemberInOrg = async (
     for (let member of orgData.joined_members) {
       if (member.user_ref?.id === user_id) {
         existingMemberData = member;
-        console.log(member);
         break;
       }
     }

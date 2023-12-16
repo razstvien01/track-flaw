@@ -90,9 +90,6 @@ export default function OrgSwitcher({
                   <CommandItem
                     key={index}
                     onSelect={() => {
-                      console.log(org_refs)
-                      console.log(org_id)
-                      
                       org_refs.map((org: OrgDataProps) => {
                         if(org_id == org.org_id){
                           const { role = "" } = org

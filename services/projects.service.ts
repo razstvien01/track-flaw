@@ -124,8 +124,6 @@ export const removeTeamMember = async (
       query: PROJECT_QUERY.REMOVE_TEAM_MEMBER,
     };
     
-    console.log(params)
-
     const response = await axios.delete("/api/projects", {
       params,
     });

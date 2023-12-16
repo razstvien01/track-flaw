@@ -164,7 +164,6 @@ export const PUT = async (request: NextRequest) => {
 
     switch (query) {
       case PROJECT_QUERY.UPDATE_TEAM_MEMBERS:
-        console.log("MIAGII??");
         await updateTeamMember(project_id, user_id, role);
         message = "Successfully added a team member";
         break;
