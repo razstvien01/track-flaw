@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { UserDataProps } from "../types/types";
+import { useCurrRoleAtom } from "@/hooks/curr_role_data_atom";
 
 export const useGetUsers = (setUsers: Dispatch<SetStateAction<never[]>>) => {
   useEffect(() => {
@@ -21,6 +22,7 @@ export const useGetUser = (
   isUpdate?: boolean,
   showNewOrgDialog?: boolean
 ) => {
+  const [currRole, setCurrRole] = useCurrRoleAtom();
   useEffect(() => {
     const params = {
       query: "GET_USER",
@@ -37,7 +39,7 @@ export const useGetUser = (
       .catch((error) => {
         console.error("Error retrieving users:", error);
       });
-  }, [setUser, user_id, isUpdate, showNewOrgDialog]);
+  }, [setUser, user_id, isUpdate, showNewOrgDialog, currRole]);
 };
 
 export const updateUser = async (newUserData: any, user_id: string) => {

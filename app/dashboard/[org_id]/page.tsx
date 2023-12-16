@@ -13,6 +13,7 @@ import { getMembersInOrgs, getOrgDetails } from "@/services/org.service";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 import NotFound from "./not-found";
 import { useRouter } from "next/navigation";
+import { useCurrRoleAtom } from "@/hooks/curr_role_data_atom";
 
 const Organization = ({ params }: any) => {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
@@ -20,6 +21,7 @@ const Organization = ({ params }: any) => {
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom();
   const [error, setError] = useState<any>(null);
   const router = useRouter();
+  const [currRole, selectCurrRole] = useCurrRoleAtom()
   
   useEffect(() => {
     router.push(`/dashboard/${currOrgData.org_id}`);
@@ -63,6 +65,8 @@ const Organization = ({ params }: any) => {
   if (error) {
     return (<NotFound/>);
   }
+  
+  console.log("currRole: " + currRole)
 
   return (
     <div>

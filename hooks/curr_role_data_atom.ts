@@ -1,9 +1,8 @@
+import { ROLES } from '@/types/constants';
 import { atom, useAtom } from 'jotai';
-import { OrgMembersType } from '../types/types';
 
+export const currRoleAtom = atom<ROLES | null>(null);
 
-export const currRoleAtom = atom(null);
-
-export function useCurrOrgMemberAtom() {
+export function useCurrRoleAtom() {
   return useAtom(currRoleAtom);
 }

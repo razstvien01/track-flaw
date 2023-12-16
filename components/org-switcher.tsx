@@ -31,6 +31,8 @@ import { OrgDataProps } from "../types/types";
 import { useCurrOrgDataAtom } from "../hooks/curr_org_data_atom";
 import { useRouter } from "next/navigation";
 import { useLoadingAtom } from "@/hooks/loading.atom";
+import { useCurrRoleAtom } from "@/hooks/curr_role_data_atom";
+import { ROLES } from "@/types/constants";
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<
   typeof PopoverTrigger
@@ -53,7 +55,7 @@ export default function OrgSwitcher({
   const [open, setOpen] = useState(false);
 
   const [selectedOrg, setSelectedOrg] = useCurrOrgDataAtom();
-  const [isLoading, setIsLoading] = useLoadingAtom();
+  const [currRole, selectCurrRole] = useCurrRoleAtom()
 
   return (
     <Dialog open={showNewOrgDialog} onOpenChange={setShowNewOrgDialog}>
@@ -88,7 +90,15 @@ export default function OrgSwitcher({
                   <CommandItem
                     key={index}
                     onSelect={() => {
+                      console.log(org_refs)
+                      console.log(org_id)
                       
+                      org_refs.map((org: OrgDataProps) => {
+                        if(org_id == org.org_id){
+                          const { role = "" } = org
+                          selectCurrRole(role as ROLES)
+                        }
+                      })
                       setSelectedOrg(org);
                       setCurrOrgData(org)
                       
