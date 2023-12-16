@@ -29,6 +29,7 @@ import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 import { createNotif } from "@/services/notifications.service";
 import { useUserDataAtom } from "@/hooks/user_data_atom";
 import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
+import { useCurrRoleAtom } from "@/hooks/curr_role_data_atom";
 
 interface AddMemberSubmitProps {
   user_id: string;
@@ -46,6 +47,7 @@ export function AddMemberDialog() {
   const [userData, setUserData] = useUserDataAtom();
   const { org_id = "", org_name = "" } = currOrgData || {};
   const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
+  const [currRole, selectCurrRole] = useCurrRoleAtom()
 
   const [addMember, setAddMember] =
     useState<AddMemberSubmitProps>(AddMemberSubmitInit);
@@ -158,10 +160,10 @@ export function AddMemberDialog() {
       role: value,
     }));
   };
-
+  
   return (
     <Dialog open={showDialog} onOpenChange={setShowDialog}>
-      <DialogTrigger asChild>
+      {(currRole && (currRole === ROLES.ADMIN.toUpperCase() || currRole === ROLES.MANAGER.toUpperCase())) ? <DialogTrigger asChild>
         <Button
           variant="default"
           onClick={() => {}}
@@ -170,7 +172,7 @@ export function AddMemberDialog() {
           <PlusIcon className="mr-2 h-4 w-4" />
           Add Member
         </Button>
-      </DialogTrigger>
+      </DialogTrigger> : null}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Member</DialogTitle>

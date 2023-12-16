@@ -66,8 +66,6 @@ const Organization = ({ params }: any) => {
     return (<NotFound/>);
   }
   
-  console.log("currRole: " + currRole)
-
   return (
     <div>
       <div>
