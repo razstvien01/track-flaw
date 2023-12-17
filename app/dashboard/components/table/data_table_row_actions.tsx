@@ -25,6 +25,8 @@ import { ViewMemberDialog } from "../dialogs/view_member_dialog";
 import { createNotif } from "@/services/notifications.service";
 import { useUserDataAtom } from "@/hooks/user_data_atom";
 import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
+import { useCurrRoleAtom } from "@/hooks/curr_role_data_atom";
+import { ROLES } from "@/types/constants";
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
@@ -37,8 +39,8 @@ export function DataTableRowActions<TData>({
   const [openEditDialog, setOpenEditDialog] = useState<boolean>(false);
   const [openViewDialog, setOpenViewDialog] = useState<boolean>(false);
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
-  const { org_name = "" } = currOrgData || {}
-  
+  const { org_name = "" } = currOrgData || {};
+
   const [isSave, setIsSave] = useState<boolean>(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -47,10 +49,10 @@ export function DataTableRowActions<TData>({
 
   const { user_id = "", role = "", full_name = "" } = member || {};
   const { org_id = "" } = currOrgData || {};
-  
+
   const [userData, setUserData] = useUserDataAtom();
   const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
-  
+  const [currRole, selectCurrRole] = useCurrRoleAtom();
 
   const fetchMembers = useCallback(async () => {
     if (org_id !== "") {
@@ -68,7 +70,7 @@ export function DataTableRowActions<TData>({
         setIsSave(false);
         setOpenDeleteDialog(false);
         fetchMembers();
-        setIsToggleNotif(prev => !prev)
+        setIsToggleNotif((prev) => !prev);
       }, 2000);
 
       return () => clearTimeout(timer);
@@ -85,12 +87,12 @@ export function DataTableRowActions<TData>({
 
   const handleContinue = async () => {
     setIsSave(true);
-    const memberName = full_name
+    const memberName = full_name;
     const result = await removeMember(org_id, user_id, role);
-    
+
     if (result.success) {
-      const { full_name, user_id, photo_url } = userData
-      
+      const { full_name, user_id, photo_url } = userData;
+
       const params = {
         user_id,
         org_id,
@@ -99,9 +101,9 @@ export function DataTableRowActions<TData>({
         description: `${full_name} removed ${memberName} in the ${org_name} organization`,
         type: "organization",
       };
-      
-      await createNotif(params)
-      
+
+      await createNotif(params);
+
       setHasSubmitted(true);
       setToastParams({
         title: "Remove Member",
@@ -144,29 +146,41 @@ export function DataTableRowActions<TData>({
         member={member}
       />
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-          >
-            <DotsHorizontalIcon className="h-4 w-4" />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
+        {
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+            >
+              <DotsHorizontalIcon className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
+        }
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem onClick={() => setOpenViewDialog(true)}>
             View Member
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpenEditDialog(true)}>
-            Edit
-          </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setOpenDeleteDialog(true)}>
-            Remove
-            <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          {currRole &&
+          (currRole === ROLES.ADMIN.toUpperCase() ||
+            currRole === ROLES.MANAGER.toUpperCase()) ? (
+            <DropdownMenuItem onClick={() => setOpenEditDialog(true)}>
+              Edit
+            </DropdownMenuItem>
+          ) : null}
+          {currRole &&
+          (currRole === ROLES.ADMIN.toUpperCase() ||
+            currRole === ROLES.MANAGER.toUpperCase()) ? (
+            <DropdownMenuSeparator />
+          ) : null}
+          {currRole &&
+          (currRole === ROLES.ADMIN.toUpperCase() ||
+            currRole === ROLES.MANAGER.toUpperCase()) ? (
+            <DropdownMenuItem onClick={() => setOpenDeleteDialog(true)}>
+              Remove
+              <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          ) : null}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

@@ -10,12 +10,12 @@ const NotFound = () => {
   return (
     <main className="flex flex-col gap-2 items-center justify-center text-center h-screen">
       <Image
-            src="/cat.gif"
-            alt="Image"
-            width={600}
-            height={600}
-            className="rounded-md object-cover"
-          />
+        src="/cat.gif"
+        alt="Image"
+        width={600}
+        height={600}
+        className="rounded-md object-cover"
+      />
       <h1 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:leading-[1.1]">
         There was a problem.
       </h1>

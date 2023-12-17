@@ -13,7 +13,6 @@ import { getMembersInOrgs, getOrgDetails } from "@/services/org.service";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
 import NotFound from "./not-found";
 import { useRouter } from "next/navigation";
-import { useCurrRoleAtom } from "@/hooks/curr_role_data_atom";
 
 const Organization = ({ params }: any) => {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
@@ -21,16 +20,6 @@ const Organization = ({ params }: any) => {
   const [orgMembers, setOrgMembers] = useCurrOrgMemberAtom();
   const [error, setError] = useState<any>(null);
   const router = useRouter();
-  const [currRole, selectCurrRole] = useCurrRoleAtom()
-  
-  
-  useEffect(() => {
-    router.push(`/dashboard/${currOrgData.org_id}`);
-  
-    return () => {
-      
-    }
-  }, [currOrgData, org_id, router])
   
   
   const fetchMembers = useCallback(async () => {
@@ -64,10 +53,19 @@ const Organization = ({ params }: any) => {
     fetchOrgDetails();
   }, [fetchOrgDetails]);
   
+  // TODO - BUG, CAN'T GO ON THE NOT FOUND PAGE
+  useEffect(() => {
+    if(org_id !== "")
+      router.replace(`/dashboard/${currOrgData.org_id}`);
+    
+    return () => {
+      
+    }
+  }, [currOrgData, org_id, router, error])
+  
   if (error) {
     return (<NotFound/>);
   }
-  
   
   return (
     <div>
