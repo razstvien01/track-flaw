@@ -23,7 +23,13 @@ import {
 
 import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import { useCurrOrgMemberAtom } from "@/hooks/curr_org_members_atom";
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { getMembersInOrgs } from "@/services/org.service";
 import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
 import { OrgMembersType } from "@/types/types";
@@ -38,6 +44,8 @@ import { AlertDialogPop } from "@/components/alert-dialog";
 import { useUserDataAtom } from "@/hooks/user_data_atom";
 import { createNotif } from "@/services/notifications.service";
 import { useRefreshNotif } from "@/hooks/refresh_notif-atom";
+import { useCurrRoleAtom } from "@/hooks/curr_role_data_atom";
+import { ROLES } from "@/types/constants";
 
 interface TeamMembersProps {
   project_id: string;
@@ -57,6 +65,7 @@ export function TeamMembers({ project_id, project_name }: TeamMembersProps) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
   const [toRemove, setToRemove] = useState<any>();
+  const [currRole, setCurrRole] = useCurrRoleAtom();
 
   const fetchMembers = useCallback(async () => {
     if (org_id !== "") {
@@ -88,9 +97,13 @@ export function TeamMembers({ project_id, project_name }: TeamMembersProps) {
     fetchTeamMembers();
   }, [fetchTeamMembers]);
 
-  const addTeamMember = async (user_id: string, role: string, full_name: string) => {
+  const addTeamMember = async (
+    user_id: string,
+    role: string,
+    full_name: string
+  ) => {
     const response = await updateTeamMember(project_id, user_id, role);
-    
+
     if (response.success) {
       const params = {
         user_id: userData.user_id,
@@ -101,9 +114,9 @@ export function TeamMembers({ project_id, project_name }: TeamMembersProps) {
         description: `${userData.full_name} added ${full_name} in the project ${project_name} in the ${org_name} organization`,
         type: "project",
       };
-      
-      await createNotif(params);  
-      
+
+      await createNotif(params);
+
       setIsToggleNotif((prev) => !prev);
 
       setRefresh(!refresh);
@@ -142,8 +155,7 @@ export function TeamMembers({ project_id, project_name }: TeamMembersProps) {
         description: `${full_name} removed ${memberName} in the project ${project_name}`,
         type: "project",
       };
-      
-      
+
       await createNotif(params);
 
       setHasSubmitted(true);
@@ -187,61 +199,66 @@ export function TeamMembers({ project_id, project_name }: TeamMembersProps) {
         <CardHeader>
           <CardTitle>
             Team Members
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button className="ml-5">
-                  <PlusIcon />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="p-0" align="end">
-                <Command>
-                  <CommandInput placeholder="Search a member..." />
-                  <CommandList>
-                    <CommandEmpty>No roles found.</CommandEmpty>
-                    <CommandGroup className="p-1.5">
-                      {orgMembers.map((member, index) => {
-                        const { full_name, role, user_id, photo_url } = member;
+            {currRole &&
+            (currRole === ROLES.ADMIN.toUpperCase() ||
+              currRole === ROLES.MANAGER.toUpperCase()) ? (
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button className="ml-5">
+                    <PlusIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="p-0" align="end">
+                  <Command>
+                    <CommandInput placeholder="Search a member..." />
+                    <CommandList>
+                      <CommandEmpty>No roles found.</CommandEmpty>
+                      <CommandGroup className="p-1.5">
+                        {orgMembers.map((member, index) => {
+                          const { full_name, role, user_id, photo_url } =
+                            member;
 
-                        //* Check if the user_id doesn't exist in team_members
-                        const isMemberExists = teamMembers.find(
-                          (teamMember) => teamMember.user_id === user_id
-                        );
+                          //* Check if the user_id doesn't exist in team_members
+                          const isMemberExists = teamMembers.find(
+                            (teamMember) => teamMember.user_id === user_id
+                          );
 
-                        //* If the user_id doesn't exist in team_members, render the member
-                        if (!isMemberExists) {
-                          return (
-                            <CommandItem
-                              className="teamaspace-y-1 flex flex-col items-start px-4 py-2"
-                              key={index}
-                              onSelect={() => {
-                                addTeamMember(user_id, role, full_name);
-                                setOpen(!open);
-                              }}
-                            >
-                              <div className="flex-col">
-                                <div className="flex">
-                                  <Avatar className="mr-2">
-                                    <AvatarImage src={photo_url} />
-                                    <AvatarFallback>SD</AvatarFallback>
-                                  </Avatar>
-                                  <div className="flex-col">
-                                    <p>{full_name}</p>
-                                    <p className="text-sm text-muted-foreground">
-                                      {role}
-                                    </p>
+                          //* If the user_id doesn't exist in team_members, render the member
+                          if (!isMemberExists) {
+                            return (
+                              <CommandItem
+                                className="teamaspace-y-1 flex flex-col items-start px-4 py-2"
+                                key={index}
+                                onSelect={() => {
+                                  addTeamMember(user_id, role, full_name);
+                                  setOpen(!open);
+                                }}
+                              >
+                                <div className="flex-col">
+                                  <div className="flex">
+                                    <Avatar className="mr-2">
+                                      <AvatarImage src={photo_url} />
+                                      <AvatarFallback>SD</AvatarFallback>
+                                    </Avatar>
+                                    <div className="flex-col">
+                                      <p>{full_name}</p>
+                                      <p className="text-sm text-muted-foreground">
+                                        {role}
+                                      </p>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </CommandItem>
-                          );
-                        }
-                        return null;
-                      })}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
+                              </CommandItem>
+                            );
+                          }
+                          return null;
+                        })}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            ) : null}
           </CardTitle>
           <CardDescription>
             Invite your team members to collaborate.

@@ -18,30 +18,17 @@ const LoadingComponent = () => (
   </main>
 );
 
-const metadata: Metadata = {
-  title: "Track Flaw",
-  description:
-    "It is a bug tracking app that makes it effortless for team members to report and manage bugs, ensuring seamless collaboration across the development and testing phases. It centralizes the management of software issues from initial reporting through resolution and verification.",
-};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const [isLoading, setIsLoading] = useState(true);
   const [isLoading, setIsLoading] = useLoadingAtom();
 
   const { user = {}, logOut, googleSignIn, googleSignUp } = UserAuth() || {};
   const { uid = "" } = user || {};
   const [userData, setUserData] = useUserDataAtom();
-
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const [currentUser, setCurrentUser] = useUserDataAtom();
-
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear());
-  }, []);
 
   useGetUser(uid, setUserData, isLoading);
 
@@ -77,11 +64,6 @@ export default function RootLayout({
             </Provider>
           </AuthContextProvider>
           <Toaster />
-          {/* <footer className="align-bottom">
-            <div className="container mx-auto text-right">
-              &copy; {currentYear} Buggy Cat
-            </div>
-          </footer> */}
         </body>
       </html>
     </>
