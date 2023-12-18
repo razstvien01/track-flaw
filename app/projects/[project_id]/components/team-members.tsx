@@ -292,15 +292,19 @@ export function TeamMembers({ project_id, project_name }: TeamMembersProps) {
                   </div>
                 </div>
                 <Badge variant={"secondary"}>{role}</Badge>
-                <Button
-                  variant={"default"}
-                  onClick={() => {
-                    setToRemove(member);
-                    setOpenDeleteDialog(true);
-                  }}
-                >
-                  <TrashIcon />
-                </Button>
+                {currRole &&
+                (currRole === ROLES.ADMIN.toUpperCase() ||
+                  currRole === ROLES.MANAGER.toUpperCase()) ? (
+                  <Button
+                    variant={"default"}
+                    onClick={() => {
+                      setToRemove(member);
+                      setOpenDeleteDialog(true);
+                    }}
+                  >
+                    <TrashIcon />
+                  </Button>
+                ) : null}
               </div>
             );
           })}
