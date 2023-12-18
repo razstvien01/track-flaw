@@ -14,6 +14,8 @@ import {
   PageHeaderHeading,
 } from "@/components/page-header";
 import { getProjectsInOrgs } from "@/services/projects.service";
+import { useCurrRoleAtom } from "@/hooks/curr_role_data_atom";
+import { ROLES } from "@/types/constants";
 
 const Projects = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
@@ -21,6 +23,8 @@ const Projects = () => {
   const [currOrgData, setCurrOrgData] = useCurrOrgDataAtom();
   const { org_id = "", org_name } = currOrgData || {};
   const [projects, setProjects] = useState<any[] | undefined>([]);
+
+  const [currRole, setCurrRole] = useCurrRoleAtom();
 
   const fetchProjects = useCallback(async () => {
     if (org_id !== "") {
@@ -39,7 +43,9 @@ const Projects = () => {
     return (
       <>
         <PageHeader>
-          <PageHeaderHeading className="text-5xl">No Organization Selected</PageHeaderHeading>
+          <PageHeaderHeading className="text-5xl">
+            No Organization Selected
+          </PageHeaderHeading>
           <PageHeaderDescription>
             View and start a new project to fill up this space by selecting or
             creating an organizaiton
@@ -48,16 +54,20 @@ const Projects = () => {
       </>
     );
   }
-  
+
   return (
     <>
-      <AddProjectDialog
-        showDialog={showDialog}
-        setShowDialog={setShowDialog}
-        setSuccessAdd={setSuccessAdd}
-        org_id={org_id}
-        org_name={org_name}
-      />
+      {currRole &&
+      (currRole === ROLES.ADMIN.toUpperCase() ||
+        currRole === ROLES.MANAGER.toUpperCase()) ? (
+        <AddProjectDialog
+          showDialog={showDialog}
+          setShowDialog={setShowDialog}
+          setSuccessAdd={setSuccessAdd}
+          org_id={org_id}
+          org_name={org_name}
+        />
+      ) : null}
       <div className="h-full px-4 py-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
@@ -69,16 +79,19 @@ const Projects = () => {
               issues, ensuring organized and efficient bug management.
             </p>
           </div>
-          <div className="ml-auto mr-4">
-            <Button onClick={() => setShowDialog(!showDialog)}>
-              <PlusIcon className="mr-2 h-4 w-4" />
-              Create Project
-            </Button>
-          </div>
+          {currRole &&
+          (currRole === ROLES.ADMIN.toUpperCase() ||
+            currRole === ROLES.MANAGER.toUpperCase()) ? (
+            <div className="ml-auto mr-4">
+              <Button onClick={() => setShowDialog(!showDialog)}>
+                <PlusIcon className="mr-2 h-4 w-4" />
+                Create Project
+              </Button>
+            </div>
+          ) : null}
         </div>
         <Separator className="my-4" />
-        
-        
+
         <div className="relative">
           <ScrollArea>
             <div className="flex space-x-4 pb-4">

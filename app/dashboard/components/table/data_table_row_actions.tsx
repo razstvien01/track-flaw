@@ -52,7 +52,7 @@ export function DataTableRowActions<TData>({
 
   const [userData, setUserData] = useUserDataAtom();
   const [isToggleNotif, setIsToggleNotif] = useRefreshNotif();
-  const [currRole, selectCurrRole] = useCurrRoleAtom();
+  const [currRole, setCurrRole] = useCurrRoleAtom();
 
   const fetchMembers = useCallback(async () => {
     if (org_id !== "") {
@@ -123,22 +123,28 @@ export function DataTableRowActions<TData>({
 
   return (
     <>
-      <AlertDialogPop
-        title="Are you absolutely sure?"
-        description="This action cannot be undone. This will remove a member
+      {currRole &&
+      (currRole === ROLES.ADMIN.toUpperCase() ||
+        currRole === ROLES.MANAGER.toUpperCase()) ? (
+        <>
+          <AlertDialogPop
+            title="Are you absolutely sure?"
+            description="This action cannot be undone. This will remove a member
         account and remove its data from our organization."
-        openDeleteDialog={openDeleteDialog}
-        setOpenDeleteDialog={setOpenDeleteDialog}
-        handleContinue={handleContinue}
-        isSave={isSave}
-      />
-      <UpdateMemberDialog
-        showDialog={openEditDialog}
-        setShowDialog={setOpenEditDialog}
-        currentRole={role}
-        member_id={user_id}
-        name={full_name}
-      />
+            openDeleteDialog={openDeleteDialog}
+            setOpenDeleteDialog={setOpenDeleteDialog}
+            handleContinue={handleContinue}
+            isSave={isSave}
+          />
+          <UpdateMemberDialog
+            showDialog={openEditDialog}
+            setShowDialog={setOpenEditDialog}
+            currentRole={role}
+            member_id={user_id}
+            name={full_name}
+          />
+        </>
+      ) : null}
       <ViewMemberDialog
         showDialog={openViewDialog}
         setShowDialog={setOpenViewDialog}

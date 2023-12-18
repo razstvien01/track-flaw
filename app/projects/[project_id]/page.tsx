@@ -10,16 +10,10 @@ import {
   PageHeaderDescription,
   PageHeaderHeading,
 } from "@/components/page-header";
-import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TeamMembers } from "./components/team-members";
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
-import { Separator } from "@radix-ui/react-select";
 import AddBugDialog from "../components/add_bug_dialog";
 import { useCurrOrgDataAtom } from "@/hooks/curr_org_data_atom";
-import { columns } from "./components/columns";
-import { DataTable } from "./components/data_table";
 import BugDisplayProj from "./components/bug-display";
 
 const Projects = ({ params }: any) => {
